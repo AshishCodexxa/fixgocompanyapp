@@ -14,5 +14,6 @@ class CommonColor{
   static const TRANSPORTER_PROFILE_COLOR = const Color(0xFFA69797);
   static const PROFILE_INFO_BACK_COLOR = const Color(0xFFF2F2F2);
   static const BOOKING_CONFIRM_COLOR = const Color(0xFFFF9900);
+  static const WEIGHT_COLOR = const Color(0xFFF0F0F0);
 
 }

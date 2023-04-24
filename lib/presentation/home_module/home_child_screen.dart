@@ -2,6 +2,7 @@ import 'package:fixgocompanyapp/all_dialogs/filter__transporter_list_dialog.dart
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:fixgocompanyapp/presentation/home_module/booking_details_screen.dart';
+import 'package:fixgocompanyapp/presentation/home_module/create_new_load_form_layout.dart';
 import 'package:fixgocompanyapp/presentation/home_module/interested_transporter_list.dart';
 import 'package:fixgocompanyapp/presentation/home_module/transporter_info_profile.dart';
 import 'package:flutter/material.dart';
@@ -287,47 +288,53 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
 
           Padding(
             padding: EdgeInsets.only(bottom: SizeConfig.screenHeight*0.03),
-            child: Container(
-              height: SizeConfig.screenHeight*0.05,
-              width: SizeConfig.screenWidth*0.36,
-              decoration: BoxDecoration(
-                color: CommonColor.SIGN_UP_TEXT_COLOR,
-                borderRadius: BorderRadius.circular(10)
-              ),
-              child: Padding(
-                padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.03),
-                child: Row(
-                  children: [
+            child: GestureDetector(
+              onDoubleTap: (){},
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>NewLoadScreenForm()));
+              },
+              child: Container(
+                height: SizeConfig.screenHeight*0.05,
+                width: SizeConfig.screenWidth*0.33,
+                decoration: BoxDecoration(
+                  color: CommonColor.SIGN_UP_TEXT_COLOR,
+                  borderRadius: BorderRadius.circular(10)
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.03),
+                  child: Row(
+                    children: [
 
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Container(
-                          height: SizeConfig.screenHeight*0.035,
-                          width: SizeConfig.screenWidth*0.08,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            height: SizeConfig.screenHeight*0.035,
+                            width: SizeConfig.screenWidth*0.07,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle
+                            ),
+                          ),
+                          Icon(Icons.add)
+                        ],
+                      ),
+
+                      Padding(
+                        padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.02),
+                        child: Text(
+                          "New Load",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                              fontFamily: "Roboto_Medium",
+                              fontWeight: FontWeight.w400
                           ),
                         ),
-                        Icon(Icons.add)
-                      ],
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.02),
-                      child: Text(
-                        "New Load",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: SizeConfig.blockSizeHorizontal*4.0,
-                            fontFamily: "Roboto_Medium",
-                            fontWeight: FontWeight.w400
-                        ),
                       ),
-                    ),
 
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
