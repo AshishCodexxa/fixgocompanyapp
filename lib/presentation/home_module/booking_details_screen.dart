@@ -1,5 +1,7 @@
+import 'package:fixgocompanyapp/all_dialogs/transporter_amount_pay_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
@@ -584,6 +586,17 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                     GestureDetector(
                       onDoubleTap: (){},
                       onTap: (){
+
+                        showCupertinoDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (context) {
+                            return const AnimatedOpacity(
+                                opacity: 1.0,
+                                duration: Duration(seconds: 2),
+                                child: TransporterAmountPayDialog());
+                          },
+                        );
 
                       },
                       child: Container(
