@@ -15,5 +15,8 @@ class CommonColor{
   static const PROFILE_INFO_BACK_COLOR = const Color(0xFFF2F2F2);
   static const BOOKING_CONFIRM_COLOR = const Color(0xFFFF9900);
   static const WEIGHT_COLOR = const Color(0xFFF0F0F0);
+  static const ADVANCE_INCREMENT_COLOR = const Color(0xFF636363);
+  static const LOAD_SUBMIT_COLOR = const Color(0xFFDCDCDC);
+  static const LOAD_SUBMIT_TEXT_COLOR = const Color(0xFF939393);
 
 }

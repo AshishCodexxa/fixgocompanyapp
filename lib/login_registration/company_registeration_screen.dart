@@ -1,4 +1,4 @@
-import 'package:fixgocompanyapp/all_dialogs/register_success_dialofg.dart';
+import 'package:fixgocompanyapp/all_dialogs/register_success_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:flutter/cupertino.dart';

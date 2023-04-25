@@ -1,5 +1,7 @@
+import 'package:fixgocompanyapp/all_dialogs/load_post_success_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -27,6 +29,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
   TextEditingController vehicleNumberController = TextEditingController();
   TextEditingController lengthController = TextEditingController();
   TextEditingController widthController = TextEditingController();
+  TextEditingController totalFareController = TextEditingController();
 
   String? pickUpDate;
   String? bidEndDate;
@@ -35,8 +38,19 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
   String vehicleValue = 'Type of Vehicle';
 
   bool showAllGoodsField = true;
+  bool showAllVehicleTypes = true;
   bool hideAllGoodsField = false;
+  bool hideAllVehicleTypeField = false;
   bool showLoadField = false;
+  bool showVehicleType = false;
+
+  bool lengthWidthVehicle = false;
+
+  bool advPayAmountShow = false;
+  bool deliverPayAmountShow = false;
+
+  bool paymentFieldShow = true;
+  bool paymentFieldHide = false;
 
   int PackLoad = 1;
   int LooseLoad = 2;
@@ -45,25 +59,25 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
   int loadType = 0;
   String typeLoad = "";
 
+  int vehicleType = 0;
+  String vehicleName = "";
 
-  var employeeCount = [
-    'Type of Load',
-    'Pack Load',
-    'Loose Load',
-    'Over Dimensional Load',
-  ];
+  int loadUnit = 0;
+  String loadUnits = "";
 
-  var vehicleType = [
-    'Type of Vehicle',
-    'Open body',
-    'Closed body',
-    'Trailer',
-    'Container',
-  ];
+  int advancePay = 0;
+  int deliveryPay = 0;
+
+  int advPay = 0;
+  String advPayMethod = "";
+
+  int deliverPay = 0;
+  String deliveryPayMethod = "";
+
 
   @override
   void initState() {
-    dateInput.text = ""; //set the initial value of text field
+    dateInput.text = "";
     super.initState();
   }
 
@@ -94,6 +108,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                 getPickAndEndDate(SizeConfig.screenHeight, SizeConfig.screenWidth),
                 getGoodsLoadLayout(SizeConfig.screenHeight, SizeConfig.screenWidth),
                 getVehicleDetails(SizeConfig.screenHeight, SizeConfig.screenWidth),
+                getPaymentDetailsLayout(SizeConfig.screenHeight, SizeConfig.screenWidth),
+                getSubmitButton(SizeConfig.screenHeight, SizeConfig.screenWidth),
 
               ],
             ),
@@ -138,9 +154,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
   Widget getPickUpAndDeliverLocation(double parentHeight, double parentWidth){
     return Padding(
-      padding: EdgeInsets.only(left: parentWidth*0.05,
-      right: parentWidth*0.05,
-      top: parentHeight*0.03),
+      padding: EdgeInsets.only(left: parentWidth*0.03,
+      right: parentWidth*0.03,
+      top: parentHeight*0.02),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -149,8 +165,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
             BoxShadow(
                 color: Colors.black.withOpacity(0.15),
                 blurRadius: 3,
-                spreadRadius: 1,
-                offset: const Offset(1, 1)),
+                spreadRadius: 2,
+                offset: const Offset(3, 3)),
           ],
         ),
         child: Stack(
@@ -198,7 +214,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(left: parentWidth*0.1, top: parentHeight*0.007),
+                      padding: EdgeInsets.only(left: parentWidth*0.1, top: parentHeight*0.017),
                       child: Text("Delivery",
                         style: TextStyle(
                             color: Colors.black54,
@@ -207,7 +223,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             fontFamily: 'Roboto_Regular'
                         ),),
                     ),
-                   Container(
+                  /* Container(
                      color: Colors.transparent,
                      width: parentWidth*0.14,
                      child: Row(
@@ -239,11 +255,15 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                          )
                        ],
                      ),
-                   )
+                   )*/
                   ],
                 ),
 
-                for(int i = 0; i < addDeliveryCount ; i++)
+                SizedBox(
+                  height: parentHeight*0.01,
+                ),
+
+               /* for(int i = 0; i < addDeliveryCount ; i++)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -291,7 +311,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                      ),
                    )
                   ],
-                ),
+                ),*/
                 SizedBox(
                   height: parentHeight*0.007,
                 ),
@@ -327,7 +347,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          height: parentHeight*0.04,
+                          height: parentHeight*0.037,
                           width: parentWidth*0.003,
                           color: Colors.black,
                         ),
@@ -362,8 +382,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
   Widget getPickAndEndDate(double parentHeight, double parentWidth){
     return Padding(
-      padding: EdgeInsets.only(left: parentWidth*0.05,
-          right: parentWidth*0.05,
+      padding: EdgeInsets.only(left: parentWidth*0.03,
+          right: parentWidth*0.03,
           top: parentHeight*0.02),
       child: Container(
         decoration: BoxDecoration(
@@ -373,8 +393,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
             BoxShadow(
                 color: Colors.black.withOpacity(0.15),
                 blurRadius: 3,
-                spreadRadius: 1,
-                offset: const Offset(1, 1)),
+                spreadRadius: 2,
+                offset: const Offset(3, 3)),
           ],
         ),
         child: Row(
@@ -501,9 +521,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
   Widget getGoodsLoadLayout(double parentHeight, double parentWidth){
     return Padding(
-      padding: EdgeInsets.only(left: parentWidth*0.05,
-          right: parentWidth*0.05,
-          top: parentHeight*0.03),
+      padding: EdgeInsets.only(left: parentWidth*0.03,
+          right: parentWidth*0.03,
+          top: parentHeight*0.02),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -512,8 +532,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
             BoxShadow(
                 color: Colors.black.withOpacity(0.15),
                 blurRadius: 3,
-                spreadRadius: 1,
-                offset: const Offset(1, 1)),
+                spreadRadius: 2,
+                offset: const Offset(3, 3)),
           ],
         ),
         child: Stack(
@@ -580,38 +600,60 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  height: parentHeight*0.025,
-                                  width: parentWidth*0.15,
-                                  decoration: BoxDecoration(
-                                    color: CommonColor.WEIGHT_COLOR,
-                                    borderRadius: BorderRadius.circular(10)
-                                  ),
-                                  child: Center(
-                                    child: Text("Ton(s)",
-                                      style: TextStyle(
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: SizeConfig.blockSizeHorizontal*3.0,
-                                        fontFamily: 'Roboto_Regular'
-                                      ),),
+                                GestureDetector(
+                                  onDoubleTap: (){},
+                                  onTap: (){
+                                    if(mounted){
+                                      setState(() {
+                                        loadUnit = 1;
+                                        loadUnits = "Ton(s)";
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                    height: parentHeight*0.025,
+                                    width: parentWidth*0.15,
+                                    decoration: BoxDecoration(
+                                        color:loadUnit == 1 ? CommonColor.SIGN_UP_TEXT_COLOR : CommonColor.WEIGHT_COLOR,
+                                      borderRadius: BorderRadius.circular(10)
+                                    ),
+                                    child: Center(
+                                      child: Text("Ton(s)",
+                                        style: TextStyle(
+                                            color:loadUnit == 1 ? Colors.white : Colors.black54,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                                          fontFamily: 'Roboto_Regular'
+                                        ),),
+                                    ),
                                   ),
                                 ),
-                                Container(
-                                  height: parentHeight*0.025,
-                                  width: parentWidth*0.15,
-                                  decoration: BoxDecoration(
-                                    color: CommonColor.WEIGHT_COLOR,
-                                    borderRadius: BorderRadius.circular(10)
-                                  ),
-                                  child: Center(
-                                    child: Text("Kg(s)",
-                                      style: TextStyle(
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: SizeConfig.blockSizeHorizontal*3.0,
-                                        fontFamily: 'Roboto_Regular'
-                                      ),),
+                                GestureDetector(
+                                  onDoubleTap: (){},
+                                  onTap: (){
+                                    if(mounted){
+                                      setState(() {
+                                        loadUnit = 2;
+                                        loadUnits = "Kg(s)";
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                    height: parentHeight*0.025,
+                                    width: parentWidth*0.15,
+                                    decoration: BoxDecoration(
+                                      color:loadUnit == 2 ? CommonColor.SIGN_UP_TEXT_COLOR : CommonColor.WEIGHT_COLOR,
+                                      borderRadius: BorderRadius.circular(10)
+                                    ),
+                                    child: Center(
+                                      child: Text("Kg(s)",
+                                        style: TextStyle(
+                                            color:loadUnit == 2 ? Colors.white : Colors.black54,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                                          fontFamily: 'Roboto_Regular'
+                                        ),),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -932,6 +974,164 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                     ),
                   ),
 
+                  Visibility(
+                    visible: loadType == 3? true : false,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.01),
+                          child: Row(
+                            children: [
+                              Text("Size of Load",
+                                style: TextStyle(
+                                    fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                                    fontFamily: "Roboto_Regular",
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: parentWidth * 0.05,
+                              right: parentWidth * 0.05,
+                              top: parentHeight*0.015),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(right: parentWidth * 0.05),
+                                  child: Container(
+                                    height: parentHeight*0.05,
+                                    child: TextFormField(
+                                      controller: lengthController,
+                                      // focusNode: _cityFocus,
+                                      textInputAction: TextInputAction.next,
+                                      decoration: InputDecoration(
+                                        label: RichText(
+                                          text: TextSpan(
+                                            text: 'Length(Mts)',
+                                            style: TextStyle(
+                                              color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: SizeConfig.blockSizeHorizontal*2.8,
+                                            ),
+                                          ),
+                                        ),
+                                        labelStyle: TextStyle(
+                                            color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                            fontSize: SizeConfig.blockSizeHorizontal * 3.5,
+                                            fontFamily: 'Roboto_Regular'),
+                                        border: const OutlineInputBorder(
+                                            borderSide:
+                                            BorderSide(width: 1.0, color: Colors.black)),
+                                        focusedBorder: const OutlineInputBorder(
+                                            borderSide:
+                                            BorderSide(width: 1.0, color: Colors.black)),
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(right: parentWidth * 0.05),
+                                  child: Container(
+                                    height: parentHeight*0.05,
+                                    child: TextFormField(
+                                      controller: lengthController,
+                                      // focusNode: _cityFocus,
+                                      textInputAction: TextInputAction.next,
+                                      decoration: InputDecoration(
+                                        label: RichText(
+                                          text: TextSpan(
+                                            text: 'Width(Mts)',
+                                            style: TextStyle(
+                                              color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: SizeConfig.blockSizeHorizontal*2.8,
+                                            ),
+                                          ),
+                                        ),
+                                        labelStyle: TextStyle(
+                                            color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                            fontSize: SizeConfig.blockSizeHorizontal * 3.5,
+                                            fontFamily: 'Roboto_Regular'),
+                                        border: const OutlineInputBorder(
+                                            borderSide:
+                                            BorderSide(width: 1.0, color: Colors.black)),
+                                        focusedBorder: const OutlineInputBorder(
+                                            borderSide:
+                                            BorderSide(width: 1.0, color: Colors.black)),
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(right: parentWidth * 0.05),
+                                  child: Container(
+                                    height: parentHeight*0.05,
+                                    child: TextFormField(
+                                      controller: lengthController,
+                                      // focusNode: _cityFocus,
+                                      textInputAction: TextInputAction.next,
+                                      decoration: InputDecoration(
+                                        label: RichText(
+                                          text: TextSpan(
+                                            text: 'Height',
+                                            style: TextStyle(
+                                              color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: SizeConfig.blockSizeHorizontal*2.8,
+                                            ),
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        labelStyle: TextStyle(
+                                            color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                            fontSize: SizeConfig.blockSizeHorizontal * 3.5,
+                                            fontFamily: 'Roboto_Regular'),
+                                        border: const OutlineInputBorder(
+                                            borderSide:
+                                            BorderSide(width: 1.0, color: Colors.black)),
+                                        focusedBorder: const OutlineInputBorder(
+                                            borderSide:
+                                            BorderSide(width: 1.0, color: Colors.black)),
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.02),
+                          child: Container(
+                            height: SizeConfig.screenWidth*0.003,
+                            color: Colors.black12,
+                            child: Row(
+                              children: const [
+                                Text("hii",
+                                  style: TextStyle(
+                                      color: Colors.transparent
+                                  ),),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+
                   Padding(
                     padding: EdgeInsets.only(top: parentHeight*0.01),
                     child: Container(
@@ -1024,19 +1224,19 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       children: [
 
                         Container(
-                          height: parentHeight*0.09,
+                          height: parentHeight*0.085,
                           width: parentWidth*0.195,
                           color: CommonColor.UNSELECT_TYPE_COLOR,
                         ),
 
                         Container(
-                          height: parentHeight*0.09,
+                          height: parentHeight*0.085,
                           width: parentWidth*0.195,
                           color: CommonColor.UNSELECT_TYPE_COLOR,
                         ),
 
                         Container(
-                          height: parentHeight*0.09,
+                          height: parentHeight*0.085,
                           width: parentWidth*0.195,
                           color: CommonColor.UNSELECT_TYPE_COLOR,
                         )
@@ -1046,7 +1246,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                   ),
 
                   Padding(
-                    padding: EdgeInsets.only(top: parentHeight*0.02,
+                    padding: EdgeInsets.only(top: parentHeight*0.01,
                     left: parentWidth*0.05),
                     child: Row(
                       children: [
@@ -1062,7 +1262,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                         Text(" Over Dimensional Load",
                           style: TextStyle(
                               color: Colors.black,
-                              fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                              fontSize: SizeConfig.blockSizeHorizontal*3.7,
                               fontWeight: FontWeight.w500,
                               fontFamily: 'Roboto_Regular'
                           ),),
@@ -1120,9 +1320,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
   Widget getVehicleDetails(double parentHeight, double parentWidth){
     return Padding(
-      padding: EdgeInsets.only(left: parentWidth*0.05,
-          right: parentWidth*0.05,
-          top: parentHeight*0.03),
+      padding: EdgeInsets.only(left: parentWidth*0.03,
+          right: parentWidth*0.03,
+          top: parentHeight*0.02),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -1131,14 +1331,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
             BoxShadow(
                 color: Colors.black.withOpacity(0.15),
                 blurRadius: 3,
-                spreadRadius: 1,
-                offset: const Offset(1, 1)),
+                spreadRadius: 2,
+                offset: const Offset(3, 3)),
           ],
         ),
         child: Stack(
           children: [
             Visibility(
-              visible: showAllGoodsField,
+              visible: showAllVehicleTypes,
               child: Column(
                 children: [
 
@@ -1165,7 +1365,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                     child: GestureDetector(
                       onDoubleTap: (){},
                       onTap: (){
-                        showLoadField = !showLoadField;
+                        showVehicleType = !showVehicleType;
                         if(mounted){
                           setState(() {
 
@@ -1179,9 +1379,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                           children: [
                             RichText(
                               text: TextSpan(
-                                text: loadType == 0 ? 'Type of Load' : typeLoad,
+                                text: vehicleType == 0 ? 'Type of Vehicle' : vehicleName,
                                 style: TextStyle(
-                                  color: loadType == 0 ? CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0)
+                                  color: vehicleType == 0 ? CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0)
                                       : Colors.black,
                                   fontWeight: FontWeight.w400,
                                   fontSize: SizeConfig.blockSizeHorizontal*4.0,
@@ -1200,7 +1400,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                   ),
 
                   Visibility(
-                    visible: showLoadField,
+                    visible: showVehicleType,
                     child: Padding(
                       padding: EdgeInsets.only(top: parentHeight*0.02,),
                       child: Column(
@@ -1211,11 +1411,11 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             child: GestureDetector(
                               onDoubleTap: (){},
                               onTap: (){
-                                showLoadField = !showLoadField;
-                                loadType = 1;
+                                showVehicleType = !showVehicleType;
+                                vehicleType = 1;
                                 if(mounted){
                                   setState(() {
-                                    typeLoad = "Pack Load";
+                                    vehicleName = "Open body";
                                   });
                                 }
                               },
@@ -1230,13 +1430,13 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       decoration: BoxDecoration(
                                           border: Border.all(color: Colors.black),
                                           shape: BoxShape.circle,
-                                          color:loadType == 1 ? CommonColor.SIGN_UP_TEXT_COLOR : CommonColor.WHITE_COLOR
+                                          color:vehicleType == 1 ? CommonColor.SIGN_UP_TEXT_COLOR : CommonColor.WHITE_COLOR
                                       ),
                                     ),
 
                                     Padding(
                                       padding:  EdgeInsets.only(left: parentWidth*0.03),
-                                      child: Text("Pack Load",
+                                      child: Text("Open body",
                                         style: TextStyle(
                                             color: Colors.black54,
                                             fontWeight: FontWeight.w400,
@@ -1275,11 +1475,11 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             child: GestureDetector(
                               onDoubleTap: (){},
                               onTap: (){
-                                showLoadField = !showLoadField;
-                                loadType = 2;
+                                showVehicleType = !showVehicleType;
+                                vehicleType = 2;
                                 if(mounted){
                                   setState(() {
-                                    typeLoad = "Loose Load";
+                                    vehicleName = "Closed body";
                                   });
                                 }
                               },
@@ -1294,14 +1494,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       decoration: BoxDecoration(
                                           border: Border.all(color: Colors.black),
                                           shape: BoxShape.circle,
-                                          color:loadType == 2 ? CommonColor.SIGN_UP_TEXT_COLOR
+                                          color:vehicleType == 2 ? CommonColor.SIGN_UP_TEXT_COLOR
                                               : CommonColor.WHITE_COLOR
                                       ),
                                     ),
 
                                     Padding(
                                       padding:  EdgeInsets.only(left: parentWidth*0.03),
-                                      child: Text("Loose Load",
+                                      child: Text("Closed body",
                                         style: TextStyle(
                                             color: Colors.black54,
                                             fontWeight: FontWeight.w400,
@@ -1339,11 +1539,11 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             child: GestureDetector(
                               onDoubleTap: (){},
                               onTap: (){
-                                showLoadField = !showLoadField;
-                                loadType = 3;
+                                showVehicleType = !showVehicleType;
+                                vehicleType = 3;
                                 if(mounted){
                                   setState(() {
-                                    typeLoad = "Over Dimensional Load";
+                                    vehicleName = "Trailor";
                                   });
                                 }
                               },
@@ -1358,14 +1558,78 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       decoration: BoxDecoration(
                                           border: Border.all(color: Colors.black),
                                           shape: BoxShape.circle,
-                                          color:loadType == 3 ? CommonColor.SIGN_UP_TEXT_COLOR
+                                          color:vehicleType == 3 ? CommonColor.SIGN_UP_TEXT_COLOR
                                               : CommonColor.WHITE_COLOR
                                       ),
                                     ),
 
                                     Padding(
                                       padding:  EdgeInsets.only(left: parentWidth*0.03),
-                                      child: Text("Over Dimensional Load",
+                                      child: Text("Trailor",
+                                        style: TextStyle(
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                            fontFamily: 'Roboto_Regular'
+                                        ),
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.01,
+                                left: parentWidth*0.03,
+                                right: parentWidth*0.03),
+                            child: Container(
+                              height: SizeConfig.screenWidth*0.003,
+                              color: Colors.black12,
+                              child: Row(
+                                children: const [
+                                  Text("hii",
+                                    style: TextStyle(
+                                        color: Colors.transparent
+                                    ),),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:  EdgeInsets.only(left: parentWidth*0.05,
+                                top: parentHeight*0.01),
+                            child: GestureDetector(
+                              onDoubleTap: (){},
+                              onTap: (){
+                                showVehicleType = !showVehicleType;
+                                vehicleType = 4;
+                                if(mounted){
+                                  setState(() {
+                                    vehicleName = "Container";
+                                  });
+                                }
+                              },
+                              child: Container(
+                                color: Colors.transparent,
+                                child: Row(
+                                  children: [
+
+                                    Container(
+                                      height: parentHeight*0.03,
+                                      width: parentWidth*0.06,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.black),
+                                          shape: BoxShape.circle,
+                                          color:vehicleType == 4 ? CommonColor.SIGN_UP_TEXT_COLOR
+                                              : CommonColor.WHITE_COLOR
+                                      ),
+                                    ),
+
+                                    Padding(
+                                      padding:  EdgeInsets.only(left: parentWidth*0.03),
+                                      child: Text("Container",
                                         style: TextStyle(
                                             color: Colors.black54,
                                             fontWeight: FontWeight.w400,
@@ -1447,13 +1711,13 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                   height: parentHeight*0.025,
                                   width: parentWidth*0.15,
                                   decoration: BoxDecoration(
-                                      color: CommonColor.WEIGHT_COLOR,
+                                      color: CommonColor.SIGN_UP_TEXT_COLOR,
                                       borderRadius: BorderRadius.circular(10)
                                   ),
                                   child: Center(
                                     child: Text("RLW (kg)",
                                       style: TextStyle(
-                                          color: Colors.black54,
+                                          color: CommonColor.WHITE_COLOR,
                                           fontWeight: FontWeight.w400,
                                           fontSize: SizeConfig.blockSizeHorizontal*3.0,
                                           fontFamily: 'Roboto_Regular'
@@ -1469,7 +1733,6 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                     ),
 
                   ),
-
 
                   Padding(
                     padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.0),
@@ -1492,7 +1755,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                     child: TextFormField(
                       controller: vehicleNumberController,
                       // focusNode: _userNameFocus,
-                      textInputAction: TextInputAction.next,
+                      textInputAction: TextInputAction.done,
                       decoration: InputDecoration(
                         label: Text("No. of Vehicle (e.g. 01 )",
                           style: TextStyle(
@@ -1508,6 +1771,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             borderSide: BorderSide(color: Colors.black12)
                         ),
                       ),
+                      onFieldSubmitted: (val){
+                        if(mounted){
+                          setState(() {
+                            hideAllVehicleTypeField = !hideAllVehicleTypeField;
+                            showAllVehicleTypes = !showAllVehicleTypes;
+                          });
+                        }
+                      },
                     ),
                   ),
 
@@ -1531,6 +1802,11 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                 onChanged: (bool? value) {
                                   setState(() {
                                     isChecked = value!;
+                                    if(isChecked == true){
+                                      lengthWidthVehicle = !lengthWidthVehicle;
+                                    }else{
+                                      lengthWidthVehicle = !lengthWidthVehicle;
+                                    }
                                   });
                                 },
                               ),
@@ -1542,7 +1818,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                           children: [
                             Padding(
                               padding: EdgeInsets.only(left: SizeConfig.screenWidth * 0.01,
-                              bottom: parentHeight*0.008),
+                              bottom: parentHeight*0.015),
                               child: Text("Length & Width of Vehicle",
                                 style: TextStyle(
                                     color: Colors.black54,
@@ -1557,82 +1833,92 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                     ),
                   ),
 
-                  Padding(
-                    padding: EdgeInsets.only(
-                        top: parentHeight * 0.0,
-                        left: parentWidth * 0.05,
-                        right: parentWidth * 0.05),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(right: parentWidth * 0.05),
-                            child: Container(
-                              height: parentHeight*0.06,
-                              child: TextFormField(
-                                controller: lengthController,
-                                // focusNode: _cityFocus,
-                                textInputAction: TextInputAction.next,
-                                decoration: InputDecoration(
-                                  label: RichText(
-                                    text: TextSpan(
-                                        text: 'Length(Ft.)',
-                                        style: TextStyle(
-                                          color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                                        ),
-                                       ),
+                  Visibility(
+                    visible: lengthWidthVehicle,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: parentWidth * 0.05,
+                          right: parentWidth * 0.05),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(right: parentWidth * 0.05),
+                              child: Container(
+                                height: parentHeight*0.06,
+                                child: TextFormField(
+                                  controller: lengthController,
+                                  // focusNode: _cityFocus,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: InputDecoration(
+                                    label: RichText(
+                                      text: TextSpan(
+                                          text: 'Length(Ft.)',
+                                          style: TextStyle(
+                                            color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                                          ),
+                                         ),
+                                    ),
+                                    labelStyle: TextStyle(
+                                        color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                        fontSize: SizeConfig.blockSizeHorizontal * 3.5,
+                                        fontFamily: 'Roboto_Regular'),
+                                    border: const OutlineInputBorder(
+                                        borderSide:
+                                        BorderSide(width: 1.0, color: Colors.black)),
+                                    focusedBorder: const OutlineInputBorder(
+                                        borderSide:
+                                        BorderSide(width: 1.0, color: Colors.black)),
                                   ),
-                                  labelStyle: TextStyle(
-                                      color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
-                                      fontSize: SizeConfig.blockSizeHorizontal * 3.5,
-                                      fontFamily: 'Roboto_Regular'),
-                                  border: const OutlineInputBorder(
-                                      borderSide:
-                                      BorderSide(width: 1.0, color: Colors.black)),
-                                  focusedBorder: const OutlineInputBorder(
-                                      borderSide:
-                                      BorderSide(width: 1.0, color: Colors.black)),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
                               ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(left: parentWidth * 0.05),
-                            child: Container(
-                              height: parentHeight*0.06,
-                              child: TextFormField(
-                                controller: widthController,
-                                // focusNode: _zipCodeFocus,
-                                textInputAction: TextInputAction.next,
-                                decoration: InputDecoration(
-                                  labelText: "Width(Ft.)",
-                                  labelStyle: TextStyle(
-                                      color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
-                                      fontSize: SizeConfig.blockSizeHorizontal * 3.5,
-                                      fontFamily: 'Roboto_Regular'),
-                                  border: const OutlineInputBorder(
-                                      borderSide:
-                                      BorderSide(width: 1.0, color: Colors.black)),
-                                  focusedBorder: const OutlineInputBorder(
-                                      borderSide:
-                                      BorderSide(width: 1.0, color: Colors.black)),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: parentWidth * 0.05),
+                              child: Container(
+                                height: parentHeight*0.06,
+                                child: TextFormField(
+                                  controller: widthController,
+                                  // focusNode: _zipCodeFocus,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: InputDecoration(
+                                    labelText: "Width(Ft.)",
+                                    labelStyle: TextStyle(
+                                        color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                        fontSize: SizeConfig.blockSizeHorizontal * 3.5,
+                                        fontFamily: 'Roboto_Regular'),
+                                    border: const OutlineInputBorder(
+                                        borderSide:
+                                        BorderSide(width: 1.0, color: Colors.black)),
+                                    focusedBorder: const OutlineInputBorder(
+                                        borderSide:
+                                        BorderSide(width: 1.0, color: Colors.black)),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  onFieldSubmitted: (val){
+                                    if(mounted){
+                                      setState(() {
+                                        hideAllVehicleTypeField = !hideAllVehicleTypeField;
+                                        showAllVehicleTypes = !showAllVehicleTypes;
+                                      });
+                                    }
+                                  },
                                 ),
-                                textAlign: TextAlign.center,
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
 
                   SizedBox(
-                    height: parentHeight*0.03,
+                    height: parentHeight*0.01,
                   )
 
                 ],
@@ -1640,7 +1926,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
             ),
 
             Visibility(
-              visible: hideAllGoodsField,
+              visible: hideAllVehicleTypeField,
               child: Column(
                 children: [
                   Padding(
@@ -1651,7 +1937,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
 
-                        Text("Load Details",
+                        Text("Vehicles",
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: SizeConfig.blockSizeHorizontal*4.5,
@@ -1664,8 +1950,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                           onTap: (){
                             if(mounted){
                               setState(() {
-                                showAllGoodsField = !showAllGoodsField;
-                                hideAllGoodsField = !hideAllGoodsField;
+                                hideAllVehicleTypeField = !hideAllVehicleTypeField;
+                                showAllVehicleTypes = !showAllVehicleTypes;
                               });
                             }
                           },
@@ -1681,92 +1967,84 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                   ),
 
                   Padding(
-                    padding: EdgeInsets.only(top: parentHeight*0.02,
-                        left: parentWidth*0.1,
+                    padding: EdgeInsets.only(top: parentHeight*0.01,
+                        left: parentWidth*0.05,
                         right: parentWidth*0.1),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
 
-                        Container(
-                          height: parentHeight*0.09,
-                          width: parentWidth*0.195,
-                          color: CommonColor.UNSELECT_TYPE_COLOR,
-                        ),
-
-                        Container(
-                          height: parentHeight*0.09,
-                          width: parentWidth*0.195,
-                          color: CommonColor.UNSELECT_TYPE_COLOR,
-                        ),
-
-                        Container(
-                          height: parentHeight*0.09,
-                          width: parentWidth*0.195,
-                          color: CommonColor.UNSELECT_TYPE_COLOR,
-                        )
-
-                      ],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.only(top: parentHeight*0.02,
-                        left: parentWidth*0.05),
-                    child: Row(
-                      children: [
-
-                        Text("Type of Load :",
-                          style: TextStyle(
-                              color: Colors.black45,
-                              fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'Roboto_Regular'
-                          ),),
-
-                        Text(" Over Dimensional Load",
+                        Text("$vehicleName",
                           style: TextStyle(
                               color: Colors.black,
-                              fontSize: SizeConfig.blockSizeHorizontal*4.0,
-                              fontWeight: FontWeight.w500,
+                              fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                              fontWeight: FontWeight.w400,
                               fontFamily: 'Roboto_Regular'
                           ),),
 
-                        Padding(
-                          padding: EdgeInsets.only(left: parentWidth*0.02),
-                          child: Container(
-                            height: parentHeight*0.04,
-                            width: parentWidth*0.002,
-                            color: Colors.black26,
-                          ),
+                        Container(
+                          height: parentHeight*0.035,
+                          width: parentWidth*0.003,
+                          color: CommonColor.UNSELECT_TYPE_COLOR,
                         ),
 
-                        Padding(
-                          padding: EdgeInsets.only(left: parentWidth*0.02),
-                          child: Text("10 Ton(s)",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: SizeConfig.blockSizeHorizontal*3.7,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Roboto_Regular'
-                            ),),
+                        Text("1550 RLW(kg)",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Roboto_Regular'
+                          ),),
+
+                        Container(
+                          height: parentHeight*0.035,
+                          width: parentWidth*0.003,
+                          color: CommonColor.UNSELECT_TYPE_COLOR,
                         ),
 
+                        Text("  L : 40 ft.",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Roboto_Regular'
+                          ),),
+
+                        Text("W : 08 ft.",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Roboto_Regular'
+                          ),),
                       ],
                     ),
                   ),
 
                   Padding(
                     padding: EdgeInsets.only(left: parentWidth*0.05,
-                        right: parentWidth*0.05,
-                        top: parentHeight*0.01),
-                    child: Text("Lorem Ipsum is simply dummy text of the printing and typesetting.",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: SizeConfig.blockSizeHorizontal*3.0,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'Roboto_Regular'
-                      ),),
+                    top: parentHeight*0.01),
+                    child: Row(
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                              text: 'No. Of Vehicle :',
+                              style: TextStyle(
+                                color: Colors.black26,
+                                fontWeight: FontWeight.w400,
+                                fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                              ),
+                              children: [
+                                TextSpan(
+                                    text: ' 04',
+                                    style: TextStyle(
+                                        fontSize: SizeConfig.blockSizeHorizontal*4.5,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400))
+                              ]),
+                        ),
+                      ],
+                    ),
                   ),
 
                   SizedBox(
@@ -1778,6 +2056,933 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget getPaymentDetailsLayout(double parentHeight, double parentWidth){
+    return Padding(
+      padding: EdgeInsets.only(left: parentWidth*0.03,
+          right: parentWidth*0.03,
+          top: parentHeight*0.02),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: Colors.black.withOpacity(0.15),
+                blurRadius: 3,
+                spreadRadius: 2,
+                offset: const Offset(3, 3)),
+          ],
+        ),
+        child: Stack(
+          children: [
+            Visibility(
+              visible: paymentFieldShow,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.02),
+                        child: Text("Payment Details",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: SizeConfig.blockSizeHorizontal*4.5,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Roboto_Medium'
+                          ),),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    color: Colors.transparent,
+                    height: parentHeight*0.07,
+                    child: Row(
+                      children: [
+
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: parentHeight*0.01),
+                            child: TextFormField(
+                              controller: quantityLoadController,
+                              // focusNode: _userNameFocus,
+                              textInputAction: TextInputAction.done,
+                              decoration: InputDecoration(
+                                label: Text("Total Fare",
+                                  style: TextStyle(
+                                    color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                                  ),),
+                                contentPadding: EdgeInsets.only(left: parentWidth*0.05, right: parentWidth*0.05),
+                                prefixText: "\u{20B9}",
+                                prefixStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: SizeConfig.blockSizeHorizontal*5.0
+                                ),
+                                enabledBorder:  UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.black12)
+                                ),
+                                focusedBorder:  UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.black12)
+                                ),
+                              ),
+                              style: TextStyle(
+                                  color: CommonColor.REGISTER_HINT_COLOR.withOpacity(0.5),
+                                  fontSize: SizeConfig.blockSizeHorizontal*5.0
+                              ),onFieldSubmitted: (val){
+                                if(mounted){
+                                  setState(() {
+                                    paymentFieldHide = !paymentFieldHide;
+                                    paymentFieldShow = !paymentFieldShow;
+                                  });
+                                }
+                            },
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+
+                      Padding(
+                        padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.007),
+                        child: Text("Advance Payment Will Be Given By",
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Roboto_Regular'
+                          ),),
+                      ),
+
+                      Padding(
+                        padding: EdgeInsets.only(right: parentWidth*0.03,
+                            top: parentHeight*0.01),
+                        child: Row(
+                          children: [
+
+                            Container(
+                              height: parentHeight*0.027,
+                              width: parentWidth*0.07,
+                              decoration: BoxDecoration(
+                                color: CommonColor.ADVANCE_INCREMENT_COLOR,
+                                borderRadius: BorderRadius.circular(5)
+                              ),
+                              child: Icon(Icons.remove,
+                              color: Colors.white,
+                                size: parentHeight*0.02,),
+                            ),
+
+                            Padding(
+                              padding: EdgeInsets.only(left: parentWidth*0.02, right: parentWidth*0.02),
+                              child: Text("50 %",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: SizeConfig.blockSizeHorizontal*3.7,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Roboto_Regular'
+                                ),),
+                            ),
+
+                            Container(
+                              height: parentHeight*0.027,
+                              width: parentWidth*0.07,
+                              decoration: BoxDecoration(
+                                  color: CommonColor.ADVANCE_INCREMENT_COLOR,
+                                  borderRadius: BorderRadius.circular(5)
+                              ),
+                              child: Icon(Icons.add,
+                                color: Colors.white,
+                              size: parentHeight*0.02,),
+                            ),
+
+                          ],
+                        ),
+                      ),
+
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: parentHeight*0.015,
+                      left: parentWidth*0.05,
+                      right: parentWidth*0.25
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+
+                        GestureDetector(
+                          onDoubleTap: (){},
+                          onTap: (){
+                            if(mounted){
+                              setState(() {
+                                advancePay = 1;
+
+                                if(advPayAmountShow == false){
+                                  advPayAmountShow = !advPayAmountShow;
+                                }
+
+
+                              });
+                            }
+                          },
+                          child: Container(
+                            color: Colors.transparent,
+                            child: Row(
+                              children: [
+
+                                Container(
+                                  height: parentHeight*0.03,
+                                  width: parentWidth*0.06,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black),
+                                      shape: BoxShape.circle,
+                                      color:advancePay == 1 ? CommonColor.SIGN_UP_TEXT_COLOR
+                                          : CommonColor.WHITE_COLOR
+                                  ),
+                                ),
+
+                                Padding(
+                                  padding:  EdgeInsets.only(left: parentWidth*0.03),
+                                  child: Text("Company",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                        fontFamily: 'Roboto_Regular'
+                                    ),
+                                  ),
+                                ),
+
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        GestureDetector(
+                          onDoubleTap: (){},
+                          onTap: (){
+                            if(mounted){
+                              setState(() {
+                                advancePay = 2;
+                                if(advPayAmountShow == false){
+                                  advPayAmountShow = !advPayAmountShow;
+                                }
+                              });
+                            }
+                          },
+                          child: Container(
+                            color: Colors.transparent,
+                            child: Row(
+                              children: [
+
+                                Container(
+                                  height: parentHeight*0.03,
+                                  width: parentWidth*0.06,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black),
+                                      shape: BoxShape.circle,
+                                      color:advancePay == 2 ? CommonColor.SIGN_UP_TEXT_COLOR
+                                          : CommonColor.WHITE_COLOR
+                                  ),
+                                ),
+
+                                Padding(
+                                  padding:  EdgeInsets.only(left: parentWidth*0.03),
+                                  child: Text("Receiver",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                        fontFamily: 'Roboto_Regular'
+                                    ),
+                                  ),
+                                ),
+
+                              ],
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                    visible: advPayAmountShow,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: parentWidth*0.05,right: parentWidth*0.05,
+                      top: parentHeight*0.015),
+                      child: Container(
+                        height: parentHeight*0.06,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(7),
+                          border: Border.all(color: Colors.black12)
+                        ),
+                        child: Row(
+                          children: [
+
+                            Padding(
+                              padding: EdgeInsets.only(left: parentWidth*0.03),
+                              child: Icon(Icons.currency_rupee,
+                              color: Colors.black,
+                              size: parentHeight*0.022,),
+                            ),
+
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.only(top: parentHeight*0.01),
+                                child: TextFormField(
+                                  controller: quantityLoadController,
+                                  // focusNode: _userNameFocus,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: InputDecoration(
+                                    hintText:"6000",
+                                    hintStyle: TextStyle(
+                                      color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: SizeConfig.blockSizeHorizontal*6.0,
+                                    ),
+                                    contentPadding: EdgeInsets.only(left: parentWidth*0.05, right: parentWidth*0.05,
+                                    bottom: parentHeight*0.016),
+                                    enabledBorder: const UnderlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.transparent)
+                                    ),
+                                    focusedBorder: const UnderlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.transparent)
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            Padding(
+                              padding: EdgeInsets.only(right: parentWidth*0.02),
+                              child: Container(
+                                width: parentWidth*0.31,
+                                color: Colors.transparent,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onDoubleTap: (){},
+                                      onTap: (){
+                                        if(mounted){
+                                          setState(() {
+                                            advPay = 1;
+                                            advPayMethod = "Online";
+                                          });
+                                        }
+                                      },
+                                      child: Container(
+                                        height: parentHeight*0.025,
+                                        width: parentWidth*0.15,
+                                        decoration: BoxDecoration(
+                                            color:advPay == 1 ? CommonColor.SIGN_UP_TEXT_COLOR : CommonColor.WEIGHT_COLOR,
+                                            borderRadius: BorderRadius.circular(10)
+                                        ),
+                                        child: Center(
+                                          child: Text("Online",
+                                            style: TextStyle(
+                                                color:advPay == 1 ? Colors.white : Colors.black54,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                                                fontFamily: 'Roboto_Regular'
+                                            ),),
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onDoubleTap: (){},
+                                      onTap: (){
+                                        if(mounted){
+                                          setState(() {
+                                            advPay = 2;
+                                            advPayMethod = "Cash";
+                                          });
+                                        }
+                                      },
+                                      child: Container(
+                                        height: parentHeight*0.025,
+                                        width: parentWidth*0.15,
+                                        decoration: BoxDecoration(
+                                            color:advPay == 2 ? CommonColor.SIGN_UP_TEXT_COLOR : CommonColor.WEIGHT_COLOR,
+                                            borderRadius: BorderRadius.circular(10)
+                                        ),
+                                        child: Center(
+                                          child: Text("Cash",
+                                            style: TextStyle(
+                                                color:advPay == 2 ? Colors.white : Colors.black54,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                                                fontFamily: 'Roboto_Regular'
+                                            ),),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+
+                          ],
+                        ),
+
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: parentHeight*0.01),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+
+                        Padding(
+                          padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.007),
+                          child: Text("Delivery  Payment Will Be Given By",
+                            style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Roboto_Regular'
+                            ),),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: parentHeight*0.015,
+                        left: parentWidth*0.05,
+                        right: parentWidth*0.25
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+
+                        GestureDetector(
+                          onDoubleTap: (){},
+                          onTap: (){
+                            if(mounted){
+                              setState(() {
+                                deliveryPay = 1;
+
+                                if(deliverPayAmountShow == false){
+                                  deliverPayAmountShow = !deliverPayAmountShow;
+                                }
+
+                              });
+                            }
+                          },
+                          child: Row(
+                            children: [
+
+                              Container(
+                                height: parentHeight*0.03,
+                                width: parentWidth*0.06,
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black),
+                                    shape: BoxShape.circle,
+                                    color:deliveryPay == 1 ? CommonColor.SIGN_UP_TEXT_COLOR
+                                        : CommonColor.WHITE_COLOR
+                                ),
+                              ),
+
+                              Padding(
+                                padding:  EdgeInsets.only(left: parentWidth*0.03),
+                                child: Text("Company",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                      fontFamily: 'Roboto_Regular'
+                                  ),
+                                ),
+                              ),
+
+                            ],
+                          ),
+                        ),
+
+                        GestureDetector(
+                          onDoubleTap: (){},
+                          onTap: (){
+                            if(mounted){
+                              setState(() {
+                                deliveryPay = 2;
+
+                                if(deliverPayAmountShow == false){
+                                  deliverPayAmountShow = !deliverPayAmountShow;
+                                }
+                              });
+                            }
+                          },
+                          child: Row(
+                            children: [
+
+                              Container(
+                                height: parentHeight*0.03,
+                                width: parentWidth*0.06,
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black),
+                                    shape: BoxShape.circle,
+                                    color:deliveryPay == 2 ? CommonColor.SIGN_UP_TEXT_COLOR
+                                        : CommonColor.WHITE_COLOR
+                                ),
+                              ),
+
+                              Padding(
+                                padding:  EdgeInsets.only(left: parentWidth*0.03),
+                                child: Text("Receiver",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                      fontFamily: 'Roboto_Regular'
+                                  ),
+                                ),
+                              ),
+
+                            ],
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                    visible: deliverPayAmountShow,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: parentWidth*0.05,right: parentWidth*0.05,
+                          top: parentHeight*0.015),
+                      child: Container(
+                        height: parentHeight*0.06,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(7),
+                            border: Border.all(color: Colors.black12)
+                        ),
+                        child: Row(
+                          children: [
+
+                            Padding(
+                              padding: EdgeInsets.only(left: parentWidth*0.03),
+                              child: Icon(Icons.currency_rupee,
+                                color: Colors.black,
+                                size: parentHeight*0.022,),
+                            ),
+
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.only(top: parentHeight*0.01),
+                                child: TextFormField(
+                                  controller: quantityLoadController,
+                                  // focusNode: _userNameFocus,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: InputDecoration(
+                                    hintText:"6000",
+                                    hintStyle: TextStyle(
+                                      color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: SizeConfig.blockSizeHorizontal*6.0,
+                                    ),
+                                    contentPadding: EdgeInsets.only(left: parentWidth*0.05, right: parentWidth*0.05,
+                                        bottom: parentHeight*0.016),
+                                    enabledBorder: const UnderlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.transparent)
+                                    ),
+                                    focusedBorder: const UnderlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.transparent)
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            Padding(
+                              padding: EdgeInsets.only(right: parentWidth*0.02),
+                              child: Container(
+                                width: parentWidth*0.31,
+                                color: Colors.transparent,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onDoubleTap: (){},
+                                      onTap: (){
+                                        if(mounted){
+                                          setState(() {
+                                            deliverPay = 1;
+                                            deliveryPayMethod = "Online";
+                                          });
+                                        }
+                                      },
+                                      child: Container(
+                                        height: parentHeight*0.025,
+                                        width: parentWidth*0.15,
+                                        decoration: BoxDecoration(
+                                            color:deliverPay == 1 ? CommonColor.SIGN_UP_TEXT_COLOR : CommonColor.WEIGHT_COLOR,
+                                            borderRadius: BorderRadius.circular(10)
+                                        ),
+                                        child: Center(
+                                          child: Text("Online",
+                                            style: TextStyle(
+                                                color:deliverPay == 1 ? Colors.white : Colors.black54,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                                                fontFamily: 'Roboto_Regular'
+                                            ),),
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onDoubleTap: (){},
+                                      onTap: (){
+                                        if(mounted){
+                                          setState(() {
+                                            deliverPay = 2;
+                                            deliveryPayMethod = "Cash";
+                                          });
+                                        }
+                                      },
+                                      child: Container(
+                                        height: parentHeight*0.025,
+                                        width: parentWidth*0.15,
+                                        decoration: BoxDecoration(
+                                            color:deliverPay == 2 ? CommonColor.SIGN_UP_TEXT_COLOR : CommonColor.WEIGHT_COLOR,
+                                            borderRadius: BorderRadius.circular(10)
+                                        ),
+                                        child: Center(
+                                          child: Text("Cash",
+                                            style: TextStyle(
+                                                color:deliverPay == 2 ? Colors.white : Colors.black54,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                                                fontFamily: 'Roboto_Regular'
+                                            ),),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+
+                          ],
+                        ),
+
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: parentHeight*0.02,
+                  ),
+                ],
+              ),
+            ),
+            Visibility(
+              visible: paymentFieldHide,
+              child: Column(
+                children: [
+
+                  Padding(
+                    padding: EdgeInsets.only(right: parentWidth*0.05),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.02),
+                          child: Text("Payment Details",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: SizeConfig.blockSizeHorizontal*4.5,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Roboto_Medium'
+                            ),),
+                        ),
+
+                        GestureDetector(
+                          onDoubleTap: (){},
+                          onTap: (){
+                            if(mounted){
+                              setState(() {
+                                paymentFieldHide = !paymentFieldHide;
+                                paymentFieldShow = !paymentFieldShow;
+                              });
+                            }
+                          },
+                          child: Container(
+                            color: Colors.transparent,
+                            child: Icon(Icons.edit,
+                              size: parentHeight*0.025,),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: parentHeight*0.015,
+                      left: parentWidth*0.05,
+                      right: parentWidth*0.1,
+                    ),
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Total Fare",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Roboto_Regular'
+                            ),),
+                          RichText(
+                            text: TextSpan(
+                                text: '\u{20B9}',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: SizeConfig.blockSizeHorizontal*5.0,
+                                  fontFamily: "Roboto_Regular"
+                                ),
+                                children: [
+                                  TextSpan(
+                                      text: ' 12000',
+                                      style: TextStyle(
+                                          fontSize: SizeConfig.blockSizeHorizontal*4.5,
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.w400))
+                                ]),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.only(right: parentWidth*0.05),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.01),
+                          child: Text("Advance Payment ",
+                            style: TextStyle(
+                                color: CommonColor.REGISTER_HINT_COLOR,
+                                fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Roboto_Regular'
+                            ),),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: parentHeight*0.015,
+                      left: parentWidth*0.05,
+                      right: parentWidth*0.1,
+                    ),
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: parentWidth*0.3,
+                            color:Colors.transparent,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Company",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: SizeConfig.blockSizeHorizontal*3.7,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Roboto_Regular'
+                                  ),),
+                                Container(
+                                  height: parentHeight*0.035,
+                                  width: parentWidth*0.003,
+                                  color: CommonColor.UNSELECT_TYPE_COLOR,
+                                ),
+                                Text("Online",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: SizeConfig.blockSizeHorizontal*3.7,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Roboto_Regular'
+                                  ),),
+                              ],
+                            ),
+                          ),
+                          RichText(
+                            text: TextSpan(
+                                text: '\u{20B9}',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: SizeConfig.blockSizeHorizontal*5.0,
+                                    fontFamily: "Roboto_Regular"
+                                ),
+                                children: [
+                                  TextSpan(
+                                      text: ' 6000',
+                                      style: TextStyle(
+                                          fontSize: SizeConfig.blockSizeHorizontal*4.5,
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.w400))
+                                ]),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.only(right: parentWidth*0.05),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.01),
+                          child: Text("Delivery Payment",
+                            style: TextStyle(
+                                color: CommonColor.REGISTER_HINT_COLOR,
+                                fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Roboto_Regular'
+                            ),),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: parentHeight*0.015,
+                      left: parentWidth*0.05,
+                      right: parentWidth*0.1,
+                    ),
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: parentWidth*0.3,
+                            color:Colors.transparent,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Company",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: SizeConfig.blockSizeHorizontal*3.7,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Roboto_Regular'
+                                  ),),
+                                Container(
+                                  height: parentHeight*0.035,
+                                  width: parentWidth*0.003,
+                                  color: CommonColor.UNSELECT_TYPE_COLOR,
+                                ),
+                                Text("Cash",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: SizeConfig.blockSizeHorizontal*3.7,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Roboto_Regular'
+                                  ),),
+                              ],
+                            ),
+                          ),
+                          RichText(
+                            text: TextSpan(
+                                text: '\u{20B9}',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: SizeConfig.blockSizeHorizontal*5.0,
+                                    fontFamily: "Roboto_Regular"
+                                ),
+                                children: [
+                                  TextSpan(
+                                      text: ' 6000',
+                                      style: TextStyle(
+                                          fontSize: SizeConfig.blockSizeHorizontal*4.5,
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.w400))
+                                ]),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: parentHeight*0.01,
+                  )
+
+                ],
+              ),
+            )
+          ],
+        )
+      ),
+    );
+  }
+
+  Widget getSubmitButton(double parentHeight, double parentWidth){
+    return Padding(
+      padding: EdgeInsets.only(top: parentHeight*0.05,
+      left: parentWidth*0.1,
+      right: parentWidth*0.1),
+      child: GestureDetector(
+        onDoubleTap: (){},
+        onTap: (){
+          showCupertinoDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) {
+              return const AnimatedOpacity(
+                  opacity: 1.0,
+                  duration: Duration(seconds: 2),
+                  child: LoadPostSuccessDialog());
+            },
+          );
+        },
+        child: Container(
+          height: parentHeight*0.06,
+          width: parentWidth*0.5,
+          decoration: BoxDecoration(
+            color: CommonColor.LOAD_SUBMIT_COLOR,
+            borderRadius: BorderRadius.circular(15)
+          ),
+          child: Center(
+            child: Text("Submit",
+            style: TextStyle(
+              color: CommonColor.LOAD_SUBMIT_TEXT_COLOR,
+              fontSize: SizeConfig.blockSizeHorizontal*5.0,
+              fontFamily: 'Roboto_Bold'
+            ),),
+          ),
         ),
       ),
     );
