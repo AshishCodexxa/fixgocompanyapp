@@ -68,7 +68,8 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                       childCount: 3,
                           (context, index) {
                         return Padding(
-                            padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.03,
+                            padding: EdgeInsets.only(
+                              top: SizeConfig.screenHeight*0.02,
                             left: SizeConfig.screenWidth*0.05,
                             right: SizeConfig.screenWidth*0.05,
                             ),
@@ -100,13 +101,13 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.w400,
-                                              fontSize: SizeConfig.blockSizeHorizontal*5.0,
+                                              fontSize: SizeConfig.blockSizeHorizontal*4.0,
                                             ),
                                             children: [
                                               TextSpan(
                                                   text: ' 10000/-',
                                                   style: TextStyle(
-                                                      fontSize: SizeConfig.blockSizeHorizontal*4.5,
+                                                      fontSize: SizeConfig.blockSizeHorizontal*3.7,
                                                       color: Colors.black,
                                                       fontWeight: FontWeight.w400))
                                             ]),
@@ -148,13 +149,13 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                   ),
 
                                   Padding(
-                                    padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.01),
+                                    padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.005),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
-                                          width: SizeConfig.screenWidth*0.15,
-                                          height: SizeConfig.screenHeight*0.03,
+                                          width: SizeConfig.screenWidth*0.13,
+                                          height: SizeConfig.screenHeight*0.026,
                                           decoration: BoxDecoration(
                                             color: CommonColor.SIGN_UP_TEXT_COLOR,
                                             borderRadius: BorderRadius.circular(5),
@@ -168,7 +169,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                                 child: Text("4.5",
                                                   style: TextStyle(
                                                       color: CommonColor.WHITE_COLOR,
-                                                      fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                                      fontSize: SizeConfig.blockSizeHorizontal*3.5,
                                                       fontWeight: FontWeight.w500,
                                                       fontFamily: 'Roboto_Medium'
                                                   ),),
@@ -177,7 +178,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                               Padding(
                                                 padding: EdgeInsets.only(right: SizeConfig.screenWidth*0.017),
                                                 child: Icon(Icons.star,
-                                                size: SizeConfig.blockSizeHorizontal*4.0,
+                                                size: SizeConfig.blockSizeHorizontal*3.0,
                                                 color: Colors.white,),
                                               )
 
@@ -191,8 +192,8 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                             Navigator.push(context, MaterialPageRoute(builder: (context)=>BookingDetailsScreen()));
                                           },
                                           child: Container(
-                                            width: SizeConfig.screenWidth*0.21,
-                                            height: SizeConfig.screenHeight*0.035,
+                                            width: SizeConfig.screenWidth*0.2,
+                                            height: SizeConfig.screenHeight*0.033,
                                             decoration: BoxDecoration(
                                               color: CommonColor.SIGN_UP_TEXT_COLOR,
                                               borderRadius: BorderRadius.circular(7),
@@ -204,7 +205,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                                 Text("Book Now",
                                                   style: TextStyle(
                                                       color: CommonColor.WHITE_COLOR,
-                                                      fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                                                      fontSize: SizeConfig.blockSizeHorizontal*3.2,
                                                       fontWeight: FontWeight.w500,
                                                       fontFamily: 'Roboto_Medium'
                                                   ),),
@@ -218,7 +219,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                   ),
 
                                   Padding(
-                                    padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.02),
+                                    padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.015),
                                     child: Container(
                                       height: SizeConfig.screenWidth*0.003,
                                       color: Colors.black12,
@@ -346,12 +347,12 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
 
   Widget getInfoCardLayout(double parentHeight, double parentWidth){
     return Padding(
-      padding: EdgeInsets.only(top: parentHeight*0.02),
+      padding: EdgeInsets.only(top: parentHeight*0.01),
       child: Column(
         children: [
 
           Padding(
-            padding: EdgeInsets.only(left: parentWidth*0.05),
+            padding: EdgeInsets.only(left: parentWidth*0.051),
             child: Row(
               children: [
 
@@ -375,7 +376,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                           "City Avenue, Wakad",
                           style: TextStyle(
                               color: CommonColor.BLACK_COLOR,
-                              fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                              fontSize: SizeConfig.blockSizeHorizontal*3.0,
                               fontFamily: "Roboto_Regular",
                               fontWeight: FontWeight.w400
                           ),
@@ -391,13 +392,13 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w400,
-                        fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                        fontSize: SizeConfig.blockSizeHorizontal*3.5,
                       ),
                       children: [
                         TextSpan(
                             text: ' 12000/-',
                             style: TextStyle(
-                                fontSize: SizeConfig.blockSizeHorizontal*4.5,
+                                fontSize: SizeConfig.blockSizeHorizontal*3.7,
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold))
                       ]),
@@ -412,7 +413,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  height: parentHeight*0.015,
+                  height: parentHeight*0.013,
                   width: parentWidth*0.003,
                   color: Colors.black,
                 ),
@@ -420,7 +421,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.002),
+            padding: EdgeInsets.only(left: parentWidth*0.052, top: parentHeight*0.00),
             child: Row(
               children: [
 
@@ -442,7 +443,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                       "Pune Station",
                       style: TextStyle(
                           color: CommonColor.BLACK_COLOR,
-                          fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                          fontSize: SizeConfig.blockSizeHorizontal*3.0,
                           fontFamily: "Roboto_Regular",
                           fontWeight: FontWeight.w400
                       ),
@@ -454,7 +455,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.015),
+            padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.01),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -472,7 +473,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
           ),
 
           Padding(
-           padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.015),
+           padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.01),
            child: Row(
              mainAxisAlignment: MainAxisAlignment.start,
              children: [
@@ -567,7 +568,8 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
          ),
 
           Padding(
-            padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.012, right: parentWidth*0.05),
+            padding: EdgeInsets.only(left: parentWidth*0.05,
+                top: parentHeight*0.01, right: parentWidth*0.05),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -603,7 +605,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
           ),
 
           SizedBox(
-            height: parentHeight*0.02,
+            height: parentHeight*0.01,
           )
 
         ],
@@ -613,7 +615,8 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
 
   Widget getTransporterListHeading(double parentHeight, double parentWidth){
     return Padding(
-      padding: EdgeInsets.only(top: parentHeight*0.03,
+      padding: EdgeInsets.only(
+        top: parentHeight*0.025,
       left: parentWidth*0.05,
       right: parentWidth*0.05,
       ),

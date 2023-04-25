@@ -145,8 +145,8 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
       decoration: const BoxDecoration(
         color: CommonColor.APP_BAR_COLOR,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(17),
-          topRight: Radius.circular(17),
+          // topLeft: Radius.circular(17),
+          // topRight: Radius.circular(17),
         ),
       ),
       child: Row(

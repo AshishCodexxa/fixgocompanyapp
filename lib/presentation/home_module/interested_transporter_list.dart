@@ -1,5 +1,6 @@
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/presentation/home_module/booking_details_screen.dart';
 import 'package:fixgocompanyapp/presentation/home_module/transporter_info_profile.dart';
 import 'package:flutter/material.dart';
 
@@ -204,26 +205,32 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
                                   ),
                                 ),
 
-                                Container(
-                                  width: parentWidth*0.21,
-                                  height: parentHeight*0.04,
-                                  decoration: BoxDecoration(
-                                    color: CommonColor.SIGN_UP_TEXT_COLOR,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
+                                GestureDetector(
+                                  onDoubleTap: (){},
+                                  onTap: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>BookingDetailsScreen()));
+                                  },
+                                  child: Container(
+                                    width: parentWidth*0.21,
+                                    height: parentHeight*0.04,
+                                    decoration: BoxDecoration(
+                                      color: CommonColor.SIGN_UP_TEXT_COLOR,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
 
-                                      Text("Book Now",
-                                        style: TextStyle(
-                                            color: CommonColor.WHITE_COLOR,
-                                            fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: 'Roboto_Medium'
-                                        ),),
+                                        Text("Book Now",
+                                          style: TextStyle(
+                                              color: CommonColor.WHITE_COLOR,
+                                              fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Roboto_Medium'
+                                          ),),
 
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],
