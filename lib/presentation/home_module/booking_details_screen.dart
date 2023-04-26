@@ -1,3 +1,4 @@
+import 'package:fixgocompanyapp/all_dialogs/load_more_info_dialog.dart';
 import 'package:fixgocompanyapp/all_dialogs/transporter_amount_pay_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
@@ -102,12 +103,12 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
 
   Widget getInfoCardLayout(double parentHeight, double parentWidth){
     return Padding(
-      padding: EdgeInsets.only(top: parentHeight*0.02),
+      padding: EdgeInsets.only(top: parentHeight*0.01),
       child: Column(
         children: [
 
           Padding(
-            padding: EdgeInsets.only(left: parentWidth*0.05),
+            padding: EdgeInsets.only(left: parentWidth*0.051),
             child: Row(
               children: [
 
@@ -131,7 +132,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                           "City Avenue, Wakad",
                           style: TextStyle(
                               color: CommonColor.BLACK_COLOR,
-                              fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                              fontSize: SizeConfig.blockSizeHorizontal*3.0,
                               fontFamily: "Roboto_Regular",
                               fontWeight: FontWeight.w400
                           ),
@@ -147,13 +148,13 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w400,
-                        fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                        fontSize: SizeConfig.blockSizeHorizontal*3.5,
                       ),
                       children: [
                         TextSpan(
                             text: ' 12000/-',
                             style: TextStyle(
-                                fontSize: SizeConfig.blockSizeHorizontal*4.5,
+                                fontSize: SizeConfig.blockSizeHorizontal*3.7,
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold))
                       ]),
@@ -168,7 +169,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  height: parentHeight*0.015,
+                  height: parentHeight*0.013,
                   width: parentWidth*0.003,
                   color: Colors.black,
                 ),
@@ -176,7 +177,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.002),
+            padding: EdgeInsets.only(left: parentWidth*0.052, top: parentHeight*0.00),
             child: Row(
               children: [
 
@@ -198,7 +199,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                       "Pune Station",
                       style: TextStyle(
                           color: CommonColor.BLACK_COLOR,
-                          fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                          fontSize: SizeConfig.blockSizeHorizontal*3.0,
                           fontFamily: "Roboto_Regular",
                           fontWeight: FontWeight.w400
                       ),
@@ -210,7 +211,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.015),
+            padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.01),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -228,7 +229,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
           ),
 
           Padding(
-            padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.015),
+            padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.01),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -323,7 +324,8 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
           ),
 
           Padding(
-            padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.012, right: parentWidth*0.05),
+            padding: EdgeInsets.only(left: parentWidth*0.05,
+                top: parentHeight*0.01, right: parentWidth*0.05),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -345,13 +347,32 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                                 fontFamily: 'Roboto_Regular'))
                       ]),
                 ),
-                Text(
-                  "More",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: SizeConfig.blockSizeHorizontal*3.7,
-                      fontFamily: "Roboto_Medium",
-                      fontWeight: FontWeight.w500
+                GestureDetector(
+                  onDoubleTap: (){},
+                  onTap: (){
+                    showCupertinoDialog(
+                      context: context,
+                      barrierDismissible: true,
+                      builder: (context) {
+                        return const AnimatedOpacity(
+                            opacity: 1.0,
+                            duration: Duration(seconds: 2),
+                            child: LoadMoreInfoDialog());
+                      },
+                    );
+                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>ProcessTimelinePage()));
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Text(
+                      "More",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: SizeConfig.blockSizeHorizontal*3.7,
+                          fontFamily: "Roboto_Medium",
+                          fontWeight: FontWeight.w500
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -359,7 +380,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
           ),
 
           SizedBox(
-            height: parentHeight*0.02,
+            height: parentHeight*0.01,
           )
 
         ],

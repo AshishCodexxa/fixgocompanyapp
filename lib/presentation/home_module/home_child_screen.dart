@@ -1,10 +1,12 @@
 import 'package:fixgocompanyapp/all_dialogs/filter__transporter_list_dialog.dart';
+import 'package:fixgocompanyapp/all_dialogs/load_more_info_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:fixgocompanyapp/presentation/home_module/booking_details_screen.dart';
 import 'package:fixgocompanyapp/presentation/home_module/create_new_load_form_layout.dart';
 import 'package:fixgocompanyapp/presentation/home_module/interested_transporter_list.dart';
 import 'package:fixgocompanyapp/presentation/home_module/transporter_info_profile.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
@@ -591,13 +593,32 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                             fontFamily: 'Roboto_Regular'))
                       ]),
                 ),
-                Text(
-                  "More",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: SizeConfig.blockSizeHorizontal*3.7,
-                      fontFamily: "Roboto_Medium",
-                      fontWeight: FontWeight.w500
+                GestureDetector(
+                  onDoubleTap: (){},
+                  onTap: (){
+                    showCupertinoDialog(
+                      context: context,
+                      barrierDismissible: true,
+                      builder: (context) {
+                        return const AnimatedOpacity(
+                            opacity: 1.0,
+                            duration: Duration(seconds: 2),
+                            child: LoadMoreInfoDialog());
+                      },
+                    );
+                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>ProcessTimelinePage()));
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Text(
+                      "More",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: SizeConfig.blockSizeHorizontal*3.7,
+                          fontFamily: "Roboto_Medium",
+                          fontWeight: FontWeight.w500
+                      ),
+                    ),
                   ),
                 ),
               ],

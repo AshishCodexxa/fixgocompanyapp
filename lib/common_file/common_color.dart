@@ -18,5 +18,6 @@ class CommonColor{
   static const ADVANCE_INCREMENT_COLOR = const Color(0xFF636363);
   static const LOAD_SUBMIT_COLOR = const Color(0xFFDCDCDC);
   static const LOAD_SUBMIT_TEXT_COLOR = const Color(0xFF939393);
+  static const LOAD_IMAGE_COLOR = const Color(0xFFC6C4C4);
 
 }
