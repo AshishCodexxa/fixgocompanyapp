@@ -1,7 +1,8 @@
 import 'package:fixgocompanyapp/all_dialogs/load_post_success_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
-import 'package:fixgocompanyapp/presentation/home_module/pick_up_location_screen.dart';
+import 'package:fixgocompanyapp/presentation/home_module/delivery_address_add.dart';
+import 'package:fixgocompanyapp/presentation/home_module/recent_pickup_address_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -184,7 +185,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       child: GestureDetector(
                         onDoubleTap: (){},
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>PickUpLocation()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>PreviousAddressListScreen()));
                         },
                         child: Container(
                           color: Colors.transparent,
@@ -225,13 +226,22 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                   children: [
                     Padding(
                       padding: EdgeInsets.only(left: parentWidth*0.1, top: parentHeight*0.017),
-                      child: Text("Delivery",
-                        style: TextStyle(
-                            color: Colors.black54,
-                            fontSize: SizeConfig.blockSizeHorizontal*4.0,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Roboto_Regular'
-                        ),),
+                      child: GestureDetector(
+                        onDoubleTap: (){},
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryLocationScreen()));
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Text("Delivery",
+                            style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Roboto_Regular'
+                            ),),
+                        ),
+                      ),
                     ),
                   /* Container(
                      color: Colors.transparent,

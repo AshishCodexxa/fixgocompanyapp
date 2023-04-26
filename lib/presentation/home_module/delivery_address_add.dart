@@ -6,21 +6,21 @@ import 'package:flutter/material.dart';
 
 
 
-class PickUpLocation extends StatefulWidget {
+class DeliveryLocationScreen extends StatefulWidget {
 
   final String address;
 
-  const PickUpLocation({Key? key,
+  const DeliveryLocationScreen({Key? key,
     this.address = ''}) : super(key: key);
 
   @override
-  State<PickUpLocation> createState() => _PickUpLocationState();
+  State<DeliveryLocationScreen> createState() => _DeliveryLocationScreenState();
 }
 
-class _PickUpLocationState extends State<PickUpLocation> {
+class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
 
 
-  TextEditingController contactPersonController = TextEditingController();
+  TextEditingController receiverNameController = TextEditingController();
   TextEditingController phoneNoController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController cityController = TextEditingController();
@@ -28,7 +28,7 @@ class _PickUpLocationState extends State<PickUpLocation> {
   TextEditingController pinCodeController = TextEditingController();
 
 
-  final _contactPersonFocus = FocusNode();
+  final _receiverNameFocus = FocusNode();
   final _phoneNumberFocus = FocusNode();
   final _addressFocus = FocusNode();
   final _cityFocus = FocusNode();
@@ -80,7 +80,7 @@ class _PickUpLocationState extends State<PickUpLocation> {
           ),
           Padding(
             padding: EdgeInsets.only(left: parentHeight * 0.01),
-            child: Text("Pickup",
+            child: Text("Delivery",
               style: TextStyle(
                   fontSize: SizeConfig.blockSizeHorizontal*6.0,
                   fontFamily: "Roboto_Medium",
@@ -124,20 +124,20 @@ class _PickUpLocationState extends State<PickUpLocation> {
                 right: parentWidth*0.03,
               ),
               child: TextFormField(
-                controller: contactPersonController,
-                focusNode: _contactPersonFocus,
+                controller: receiverNameController,
+                focusNode: _receiverNameFocus,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.person,
                     color: Colors.black,),
                   label: RichText(
                     text: TextSpan(
-                        text: 'Contact Person Name',
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w400,
-                          fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                        ),),
+                      text: 'Receiver Name',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w400,
+                        fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                      ),),
                   ),
                   labelStyle: TextStyle(
                       color: CommonColor.REGISTER_HINT_COLOR,
@@ -182,12 +182,12 @@ class _PickUpLocationState extends State<PickUpLocation> {
                     color: Colors.black,),
                   label: RichText(
                     text: TextSpan(
-                        text: 'Phone No.',
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w400,
-                          fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                        ),),
+                      text: 'Phone No.',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w400,
+                        fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                      ),),
                   ),
                   labelStyle: TextStyle(
                       color: CommonColor.REGISTER_HINT_COLOR,
@@ -231,12 +231,12 @@ class _PickUpLocationState extends State<PickUpLocation> {
                   prefixIcon: Image(image: AssetImage("assets/images/company.png"),),
                   label: RichText(
                     text: TextSpan(
-                        text: 'Address',
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w400,
-                          fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                        ),),
+                      text: 'Address',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w400,
+                        fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                      ),),
                   ),
                   labelStyle: TextStyle(
                       color: CommonColor.REGISTER_HINT_COLOR,
@@ -280,12 +280,12 @@ class _PickUpLocationState extends State<PickUpLocation> {
                   prefixIcon: Image(image: AssetImage("assets/images/company.png"),),
                   label: RichText(
                     text: TextSpan(
-                        text: 'City',
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w400,
-                          fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                        ),),
+                      text: 'City',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w400,
+                        fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                      ),),
                   ),
                   labelStyle: TextStyle(
                       color: CommonColor.REGISTER_HINT_COLOR,
@@ -329,12 +329,12 @@ class _PickUpLocationState extends State<PickUpLocation> {
                   prefixIcon: Image(image: AssetImage("assets/images/company.png"),),
                   label: RichText(
                     text: TextSpan(
-                        text: 'State',
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w400,
-                          fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                        ),),
+                      text: 'State',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w400,
+                        fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                      ),),
                   ),
                   labelStyle: TextStyle(
                       color: CommonColor.REGISTER_HINT_COLOR,
@@ -378,12 +378,12 @@ class _PickUpLocationState extends State<PickUpLocation> {
                   prefixIcon: Image(image: AssetImage("assets/images/company.png"),),
                   label: RichText(
                     text: TextSpan(
-                        text: 'Pincode',
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w400,
-                          fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                        ),),
+                      text: 'Pincode',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w400,
+                        fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                      ),),
                   ),
                   labelStyle: TextStyle(
                       color: CommonColor.REGISTER_HINT_COLOR,
@@ -398,71 +398,71 @@ class _PickUpLocationState extends State<PickUpLocation> {
           padding: EdgeInsets.only(top: parentHeight*0.05),
           child: Stack(
             children: [
-             widget.address.isEmpty ?
-             GestureDetector(
+              widget.address.isEmpty ?
+              GestureDetector(
                 onDoubleTap: (){},
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LocationMapScreen(comeFrom: '1',)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LocationMapScreen(comeFrom: '2',)));
                 },
                 child: Container(
                   height: parentHeight*0.03,
                   width: parentWidth*0.3,
                   decoration: BoxDecoration(
-                    color: CommonColor.SIGN_UP_TEXT_COLOR,
-                    borderRadius: BorderRadius.circular(20)
+                      color: CommonColor.SIGN_UP_TEXT_COLOR,
+                      borderRadius: BorderRadius.circular(20)
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
 
                       Icon(Icons.location_on_outlined,
-                      color: Colors.white,
-                      size: parentHeight*0.021,),
+                        color: Colors.white,
+                        size: parentHeight*0.021,),
 
                       Padding(
                         padding: EdgeInsets.only(left: parentWidth*0.005),
                         child: Text("Select Location",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: SizeConfig.blockSizeHorizontal*3.0,
-                          fontFamily: 'Ronoto_Regular',
-                          fontWeight: FontWeight.w400
-                        ),),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                              fontFamily: 'Ronoto_Regular',
+                              fontWeight: FontWeight.w400
+                          ),),
                       )
 
                     ],
                   ),
                 ),
               ) :
-             Padding(
-               padding: EdgeInsets.only(
-                 left: parentWidth*0.05,
-                 right: parentWidth*0.05,
-               ),
-               child: Container(
-                 decoration: BoxDecoration(
-                     border: Border.all(color: Colors.black),
-                     borderRadius: BorderRadius.circular(13)
-                 ),
-                 child: Row(
-                   mainAxisAlignment: MainAxisAlignment.center,
-                   children: [
-                     Icon(Icons.location_on_outlined,
-                     ),
-                     Padding(
-                       padding: EdgeInsets.only(left: parentWidth*0.02,
-                           top: parentHeight*0.01,
-                           bottom: parentHeight*0.01),
-                       child: Container(
-                           color: Colors.transparent,
-                           width: parentWidth*0.7,
-                           child: Text("${widget.address}")
-                       ),
-                     ),
-                   ],
-                 ),
-               ),
-             ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: parentWidth*0.05,
+                  right: parentWidth*0.05,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(13)
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.location_on_outlined,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: parentWidth*0.02,
+                            top: parentHeight*0.01,
+                            bottom: parentHeight*0.01),
+                        child: Container(
+                            color: Colors.transparent,
+                            width: parentWidth*0.7,
+                            child: Text("${widget.address}")
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
 
 
             ],

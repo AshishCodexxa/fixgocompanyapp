@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/presentation/home_module/delivery_address_add.dart';
 import 'package:fixgocompanyapp/presentation/home_module/pick_up_location_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
@@ -16,7 +17,9 @@ import 'package:google_maps_webservice/places.dart';
 
 class LocationMapScreen extends StatefulWidget {
 
-  const LocationMapScreen({Key? key}) : super(key: key);
+  final String comeFrom;
+
+  const LocationMapScreen({Key? key, required this.comeFrom}) : super(key: key);
 
   @override
   State<LocationMapScreen> createState() => _LocationMapScreenState();
@@ -247,10 +250,15 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                      widget.comeFrom == 1 ?
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>
                             PickUpLocation(
                               address: '$name, $street, $subLocality, $locality, $postalCode, $administrativeArea, $country.'
-                            )));
+                            ))) :
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                          DeliveryLocationScreen(
+                              address: '$name, $street, $subLocality, $locality, $postalCode, $administrativeArea, $country.'
+                          ))) ;
                       },
                       child: const Text('Save Address'),
                     )
