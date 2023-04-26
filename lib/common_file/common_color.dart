@@ -19,5 +19,6 @@ class CommonColor{
   static const LOAD_SUBMIT_COLOR = const Color(0xFFDCDCDC);
   static const LOAD_SUBMIT_TEXT_COLOR = const Color(0xFF939393);
   static const LOAD_IMAGE_COLOR = const Color(0xFFC6C4C4);
+  static const SEARCH_TEXT_COLOR = const Color(0xFF3C3C43);
 
 }
