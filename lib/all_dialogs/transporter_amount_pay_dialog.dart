@@ -1,12 +1,17 @@
+import 'package:fixgocompanyapp/all_dialogs/get_transporter_review_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
 
 
 class TransporterAmountPayDialog extends StatefulWidget {
-  const TransporterAmountPayDialog({Key? key}) : super(key: key);
+
+  final String isComeFrom;
+
+  const TransporterAmountPayDialog({Key? key, required this.isComeFrom}) : super(key: key);
 
   @override
   State<TransporterAmountPayDialog> createState() => _TransporterAmountPayDialogState();
@@ -102,7 +107,7 @@ class _TransporterAmountPayDialogState extends State<TransporterAmountPayDialog>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Advance Payment",
+                          Text(widget.isComeFrom == "1" ? "Advance Payment" : "Due Payment",
                             style: TextStyle(
                                 color: Colors.black54,
                                 fontSize: SizeConfig.blockSizeHorizontal*3.0,
@@ -124,6 +129,16 @@ class _TransporterAmountPayDialogState extends State<TransporterAmountPayDialog>
                           GestureDetector(
                             onDoubleTap: (){},
                             onTap: (){
+                              showCupertinoDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (context) {
+                                  return const AnimatedOpacity(
+                                      opacity: 1.0,
+                                      duration: Duration(seconds: 2),
+                                      child: GetTransporterReview());
+                                },
+                              );
 
                             },
                             child: Container(

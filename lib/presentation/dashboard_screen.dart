@@ -70,7 +70,7 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
             ),
           ),
           Container(
-            height: SizeConfig.safeUsedHeight * .8,
+            height:isShow == true ? SizeConfig.safeUsedHeight * .8 : SizeConfig.safeUsedHeight * .92,
             child: getContainer(),
           ),
           Container(
@@ -155,6 +155,8 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
           GestureDetector(
             onTap: () {
 
+              isShow = true;
+
               addNewScreen(
                   HomeChildScreen(
                     mListener: this,
@@ -196,7 +198,7 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
           GestureDetector(
             onTap: () {
 
-              isShow = true;
+              isShow = false;
               addNewScreen(
                   OrderChildScreen(
                     mListener: this,

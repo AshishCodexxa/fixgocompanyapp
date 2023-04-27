@@ -1,4 +1,4 @@
-import 'package:fixgocompanyapp/all_dialogs/filter__transporter_list_dialog.dart';
+import 'package:fixgocompanyapp/all_dialogs/filter_transporter_list_dialog.dart';
 import 'package:fixgocompanyapp/all_dialogs/load_more_info_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
@@ -349,112 +349,122 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
 
   Widget getInfoCardLayout(double parentHeight, double parentWidth){
     return Padding(
-      padding: EdgeInsets.only(top: parentHeight*0.01),
+      padding: EdgeInsets.only(top: parentHeight*0.015),
       child: Column(
         children: [
 
-          Padding(
-            padding: EdgeInsets.only(left: parentWidth*0.051),
-            child: Row(
-              children: [
-
-                Row(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: parentWidth*0.05),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      height: parentHeight*0.01,
-                      width: parentWidth*0.021,
-                      decoration: BoxDecoration(
-                          color: CommonColor.FROM_AREA_COLOR,
-                          shape: BoxShape.circle
-                      ),
-                    ),
 
-                    Padding(
-                      padding: EdgeInsets.only(left: parentWidth*0.02),
-                      child: Container(
-                        width: parentWidth*0.57,
-                        color: Colors.transparent,
-                        child: Text(
-                          "City Avenue, Wakad",
-                          style: TextStyle(
-                              color: CommonColor.BLACK_COLOR,
-                              fontSize: SizeConfig.blockSizeHorizontal*3.0,
-                              fontFamily: "Roboto_Regular",
-                              fontWeight: FontWeight.w400
+                    Row(
+                      children: [
+                        Container(
+                          height: parentHeight*0.01,
+                          width: parentWidth*0.021,
+                          decoration: BoxDecoration(
+                              color: CommonColor.FROM_AREA_COLOR,
+                              shape: BoxShape.circle
                           ),
                         ),
+
+                        Padding(
+                          padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.02),
+                          child: Container(
+                            width: parentWidth*0.57,
+                            color: Colors.transparent,
+                            child: Text(
+                              "City Avenue, Wakad",
+                              style: TextStyle(
+                                  color: CommonColor.BLACK_COLOR,
+                                  fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                                  fontFamily: "Roboto_Medium",
+                                  fontWeight: FontWeight.w400
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.01),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: parentHeight*0.013,
+                            width: parentWidth*0.003,
+                            color: Colors.black,
+                          ),
+                        ],
                       ),
+                    ),
+                    Row(
+                      children: [
+
+                        Container(
+                          height: parentHeight*0.01,
+                          width: parentWidth*0.021,
+                          decoration: BoxDecoration(
+                              color: CommonColor.TO_AREA_COLOR,
+                              shape: BoxShape.circle
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.only(left: parentWidth*0.02),
+                          child: Container(
+                            width: parentWidth*0.6,
+                            color: Colors.transparent,
+                            child: Text(
+                              "Pune Station",
+                              style: TextStyle(
+                                  color: CommonColor.BLACK_COLOR,
+                                  fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                                  fontFamily: "Roboto_Medium",
+                                  fontWeight: FontWeight.w400
+                              ),
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(right: parentWidth*0.05,),
+                child: Column(
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                          text: '\u{20B9}',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                            fontSize: SizeConfig.blockSizeHorizontal*3.7,
+                          ),
+                          children: [
+                            TextSpan(
+                                text: ' 2000/-',
+                                style: TextStyle(
+                                    fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold))
+                          ]),
                     ),
                   ],
                 ),
-
-                RichText(
-                  text: TextSpan(
-                      text: '\u{20B9}',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w400,
-                        fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                      ),
-                      children: [
-                        TextSpan(
-                            text: ' 12000/-',
-                            style: TextStyle(
-                                fontSize: SizeConfig.blockSizeHorizontal*3.7,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold))
-                      ]),
-                ),
-
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: parentWidth*0.061),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  height: parentHeight*0.013,
-                  width: parentWidth*0.003,
-                  color: Colors.black,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: parentWidth*0.052, top: parentHeight*0.00),
-            child: Row(
-              children: [
-
-                Container(
-                  height: parentHeight*0.010,
-                  width: parentWidth*0.021,
-                  decoration: BoxDecoration(
-                      color: CommonColor.TO_AREA_COLOR,
-                      shape: BoxShape.circle
-                  ),
-                ),
-
-                Padding(
-                  padding: EdgeInsets.only(left: parentWidth*0.02),
-                  child: Container(
-                    width: parentWidth*0.6,
-                    color: Colors.transparent,
-                    child: Text(
-                      "Pune Station",
-                      style: TextStyle(
-                          color: CommonColor.BLACK_COLOR,
-                          fontSize: SizeConfig.blockSizeHorizontal*3.0,
-                          fontFamily: "Roboto_Regular",
-                          fontWeight: FontWeight.w400
-                      ),
-                    ),
-                  ),
-                ),
-
-              ],
-            ),
+              ),
+            ],
           ),
           Padding(
             padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.01),

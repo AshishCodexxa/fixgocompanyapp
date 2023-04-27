@@ -615,7 +615,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                             return const AnimatedOpacity(
                                 opacity: 1.0,
                                 duration: Duration(seconds: 2),
-                                child: TransporterAmountPayDialog());
+                                child: TransporterAmountPayDialog(isComeFrom: '1',));
                           },
                         );
 
