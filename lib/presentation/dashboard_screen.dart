@@ -23,9 +23,12 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
   Widget? widDashboardScreen, widMenuScreen;
   bool isShow = true;
 
+  String heading = "";
+
   @override
   void initState() {
     super.initState();
+    heading = "FixGo";
     addNewScreen(
         HomeChildScreen(
           mListener: this,
@@ -115,7 +118,7 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
           ),
           Padding(
             padding: EdgeInsets.only(left: parentHeight * 0.01),
-            child: Text("FixGo",
+            child: Text("$heading",
               style: TextStyle(
                   fontSize: SizeConfig.blockSizeHorizontal*7.0,
                   fontFamily: "Roboto_Medium",
@@ -156,6 +159,8 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
             onTap: () {
 
               isShow = true;
+
+              heading = "FixGo";
 
               addNewScreen(
                   HomeChildScreen(
@@ -242,6 +247,8 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
           ),
           GestureDetector(
             onTap: () {
+
+              heading = "Profile";
 
               isShow = true;
               addNewScreen(
