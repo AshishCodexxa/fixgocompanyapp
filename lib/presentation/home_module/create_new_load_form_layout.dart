@@ -1,16 +1,23 @@
+import 'dart:io';
+
 import 'package:fixgocompanyapp/all_dialogs/load_post_success_dialog.dart';
+import 'package:fixgocompanyapp/all_dialogs/open_camera_gallery_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:fixgocompanyapp/presentation/home_module/delivery_address_add.dart';
 import 'package:fixgocompanyapp/presentation/home_module/recent_pickup_address_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 
 
 
 class NewLoadScreenForm extends StatefulWidget {
+
+
+
   const NewLoadScreenForm({Key? key}) : super(key: key);
 
   @override
@@ -75,6 +82,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
   int deliverPay = 0;
   String deliveryPayMethod = "";
+
+  List<XFile> images = [];
 
 
   @override
@@ -971,8 +980,44 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(right: parentWidth*0.05),
-                          child: Image(image: AssetImage("assets/images/camera.png"),
-                          color: Colors.black,),
+                          child: GestureDetector(
+                            onDoubleTap: (){},
+                            onTap: (){
+                              showModalBottomSheet<List<XFile>>(
+                                  context: context,
+                                  backgroundColor: Colors.transparent,
+                                  elevation: 10,
+                                  isScrollControlled: true,
+                                  isDismissible: true,
+                                  builder: (BuildContext bc) {
+                                    return Padding(
+                                      padding: EdgeInsets.only(
+                                        bottom: MediaQuery.of(context).viewInsets.bottom,
+                                      ),
+                                      child: CameraGalleryDialog(),
+                                    );
+                                  }).then((value) {
+                                    if(value == null) {
+                                      //no image
+                                      return;
+                                    }
+                                    setState(() {
+                                      images.length < 3 ?
+                                      images.addAll(value) :
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(
+                                              content:
+                                              Text("You can upload only 3 Images")));
+                                    });
+
+                              });
+                            },
+                            child: Container(
+                              color: Colors.transparent,
+                              child: Image(image: AssetImage("assets/images/camera.png"),
+                              color: Colors.black,),
+                            ),
+                          ),
                         )
                       ],
                     ),
@@ -1242,24 +1287,27 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                      if(images.isNotEmpty)
+                        for(var file in images)
 
                         Container(
                           height: parentHeight*0.085,
                           width: parentWidth*0.195,
                           color: CommonColor.UNSELECT_TYPE_COLOR,
+                          child: Image.file(File(file.path),
+                          fit: BoxFit.cover,),
                         ),
 
-                        Container(
-                          height: parentHeight*0.085,
-                          width: parentWidth*0.195,
-                          color: CommonColor.UNSELECT_TYPE_COLOR,
-                        ),
+                        if(images.isEmpty)
+                          for(int i =0; i<3;i++)
 
-                        Container(
-                          height: parentHeight*0.085,
-                          width: parentWidth*0.195,
-                          color: CommonColor.UNSELECT_TYPE_COLOR,
-                        )
+                            Container(
+                              height: parentHeight*0.085,
+                              width: parentWidth*0.195,
+                              color: CommonColor.UNSELECT_TYPE_COLOR,
+                            ),
+
+
 
                       ],
                     ),

@@ -35,9 +35,9 @@ class _CompanyRegistrationState extends State<CompanyRegistration> {
   final _gstNumberFocus = FocusNode();
   final _tinNumberFocus = FocusNode();
 
-  int addressCount = 9;
-  int phoneNumberCount = 2;
-  int mobileNumberCount = 2;
+  int addressCount = 0;
+  int phoneNumberCount = 1;
+  int mobileNumberCount = 1;
 
 
   @override
