@@ -88,9 +88,10 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
             return Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(top: parentHeight*0.02,
-                    left: parentWidth*0.05,
-                    right: parentWidth*0.05,
+                  padding: EdgeInsets.only(
+                    top: SizeConfig.screenHeight*0.02,
+                    left: SizeConfig.screenWidth*0.05,
+                    right: SizeConfig.screenWidth*0.05,
                   ),
                   child: GestureDetector(
                     onDoubleTap: (){},
@@ -120,13 +121,13 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w400,
-                                      fontSize: SizeConfig.blockSizeHorizontal*5.0,
+                                      fontSize: SizeConfig.blockSizeHorizontal*4.0,
                                     ),
                                     children: [
                                       TextSpan(
-                                          text: ' 10000/-',
+                                          text: ' 2000/-',
                                           style: TextStyle(
-                                              fontSize: SizeConfig.blockSizeHorizontal*4.5,
+                                              fontSize: SizeConfig.blockSizeHorizontal*3.7,
                                               color: Colors.black,
                                               fontWeight: FontWeight.w400))
                                     ]),
@@ -136,7 +137,7 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
                           ),
 
                           Padding(
-                            padding: EdgeInsets.only(top: parentHeight*0.005),
+                            padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.003),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -152,7 +153,7 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
                           ),
 
                           Padding(
-                            padding: EdgeInsets.only(top: parentHeight*0.005),
+                            padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.003),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -168,15 +169,15 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
                           ),
 
                           Padding(
-                            padding: EdgeInsets.only(top: parentHeight*0.01),
+                            padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.002),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
-                                  width: parentWidth*0.15,
-                                  height: parentHeight*0.03,
+                                  width: SizeConfig.screenWidth*0.11,
+                                  height: SizeConfig.screenHeight*0.023,
                                   decoration: BoxDecoration(
-                                    color: CommonColor.SIGN_UP_TEXT_COLOR,
+                                    color: CommonColor.SELECT_TYPE_COLOR,
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                   child: Row(
@@ -184,20 +185,20 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
                                     children: [
 
                                       Padding(
-                                        padding: EdgeInsets.only(left: parentWidth*0.02),
+                                        padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.02),
                                         child: Text("4.5",
                                           style: TextStyle(
                                               color: CommonColor.WHITE_COLOR,
-                                              fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                              fontSize: SizeConfig.blockSizeHorizontal*2.7,
                                               fontWeight: FontWeight.w500,
                                               fontFamily: 'Roboto_Medium'
                                           ),),
                                       ),
 
                                       Padding(
-                                        padding: EdgeInsets.only(right: parentWidth*0.017),
+                                        padding: EdgeInsets.only(right: SizeConfig.screenWidth*0.017),
                                         child: Icon(Icons.star,
-                                          size: SizeConfig.blockSizeHorizontal*4.0,
+                                          size: SizeConfig.blockSizeHorizontal*2.5,
                                           color: Colors.white,),
                                       )
 
@@ -211,11 +212,11 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
                                     Navigator.push(context, MaterialPageRoute(builder: (context)=>BookingDetailsScreen()));
                                   },
                                   child: Container(
-                                    width: parentWidth*0.21,
-                                    height: parentHeight*0.04,
+                                    width: SizeConfig.screenWidth*0.18,
+                                    height: SizeConfig.screenHeight*0.03,
                                     decoration: BoxDecoration(
                                       color: CommonColor.SIGN_UP_TEXT_COLOR,
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(7),
                                     ),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -224,7 +225,7 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
                                         Text("Book Now",
                                           style: TextStyle(
                                               color: CommonColor.WHITE_COLOR,
-                                              fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                                              fontSize: SizeConfig.blockSizeHorizontal*3.0,
                                               fontWeight: FontWeight.w500,
                                               fontFamily: 'Roboto_Medium'
                                           ),),
@@ -238,15 +239,16 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
                           ),
 
 
+
                         ],
                       ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: parentHeight*0.02),
+                  padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.01),
                   child: Container(
-                    height: parentWidth*0.003,
+                    height: SizeConfig.screenWidth*0.003,
                     color: Colors.black12,
                     child: Row(
                       children: const [

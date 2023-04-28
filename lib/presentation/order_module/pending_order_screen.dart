@@ -987,29 +987,29 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                           });
                     },
                     child: Container(
-                      height: parentHeight*0.022,
-                      width: parentWidth*0.15,
+                      height: parentHeight*0.025,
+                      width: parentWidth*0.16,
                       decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Colors.black26,)
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.black26,)
                       ),
                       child: Padding(
                         padding: EdgeInsets.only(left: parentWidth*0.01,
-                        right: parentWidth*0.01),
+                            right: parentWidth*0.01),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
 
                             Icon(Icons.verified_user,
-                            size: parentHeight*0.015,),
+                              size: parentHeight*0.016,),
 
                             Text("Verified",
                               style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w400,
                                 fontFamily: 'Roboto_Medium',
-                                fontSize: SizeConfig.blockSizeHorizontal*2.5,
+                                fontSize: SizeConfig.blockSizeHorizontal*2.7,
                               ),)
 
                           ],

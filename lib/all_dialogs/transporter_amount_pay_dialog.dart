@@ -107,7 +107,9 @@ class _TransporterAmountPayDialogState extends State<TransporterAmountPayDialog>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(widget.isComeFrom == "1" ? "Advance Payment" : "Due Payment",
+                          Text(widget.isComeFrom == "1" ? "Advance Payment" :
+                          widget.isComeFrom == "2" ? "Due Payment"
+                            : "Advance Payment" ,
                             style: TextStyle(
                                 color: Colors.black54,
                                 fontSize: SizeConfig.blockSizeHorizontal*3.0,
@@ -149,7 +151,7 @@ class _TransporterAmountPayDialogState extends State<TransporterAmountPayDialog>
                                   borderRadius: BorderRadius.circular(10)
                               ),
                               child: Center(
-                                child: Text("Pay",
+                                child: Text(widget.isComeFrom == "3" ? "Cash Payment" : "Pay",
                                   style: TextStyle(
                                       color: CommonColor.WHITE_COLOR,
                                       fontSize: SizeConfig.blockSizeHorizontal*5.0,

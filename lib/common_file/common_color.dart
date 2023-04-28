@@ -21,5 +21,6 @@ class CommonColor{
   static const LOAD_IMAGE_COLOR = const Color(0xFFC6C4C4);
   static const SEARCH_TEXT_COLOR = const Color(0xFF3C3C43);
   static const VEHICLE_DRIVER_IMG_COLOR = const Color(0xFFD7D7D7);
+  static const PAY_IN_CASH_COLOR = const Color(0xFF8A8A8A);
 
 }

@@ -35,9 +35,9 @@ class _CompanyRegistrationState extends State<CompanyRegistration> {
   final _gstNumberFocus = FocusNode();
   final _tinNumberFocus = FocusNode();
 
-  int addressCount = 0;
-  int phoneNumberCount = 1;
-  int mobileNumberCount = 1;
+  int addressCount = 9;
+  int phoneNumberCount = 2;
+  int mobileNumberCount = 2;
 
 
   @override
@@ -628,7 +628,7 @@ class _CompanyRegistrationState extends State<CompanyRegistration> {
                             prefixIcon: const Icon(Icons.phone_android_outlined, color: Colors.black,),
                             label: RichText(
                               text: TextSpan(
-                                  text: 'Phone No. $phoneNumberCount',
+                                  text: 'Land-Line No. $phoneNumberCount',
                                   style: TextStyle(
                                     color: Colors.black54,
                                     fontWeight: FontWeight.w400,

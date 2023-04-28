@@ -62,13 +62,14 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
       child: Padding(
         padding: EdgeInsets.only(
             left: SizeConfig.screenWidth * .01,
-            right: SizeConfig.screenWidth * .01),
+            right: SizeConfig.screenWidth * .01,
+        top: SizeConfig.screenHeight*0.02),
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
           child:  Container(
-            height: SizeConfig.screenHeight*0.93,
+            height: SizeConfig.screenHeight*0.94,
             decoration:  const BoxDecoration(
               borderRadius:  BorderRadius.all(Radius.circular(25.0)),
               //color: CommonColor.RED_COLOR,
@@ -999,7 +1000,6 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
               ),
             ),
           ),
-
 
         ],
       ),

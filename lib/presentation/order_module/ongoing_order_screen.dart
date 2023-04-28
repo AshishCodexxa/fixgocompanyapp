@@ -1,4 +1,5 @@
 import 'package:fixgocompanyapp/all_dialogs/load_more_info_dialog.dart';
+import 'package:fixgocompanyapp/all_dialogs/transporter_amount_pay_dialog.dart';
 import 'package:fixgocompanyapp/all_dialogs/transporter_verify_details_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/draw_dash_border_class.dart';
@@ -466,8 +467,8 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                           });
                     },
                     child: Container(
-                      height: parentHeight*0.022,
-                      width: parentWidth*0.15,
+                      height: parentHeight*0.025,
+                      width: parentWidth*0.16,
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(5),
@@ -481,14 +482,14 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                           children: [
 
                             Icon(Icons.verified_user,
-                              size: parentHeight*0.015,),
+                              size: parentHeight*0.016,),
 
                             Text("Verified",
                               style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w400,
                                 fontFamily: 'Roboto_Medium',
-                                fontSize: SizeConfig.blockSizeHorizontal*2.5,
+                                fontSize: SizeConfig.blockSizeHorizontal*2.7,
                               ),)
 
                           ],
@@ -503,69 +504,113 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
 
           Padding(
             padding: EdgeInsets.only(left: parentWidth*0.05,
+                right: parentWidth*0.05,
             top: parentHeight*0.01),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onDoubleTap: (){},
+                      onTap: (){
+                        if(mounted){
+                          setState(() {
+                            vehicleDetailsHide = !vehicleDetailsHide;
+                            arrowShow = !arrowShow;
+                          });
+                        }
+                      },
+                      child: Text("Vehicle Details",
+                        style: TextStyle(
+                            color: CommonColor.BLACK_COLOR,
+                            fontSize: SizeConfig.blockSizeHorizontal*3.7,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Roboto_Medium'
+                        ),),
+                    ),
+                    Stack(
+                      children: [
+                        Visibility(
+                          visible: arrowShow,
+                          child: GestureDetector(
+                            onDoubleTap: (){},
+                            onTap: (){
+                              if(mounted){
+                                setState(() {
+                                  vehicleDetailsHide = !vehicleDetailsHide;
+                                  arrowShow = !arrowShow;
+                                });
+                              }
+                            },
+                            child: Container(
+                              color: Colors.transparent,
+                              child: Icon(Icons.keyboard_arrow_down_outlined,
+                              color: Colors.black,),
+                            ),
+                          ),
+                        ),
+                        Visibility(
+                          visible: !arrowShow,
+                          child: GestureDetector(
+                            onDoubleTap: (){},
+                            onTap: (){
+                              if(mounted){
+                                setState(() {
+                                  vehicleDetailsHide = !vehicleDetailsHide;
+                                  arrowShow = !arrowShow;
+                                });
+                              }
+                            },
+                            child: Container(
+                              color: Colors.transparent,
+                              child: Icon(Icons.keyboard_arrow_up_outlined,
+                                color: Colors.black,),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
                 GestureDetector(
                   onDoubleTap: (){},
                   onTap: (){
-                    if(mounted){
-                      setState(() {
-                        vehicleDetailsHide = !vehicleDetailsHide;
-                        arrowShow = !arrowShow;
-                      });
-                    }
+                    showCupertinoDialog(
+                      context: context,
+                      barrierDismissible: true,
+                      builder: (context) {
+                        return const AnimatedOpacity(
+                            opacity: 1.0,
+                            duration: Duration(seconds: 2),
+                            child: TransporterAmountPayDialog(isComeFrom: '3',));
+                      },
+                    );
+
                   },
-                  child: Text("Vehicle Details",
-                    style: TextStyle(
-                        color: CommonColor.BLACK_COLOR,
-                        fontSize: SizeConfig.blockSizeHorizontal*3.7,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Roboto_Medium'
-                    ),),
+                  child: Container(
+                    width: SizeConfig.screenWidth*0.18,
+                    height: SizeConfig.screenHeight*0.028,
+                    decoration: BoxDecoration(
+                      color: CommonColor.PAY_IN_CASH_COLOR,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+
+                        Text("Pay in Cash",
+                          style: TextStyle(
+                              color: CommonColor.WHITE_COLOR,
+                              fontSize: SizeConfig.blockSizeHorizontal*2.7,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Roboto_Medium'
+                          ),),
+
+                      ],
+                    ),
+                  ),
                 ),
-                Stack(
-                  children: [
-                    Visibility(
-                      visible: arrowShow,
-                      child: GestureDetector(
-                        onDoubleTap: (){},
-                        onTap: (){
-                          if(mounted){
-                            setState(() {
-                              vehicleDetailsHide = !vehicleDetailsHide;
-                              arrowShow = !arrowShow;
-                            });
-                          }
-                        },
-                        child: Container(
-                          color: Colors.transparent,
-                          child: Icon(Icons.keyboard_arrow_down_outlined,
-                          color: Colors.black,),
-                        ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: !arrowShow,
-                      child: GestureDetector(
-                        onDoubleTap: (){},
-                        onTap: (){
-                          if(mounted){
-                            setState(() {
-                              vehicleDetailsHide = !vehicleDetailsHide;
-                              arrowShow = !arrowShow;
-                            });
-                          }
-                        },
-                        child: Container(
-                          color: Colors.transparent,
-                          child: Icon(Icons.keyboard_arrow_up_outlined,
-                            color: Colors.black,),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
               ],
             ),
           ),
@@ -620,13 +665,50 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Raj Vehicle",
-                                  style: TextStyle(
-                                      color: CommonColor.BLACK_COLOR,
-                                      fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'Roboto_Medium'
-                                  ),),
+                                Container(
+                                  color: Colors.transparent,
+                                  width: parentWidth*0.54,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: parentWidth*0.35,
+                                        child: Text("Raj Vehicle",
+                                          style: TextStyle(
+                                              color: CommonColor.BLACK_COLOR,
+                                              fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Roboto_Medium'
+                                          ),),
+                                      ),
+
+                                      Container(
+                                        width: SizeConfig.screenWidth*0.18,
+                                        height: SizeConfig.screenHeight*0.025,
+                                        decoration: BoxDecoration(
+                                          color: CommonColor.SIGN_UP_TEXT_COLOR,
+                                          borderRadius: BorderRadius.circular(5),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+
+                                            Text("Load Done",
+                                              style: TextStyle(
+                                                  color: CommonColor.WHITE_COLOR,
+                                                  fontSize: SizeConfig.blockSizeHorizontal*2.5,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: 'Roboto_Medium'
+                                              ),),
+
+                                          ],
+                                        ),
+                                      ),
+
+                                    ],
+                                  ),
+                                ),
 
                                 Padding(
                                   padding: EdgeInsets.only(top: parentHeight*0.005),

@@ -70,7 +70,7 @@ class _TransporterProfileState extends State<TransporterProfile> {
               ),),
           ),
           const Icon(Icons.more_vert,
-            color: Colors.white,)
+            color: Colors.transparent,)
         ],
       ),
     );

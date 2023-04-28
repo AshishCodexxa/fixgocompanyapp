@@ -269,7 +269,7 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
               ),),
           ),
           const Icon(Icons.more_vert,
-            color: Colors.white,)
+            color: Colors.transparent,)
         ],
       ),
     );

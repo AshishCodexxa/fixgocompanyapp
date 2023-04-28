@@ -270,7 +270,7 @@ class _TransporterVerifyDialogState extends State<TransporterVerifyDialog> {
                   Text("Receiver Details",
                     style: TextStyle(
                         color: Colors.black,
-                        fontFamily: 'Roboto_Medium',
+                        fontFamily: 'Roboto_Bold',
                         fontWeight: FontWeight.w500,
                         fontSize: SizeConfig.blockSizeHorizontal*4.0
                     ),),

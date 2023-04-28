@@ -181,7 +181,7 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
                 children: [
                   Icon(Icons.home_outlined,
                     color: currentScreen == ScreenConstant.HOME_PAGE ? CommonColor.WHITE_COLOR
-                        : CommonColor.BLACK_COLOR,),
+                        : CommonColor.SIGN_UP_TEXT_COLOR,),
                   Padding(
                     padding: EdgeInsets.only(top: parentHeight*0.003),
                     child: Text(
@@ -189,7 +189,7 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
                       style: TextStyle(
                           color: currentScreen == ScreenConstant.HOME_PAGE
                               ? CommonColor.WHITE_COLOR
-                              : CommonColor.BLACK_COLOR,
+                              : CommonColor.SIGN_UP_TEXT_COLOR,
                           fontSize: SizeConfig.blockSizeHorizontal*3.7,
                           fontFamily: "Roboto_Medium",
                           fontWeight: FontWeight.w400),
@@ -224,7 +224,7 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
                   Image(image: const AssetImage("assets/images/order_icon.png"),
                     color: currentScreen == ScreenConstant.ORDER_FRAGMENT
                         ? CommonColor.WHITE_COLOR
-                        : CommonColor.BLACK_COLOR,
+                        : CommonColor.SIGN_UP_TEXT_COLOR,
                     height: parentHeight*0.025,
                   ),
                   Padding(
@@ -234,7 +234,7 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
                       style: TextStyle(
                           color: currentScreen == ScreenConstant.ORDER_FRAGMENT
                               ? CommonColor.WHITE_COLOR
-                              : CommonColor.BLACK_COLOR,
+                              : CommonColor.SIGN_UP_TEXT_COLOR,
                           fontSize: SizeConfig.blockSizeHorizontal*3.7,
                           fontFamily: "Roboto_Medium",
                           fontWeight: FontWeight.w400
@@ -271,7 +271,7 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
                   Image(image: const AssetImage("assets/images/profile_icon.png"),
                     color: currentScreen == ScreenConstant.PROFILE_FRAGMENT
                         ? CommonColor.WHITE_COLOR
-                        : CommonColor.BLACK_COLOR,
+                        : CommonColor.SIGN_UP_TEXT_COLOR,
                     height: parentHeight*0.025,
                   ),
                   Padding(
@@ -281,7 +281,7 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
                       style: TextStyle(
                           color: currentScreen == ScreenConstant.PROFILE_FRAGMENT
                               ? CommonColor.WHITE_COLOR
-                              : CommonColor.BLACK_COLOR,
+                              : CommonColor.SIGN_UP_TEXT_COLOR,
                           fontSize: SizeConfig.blockSizeHorizontal*3.7,
                           fontFamily: "Roboto_Medium",
                           fontWeight: FontWeight.w400
