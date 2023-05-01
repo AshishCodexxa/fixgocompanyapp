@@ -1288,29 +1288,35 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
                   Padding(
                     padding: EdgeInsets.only(top: parentHeight*0.02,
-                    left: parentWidth*0.1,
+                    left: parentWidth*0.05,
                     right: parentWidth*0.1),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                       if(images.isNotEmpty)
                         for(var file in images)
 
-                        Container(
-                          height: parentHeight*0.085,
-                          width: parentWidth*0.195,
-                          color: CommonColor.UNSELECT_TYPE_COLOR,
-                          child: Image.file(File(file.path),
-                          fit: BoxFit.cover,),
+                        Padding(
+                          padding: EdgeInsets.only(left: parentWidth*0.06),
+                          child: Container(
+                            height: parentHeight*0.085,
+                            width: parentWidth*0.195,
+                            color: CommonColor.UNSELECT_TYPE_COLOR,
+                            child: Image.file(File(file.path),
+                            fit: BoxFit.cover,),
+                          ),
                         ),
 
                         if(images.isEmpty)
-                          for(int i =0; i<3;i++)
+                          for(int i=0; i<3;i++)
 
-                            Container(
-                              height: parentHeight*0.085,
-                              width: parentWidth*0.195,
-                              color: CommonColor.UNSELECT_TYPE_COLOR,
+                            Padding(
+                              padding: EdgeInsets.only(left: parentWidth*0.06),
+                              child: Container(
+                                height: parentHeight*0.085,
+                                width: parentWidth*0.195,
+                                color: CommonColor.UNSELECT_TYPE_COLOR,
+                              ),
                             ),
 
 
