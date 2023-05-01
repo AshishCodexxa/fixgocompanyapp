@@ -42,6 +42,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
   String? pickUpDate;
   String? bidEndDate;
+  DateTime? pickedDates;
 
   String employeeValue = 'Type of Load';
   String vehicleValue = 'Type of Vehicle';
@@ -435,18 +436,17 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
               child: GestureDetector(
                 onDoubleTap: (){},
                 onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
+                    pickedDates = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(1950),
-                      //DateTime.now() - not to allow to choose before today.
+                      firstDate: DateTime.now().subtract(Duration(days: 1)),
                       lastDate: DateTime(2100));
 
-                  if (pickedDate != null) {
+                  if (pickedDates != null) {
                     print(
-                        pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                        pickedDates); //pickedDate output format => 2021-03-10 00:00:00.000
                     pickUpDate =
-                    DateFormat('dd-MM-yyyy').format(pickedDate);
+                    DateFormat('dd-MM-yyyy').format(pickedDates!);
                     print(
                         pickUpDate); //formatted date output using intl package =>  2021-03-16
                     setState(() {
@@ -498,12 +498,13 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                 onTap: () async {
                   DateTime? pickedDate = await showDatePicker(
                       context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1950),
-                      //DateTime.now() - not to allow to choose before today.
+                      initialDate: pickedDates!,
+                      firstDate: DateTime.now().subtract(Duration(days: 1)),
                       lastDate: DateTime(2100));
 
-                  if (pickedDate != null) {
+                  DateTime dt2 = DateTime.parse("$pickedDates");
+
+                  if (pickedDate != null && pickedDate != pickedDates && pickedDate.isAfter(dt2)) {
                     print(
                         pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
                     bidEndDate =
@@ -514,7 +515,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       dateInput.text =
                           bidEndDate.toString(); //set output date to TextField value.
                     });
-                  } else {}
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content:
+                            Text("Bidding Date must be greater than Pick Up Date.")));
+                  }
 
 
                 },
