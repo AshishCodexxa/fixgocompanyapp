@@ -68,15 +68,6 @@ class _CameraGalleryDialogState extends State<CameraGalleryDialog> {
     final XFile? capImages = await
     imagePicker.pickImage(source: ImageSource.camera);
 
-
-    if (capImages != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content:
-              Text("You can upload only 3 Images")));
-
-    }
-
     return capImages;
   }
 
@@ -152,7 +143,8 @@ class _CameraGalleryDialogState extends State<CameraGalleryDialog> {
 
 
                   setState(() {
-                    if((imageFileList?.length ?? 0 ) > 3) {ScaffoldMessenger.of(context).showSnackBar(
+                    if((imageFileList?.length ?? 0 ) > 3)
+                    {ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                             content:
                             Text("You can upload only 3 Images")));

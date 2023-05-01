@@ -1294,16 +1294,61 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                       if(images.isNotEmpty)
-                        for(var file in images)
-
+                        // for(var file in images)
+                          for(int i=0; i<images.length;i++)
                         Padding(
                           padding: EdgeInsets.only(left: parentWidth*0.06),
-                          child: Container(
-                            height: parentHeight*0.085,
-                            width: parentWidth*0.195,
-                            color: CommonColor.UNSELECT_TYPE_COLOR,
-                            child: Image.file(File(file.path),
-                            fit: BoxFit.cover,),
+                          child: Stack(
+                            alignment: Alignment.topRight,
+                            children: [
+                              Stack(
+                                children: [
+                                  Container(
+                                    height: parentHeight*0.085,
+                                    width: parentWidth*0.195,
+                                    color: Colors.transparent,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: parentHeight*0.007),
+                                    child: Container(
+                                      height: parentHeight*0.077,
+                                      width: parentWidth*0.18,
+                                      decoration: BoxDecoration(
+                                        color: CommonColor.UNSELECT_TYPE_COLOR,
+                                        border: Border.all(color: Colors.black54)
+                                      ),
+                                      child: Image.file(File(images[i].path),
+                                      fit: BoxFit.cover,),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(bottom: parentHeight*0.03),
+                                child: GestureDetector(
+                                  onDoubleTap: (){},
+                                  onTap: (){
+                                    print("clear");
+                                    images.removeAt(i);
+                                    setState(() {
+
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(3.0),
+                                      child: Icon(Icons.clear,
+                                          color: Colors.black,
+                                      size: parentHeight*0.015,),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
 
