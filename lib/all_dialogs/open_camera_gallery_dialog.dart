@@ -47,6 +47,7 @@ class _CameraGalleryDialogState extends State<CameraGalleryDialog> {
   final ImagePicker imagePicker = ImagePicker();
   List<XFile>? imageFileList = [];
 
+
   Future<List<XFile>> selectImages() async {
     final List<XFile> selectedImages = await
     imagePicker.pickMultiImage();
@@ -60,6 +61,23 @@ class _CameraGalleryDialogState extends State<CameraGalleryDialog> {
     }
 
     return selectedImages;
+  }
+
+  Future<XFile?> capturedImages() async {
+
+    final XFile? capImages = await
+    imagePicker.pickImage(source: ImageSource.camera);
+
+
+    if (capImages != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content:
+              Text("You can upload only 3 Images")));
+
+    }
+
+    return capImages;
   }
 
 
@@ -85,7 +103,25 @@ class _CameraGalleryDialogState extends State<CameraGalleryDialog> {
               right: SizeConfig.screenWidth*0.07),
               child: GestureDetector(
                 onDoubleTap: (){},
-                onTap: (){
+                onTap: () async {
+
+                  // final XFile? photo = await imagePicker.pickImage(source: ImageSource.camera);
+
+                  setState(() {
+                    if((imageFileList?.length ?? 0 ) > 3) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content:
+                            Text("You can upload only 3 Images")));
+                    return;
+                    }
+
+                    capturedImages().then((value){
+                      if(value == null) return;
+                      Navigator.of(context).pop([value]);
+                    });
+                  });
+
                 },
                 child: Container(
                   height: SizeConfig.screenHeight*0.06,
