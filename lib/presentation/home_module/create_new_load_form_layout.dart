@@ -149,12 +149,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
           ),
           Padding(
             padding: EdgeInsets.only(left: parentHeight * 0.01),
-            child: Text("Interested Transporter",
+            child: Text("Post Load",
               style: TextStyle(
                   fontSize: SizeConfig.blockSizeHorizontal*6.0,
                   fontFamily: "Roboto_Medium",
                   fontWeight: FontWeight.w500,
-                  color: Colors.transparent
+                  color: Colors.white
               ),),
           ),
           const Icon(Icons.more_vert,

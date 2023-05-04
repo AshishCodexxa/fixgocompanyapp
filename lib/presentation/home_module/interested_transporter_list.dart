@@ -1,3 +1,4 @@
+import 'package:fixgocompanyapp/all_dialogs/filter_transporter_list_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:fixgocompanyapp/presentation/home_module/booking_details_screen.dart';
@@ -71,8 +72,29 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
                   color: CommonColor.WHITE_COLOR
               ),),
           ),
-          const Icon(Icons.more_vert,
-            color: Colors.white,)
+          GestureDetector(
+            onDoubleTap: (){},
+            onTap: (){
+              showModalBottomSheet(
+                  context: context,
+                  backgroundColor: Colors.transparent,
+                  elevation: 20,
+                  isScrollControlled: true,
+                  isDismissible: true,
+                  enableDrag: true,
+                  builder: (BuildContext bc) {
+                    return TransporterListFilter();
+                  });
+            },
+            child: Container(
+                color: Colors.transparent,
+                child: Padding(
+                  padding: EdgeInsets.all(3.0),
+                  child: Image(image: AssetImage("assets/images/filter_icon.png"),
+                  color: Colors.white,),
+                )
+            ),
+          )
         ],
       ),
     );

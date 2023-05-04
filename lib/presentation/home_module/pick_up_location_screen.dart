@@ -132,7 +132,7 @@ class _PickUpLocationState extends State<PickUpLocation> {
                     color: Colors.black,),
                   label: RichText(
                     text: TextSpan(
-                        text: 'Contact Person Name',
+                        text: 'Company Name',
                         style: TextStyle(
                           color: Colors.black54,
                           fontWeight: FontWeight.w400,

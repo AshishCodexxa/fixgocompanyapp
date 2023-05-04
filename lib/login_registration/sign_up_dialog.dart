@@ -201,7 +201,7 @@ class _SignUpDialogState extends State<SignUpDialog> {
                             borderRadius: BorderRadius.circular(10)
                           ),
                           child: Center(
-                            child: Text("Register",
+                            child: Text("Register Now",
                               style: TextStyle(
                                   color: CommonColor.WHITE_COLOR,
                                   fontSize: SizeConfig.blockSizeHorizontal*5.0,
