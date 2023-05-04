@@ -969,9 +969,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       children: [
                         RichText(
                           text: TextSpan(
-                              text: 'Upload Image',
+                              text: images.length == 0 ? 'Upload Image' : "${images.length} Images Selected",
                               style: TextStyle(
-                                color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                color: images.length == 0 ? CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0) : Colors.black54,
                                 fontWeight: FontWeight.w400,
                                 fontSize: SizeConfig.blockSizeHorizontal*4.0,
                               ),

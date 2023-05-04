@@ -143,7 +143,7 @@ class _SignUpDialogState extends State<SignUpDialog> {
                             padding: EdgeInsets.only(left: SizeConfig.screenWidth * 0.01),
                             child: RichText(
                                 text: const TextSpan(
-                                    text: "I have read and agree to SCS Pay",
+                                    text: "I have read and agree to Fix Go",
                                     style: TextStyle(
                                         color: CommonColor.BLACK_COLOR,
                                         fontWeight: FontWeight.w400,
