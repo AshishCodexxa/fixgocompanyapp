@@ -1,6 +1,7 @@
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:fixgocompanyapp/login_registration/company_registeration_screen.dart';
+import 'package:fixgocompanyapp/login_registration/login_screen.dart';
 import 'package:flutter/material.dart';
 
 
@@ -19,6 +20,7 @@ class _SignUpDialogState extends State<SignUpDialog> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       backgroundColor: CommonColor.APP_BAR_COLOR,
       body: Column(
@@ -26,7 +28,7 @@ class _SignUpDialogState extends State<SignUpDialog> {
         children: [
 
           Container(
-            height: SizeConfig.screenWidth*0.95,
+            // height: SizeConfig.screenWidth*0.99,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(30),
@@ -213,7 +215,48 @@ class _SignUpDialogState extends State<SignUpDialog> {
                       ),
                     ],
                   ),
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: SizeConfig.screenWidth * 0.01,
+                      top: SizeConfig.screenHeight*0.02),
+                      child: GestureDetector(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          child: RichText(
+                              text: TextSpan(
+                                  text: "New User?",
+                                  style: TextStyle(
+                                      color: CommonColor.BLACK_COLOR,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 13),
+                                  children: [
+                                    TextSpan(
+                                        text: " Create an account",
+                                        style: TextStyle(
+                                            color: CommonColor.SIGN_UP_TEXT_COLOR,
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: 'Roboto-Regular',
+                                            fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                                        decoration: TextDecoration.underline,)),
+                                  ])),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  height: SizeConfig.screenHeight*0.03,
                 )
+
               ],
             ),
           )
