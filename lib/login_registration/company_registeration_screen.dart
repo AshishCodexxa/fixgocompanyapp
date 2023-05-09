@@ -1,6 +1,7 @@
 import 'package:fixgocompanyapp/all_dialogs/register_success_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/login_registration/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -1285,23 +1286,32 @@ class _CompanyRegistrationState extends State<CompanyRegistration> {
 
         Padding(
           padding: EdgeInsets.only(top: parentHeight*0.02),
-          child: RichText(
-            text: TextSpan(
-                text: 'Already have an Account?',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400,
-                  fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                ),
-                children: [
-                  TextSpan(
-                      text: ' Login',
-                      style: TextStyle(
-                          fontSize: SizeConfig.blockSizeHorizontal*4.0,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                      fontFamily: 'Roboto_Medium'))
-                ]),
+          child: GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: RichText(
+                text: TextSpan(
+                    text: 'Already have an Account?',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w400,
+                      fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                    ),
+                    children: [
+                      TextSpan(
+                          text: " Sign In",
+                          style: TextStyle(
+                            color: CommonColor.SIGN_UP_TEXT_COLOR,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Roboto-Regular',
+                            fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                            decoration: TextDecoration.underline,)),
+                    ]),
+              ),
+            ),
           ),
         ),
 

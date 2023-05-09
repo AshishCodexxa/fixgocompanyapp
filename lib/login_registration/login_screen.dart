@@ -1,5 +1,7 @@
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/login_registration/otp_put_screen.dart';
+import 'package:fixgocompanyapp/login_registration/sign_up_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
@@ -184,17 +186,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       GestureDetector(
                         onDoubleTap: (){},
                         onTap: (){
-                          // Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyRegistration()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpPutScreen()));
                         },
                         child: Container(
-                          height: SizeConfig.screenHeight*0.057,
+                          height: SizeConfig.screenHeight*0.055,
                           width: SizeConfig.screenWidth*0.7,
                           decoration: BoxDecoration(
                               color: CommonColor.SIGN_UP_TEXT_COLOR,
                               borderRadius: BorderRadius.circular(10)
                           ),
                           child: Center(
-                            child: Text("Register Now",
+                            child: Text("Send OTP",
                               style: TextStyle(
                                   color: CommonColor.WHITE_COLOR,
                                   fontSize: SizeConfig.blockSizeHorizontal*5.0,
@@ -216,7 +218,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           top: SizeConfig.screenHeight*0.02),
                       child: GestureDetector(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUpDialog()));
                         },
                         child: Container(
                           color: Colors.transparent,

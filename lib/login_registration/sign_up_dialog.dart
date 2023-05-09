@@ -1,5 +1,6 @@
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/login_registration/adhar_pan_register_screen.dart';
 import 'package:fixgocompanyapp/login_registration/company_registeration_screen.dart';
 import 'package:fixgocompanyapp/login_registration/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -193,7 +194,8 @@ class _SignUpDialogState extends State<SignUpDialog> {
                       GestureDetector(
                         onDoubleTap: (){},
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyRegistration()));
+                          // Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyRegistration()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>AadhaarPanCardRegisterScreen()));
                         },
                         child: Container(
                           height: SizeConfig.screenHeight*0.057,
@@ -217,7 +219,7 @@ class _SignUpDialogState extends State<SignUpDialog> {
                   ),
                 ),
 
-                Row(
+                /*Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
@@ -231,7 +233,7 @@ class _SignUpDialogState extends State<SignUpDialog> {
                           color: Colors.transparent,
                           child: RichText(
                               text: TextSpan(
-                                  text: "New User?",
+                                  text: "Already have an Account?",
                                   style: TextStyle(
                                       color: CommonColor.BLACK_COLOR,
                                       fontWeight: FontWeight.w400,
@@ -239,7 +241,7 @@ class _SignUpDialogState extends State<SignUpDialog> {
                                       fontSize: 13),
                                   children: [
                                     TextSpan(
-                                        text: " Create an account",
+                                        text: " Sign In",
                                         style: TextStyle(
                                             color: CommonColor.SIGN_UP_TEXT_COLOR,
                                             fontWeight: FontWeight.w600,
@@ -251,7 +253,7 @@ class _SignUpDialogState extends State<SignUpDialog> {
                       ),
                     ),
                   ],
-                ),
+                ),*/
 
                 SizedBox(
                   height: SizeConfig.screenHeight*0.03,
