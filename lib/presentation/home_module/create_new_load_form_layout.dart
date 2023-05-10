@@ -41,7 +41,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
   TextEditingController totalFareController = TextEditingController();
 
   String? pickUpDate;
-  String? bidEndDate;
+  String? pickUpTime;
   DateTime? pickedDates;
 
   String employeeValue = 'Type of Load';
@@ -144,7 +144,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
             },
             child: Container(
                 color: Colors.transparent,
-                child: Icon(Icons.arrow_back_ios_new,
+                child: const Icon(Icons.arrow_back_ios_new,
                   color: CommonColor.WHITE_COLOR,)),
           ),
           Padding(
@@ -195,7 +195,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       child: GestureDetector(
                         onDoubleTap: (){},
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>PreviousAddressListScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>const PreviousAddressListScreen()));
                         },
                         child: Container(
                           color: Colors.transparent,
@@ -239,7 +239,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       child: GestureDetector(
                         onDoubleTap: (){},
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryLocationScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>const DeliveryLocationScreen()));
                         },
                         child: Container(
                           color: Colors.transparent,
@@ -253,39 +253,6 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                         ),
                       ),
                     ),
-                  /* Container(
-                     color: Colors.transparent,
-                     width: parentWidth*0.14,
-                     child: Row(
-                       children: [
-                         Padding(
-                           padding: EdgeInsets.only(top: parentHeight*0.007,
-                           ),
-                           child: Image(image: AssetImage("assets/images/vertical_divider.png")),
-                         ),
-                         GestureDetector(
-                           onDoubleTap: (){},
-                           onTap: (){
-                             addDeliveryCount++;
-                             if(mounted){
-                               setState(() {
-
-                               });
-                             }
-                           },
-                           child: Container(
-                             color: Colors.transparent,
-                             child: Padding(
-                               padding: EdgeInsets.only(top: parentHeight*0.01,
-                                   left: parentWidth*0.03),
-                               child: Icon(Icons.add_circle_outline_rounded,
-                               color: Colors.black,),
-                             ),
-                           ),
-                         )
-                       ],
-                     ),
-                   )*/
                   ],
                 ),
 
@@ -293,55 +260,6 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                   height: parentHeight*0.01,
                 ),
 
-               /* for(int i = 0; i < addDeliveryCount ; i++)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: parentWidth*0.1, top: parentHeight*0.007),
-                      child: Text("Delivery",
-                        style: TextStyle(
-                            color: Colors.black54,
-                            fontSize: SizeConfig.blockSizeHorizontal*4.0,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Roboto_Regular'
-                        ),),
-                    ),
-                   Container(
-                     color: Colors.transparent,
-                     width: parentWidth*0.14,
-                     child: Row(
-                       children: [
-                         Padding(
-                           padding: EdgeInsets.only(top: parentHeight*0.007,
-                           ),
-                           child: Image(image: AssetImage("assets/images/vertical_divider.png")),
-                         ),
-                         GestureDetector(
-                           onDoubleTap: (){},
-                           onTap: (){
-                             addDeliveryCount--;
-                             if(mounted){
-                               setState(() {
-
-                               });
-                             }
-                           },
-                           child: Container(
-                             color: Colors.transparent,
-                             child: Padding(
-                               padding: EdgeInsets.only(top: parentHeight*0.01,
-                                   left: parentWidth*0.03),
-                               child: Icon(Icons.remove_circle_outline_rounded,
-                               color: Colors.black,),
-                             ),
-                           ),
-                         )
-                       ],
-                     ),
-                   )
-                  ],
-                ),*/
                 SizedBox(
                   height: parentHeight*0.007,
                 ),
@@ -361,7 +279,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       Container(
                         height: parentHeight*0.013,
                         width: parentWidth*0.026,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             color: CommonColor.FROM_AREA_COLOR,
                             shape: BoxShape.circle
                         ),
@@ -391,7 +309,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       Container(
                         height: parentHeight*0.013,
                         width: parentWidth*0.026,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             color: CommonColor.TO_AREA_COLOR,
                             shape: BoxShape.circle
                         ),
@@ -439,14 +357,20 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                     pickedDates = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime.now().subtract(Duration(days: 1)),
-                      lastDate: DateTime(2100));
+                      firstDate: DateTime.now().subtract(const Duration(days: 1)),
+                      lastDate: DateTime(2100),
+
+                    );
+
 
                   if (pickedDates != null) {
                     print(
-                        pickedDates); //pickedDate output format => 2021-03-10 00:00:00.000
+                        pickedDates);
                     pickUpDate =
                     DateFormat('dd-MM-yyyy').format(pickedDates!);
+
+
+
                     print(
                         pickUpDate); //formatted date output using intl package =>  2021-03-16
                     setState(() {
@@ -464,10 +388,10 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
 
-                      Icon(Icons.date_range_outlined,
+                      const Icon(Icons.date_range_outlined,
                         color: Colors.black,),
 
-                      Text(pickUpDate == null ?"Pick-up Date":"${pickUpDate}",
+                      Text(pickUpDate == null ?"Pick-up Date":"$pickUpDate",
                         style: TextStyle(
                             fontSize: SizeConfig.blockSizeHorizontal*3.5,
                             fontFamily: "Roboto_Regular",
@@ -496,33 +420,72 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
               child: GestureDetector(
                 onDoubleTap: (){},
                 onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
+
+                  Future<String?> result = showModalBottomSheet<String>(
                       context: context,
-                      initialDate: pickedDates!,
-                      firstDate: DateTime.now().subtract(Duration(days: 1)),
-                      lastDate: DateTime(2100));
+                      isScrollControlled: true,
+                      // backgroundColor: CommonColor.APP_BAR_COLOR.w,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                      ),
+                      builder: (context) {
+                        String? _time;
 
-                  DateTime dt2 = DateTime.parse("$pickedDates");
+                        return Padding(
+                          padding: MediaQuery.of(context).viewInsets,
+                          child: Column(mainAxisSize: MainAxisSize.min, children: [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .3,
+                              child: CupertinoDatePicker(
+                                mode: CupertinoDatePickerMode.time,
+                                onDateTimeChanged: (DateTime newTime) {
+                                  _time = DateFormat.jm().format(newTime);
+                                },
+                              ),
+                            ),
 
-                  if (pickedDate != null && pickedDate != pickedDates && pickedDate.isAfter(dt2)) {
-                    print(
-                        pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                    bidEndDate =
-                        DateFormat('dd-MM-yyyy').format(pickedDate);
-                    print(
-                        bidEndDate); //formatted date output using intl package =>  2021-03-16
-                    setState(() {
-                      dateInput.text =
-                          bidEndDate.toString(); //set output date to TextField value.
-                    });
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content:
-                            Text("Bidding Date must be greater than Pick Up Date.")));
-                  }
+                            GestureDetector(
+                              onTap: (){
+                                Navigator.of(context)
+                                    .pop(_time ?? DateFormat.jm().format(DateTime.now()));
+                              },
+                              child: Container(
+                                height: parentHeight*0.05,
+                                width: parentWidth*0.4,
+                                decoration: BoxDecoration(
+                                  color: CommonColor.SIGN_UP_TEXT_COLOR,
+                                  borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Center(
+                                  child: Text("Save",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: SizeConfig.blockSizeHorizontal*5.0,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Roboto_Medium'
+                                  ),),
+                                ),
+                              ),
+                            ),
 
+                            SizedBox(
+                              height: parentHeight*0.03,
+                            )
+                          ]),
+                        );
+                      });
 
+                  result.then((value){
+
+                   if(mounted){
+                     setState(() {
+                       pickUpTime = value;
+                     });
+                   }
+
+                  });
                 },
                 child: Container(
                   color: Colors.transparent,
@@ -531,15 +494,15 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
 
-                      Icon(Icons.date_range_outlined,
+                      const Icon(Icons.watch_later_outlined,
                         color: Colors.black,),
 
-                      Text(bidEndDate == null ? "  Bidding End Date" : "  ${bidEndDate}",
+                      Text(pickUpTime == null ? "  Pickup Time" : "  $pickUpTime",
                         style: TextStyle(
                             fontSize: SizeConfig.blockSizeHorizontal*3.5,
                             fontFamily: "Roboto_Regular",
                             fontWeight: FontWeight.w500,
-                            color:bidEndDate == null ? Colors.black54 : Colors.black
+                            color:pickUpTime == null ? Colors.black54 : Colors.black
                         ),),
 
                     ],
@@ -748,7 +711,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(right: parentWidth*0.05),
-                              child: Icon(Icons.keyboard_arrow_down_outlined,
+                              child: const Icon(Icons.keyboard_arrow_down_outlined,
                                 color: Colors.black,),
                             )
                           ],
@@ -1000,7 +963,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       padding: EdgeInsets.only(
                                         bottom: MediaQuery.of(context).viewInsets.bottom,
                                       ),
-                                      child: CameraGalleryDialog(),
+                                      child: const CameraGalleryDialog(),
                                     );
                                   }).then((value) {
                                     if(value == null) {
@@ -1020,7 +983,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             },
                             child: Container(
                               color: Colors.transparent,
-                              child: Image(image: AssetImage("assets/images/camera.png"),
+                              child: const Image(image: AssetImage("assets/images/camera.png"),
                               color: Colors.black,),
                             ),
                           ),
@@ -1074,7 +1037,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               Expanded(
                                 child: Padding(
                                   padding: EdgeInsets.only(right: parentWidth * 0.05),
-                                  child: Container(
+                                  child: SizedBox(
                                     height: parentHeight*0.05,
                                     child: TextFormField(
                                       controller: lengthController,
@@ -1110,7 +1073,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               Expanded(
                                 child: Padding(
                                   padding: EdgeInsets.only(right: parentWidth * 0.05),
-                                  child: Container(
+                                  child: SizedBox(
                                     height: parentHeight*0.05,
                                     child: TextFormField(
                                       controller: lengthController,
@@ -1146,7 +1109,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               Expanded(
                                 child: Padding(
                                   padding: EdgeInsets.only(right: parentWidth * 0.05),
-                                  child: Container(
+                                  child: SizedBox(
                                     height: parentHeight*0.05,
                                     child: TextFormField(
                                       controller: lengthController,
@@ -1335,7 +1298,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                     });
                                   },
                                   child: Container(
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       color: Colors.red,
                                       shape: BoxShape.circle
                                     ),
@@ -1515,7 +1478,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(right: parentWidth*0.05),
-                              child: Icon(Icons.keyboard_arrow_down_outlined,
+                              child: const Icon(Icons.keyboard_arrow_down_outlined,
                                 color: Colors.black,),
                             )
                           ],
@@ -1915,7 +1878,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                     ),
                     child: Row(
                       children: [
-                        Container(
+                        SizedBox(
                           height: SizeConfig.screenHeight * 0.07,
                           width: SizeConfig.screenWidth * 0.07,
                           child: Column(
@@ -2099,7 +2062,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
 
-                        Text("$vehicleName",
+                        Text(vehicleName,
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: SizeConfig.blockSizeHorizontal*3.5,
@@ -2249,10 +2212,10 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                   color: Colors.black,
                                   fontSize: SizeConfig.blockSizeHorizontal*5.0
                                 ),
-                                enabledBorder:  UnderlineInputBorder(
+                                enabledBorder:  const UnderlineInputBorder(
                                     borderSide: BorderSide(color: Colors.black12)
                                 ),
-                                focusedBorder:  UnderlineInputBorder(
+                                focusedBorder:  const UnderlineInputBorder(
                                     borderSide: BorderSide(color: Colors.black12)
                                 ),
                               ),
