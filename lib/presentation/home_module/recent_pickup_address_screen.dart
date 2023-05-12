@@ -82,7 +82,6 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
                                           alignment: Alignment.center,
                                           children: [
                                             GestureDetector(
-                                              onDoubleTap: (){},
                                               onTap: (){
                                                 // selectedIndex = index;
                                                 // setState(() {
@@ -208,7 +207,6 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
-                        onDoubleTap: (){},
                         onTap: (){
 
                         },

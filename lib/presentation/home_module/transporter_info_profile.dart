@@ -50,7 +50,6 @@ class _TransporterProfileState extends State<TransporterProfile> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            onDoubleTap: (){},
             onTap: (){
               Navigator.pop(context);
             },

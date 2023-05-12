@@ -73,7 +73,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            onDoubleTap: (){},
             onTap: (){
               Navigator.pop(context);
             },
@@ -522,7 +521,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 Padding(
                                   padding: EdgeInsets.only(right: parentWidth*0.03),
                                   child: GestureDetector(
-                                    onDoubleTap: (){},
                                     onTap: (){
                                       addressCount--;
                                       if(mounted){
@@ -809,7 +807,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 Padding(
                                   padding: EdgeInsets.only(right: parentWidth*0.03),
                                   child: GestureDetector(
-                                    onDoubleTap: (){},
                                     onTap: (){
                                       phoneNumberCount--;
                                       if(mounted){
@@ -1086,7 +1083,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 Padding(
                                   padding: EdgeInsets.only(right: parentWidth*0.03),
                                   child: GestureDetector(
-                                    onDoubleTap: (){},
                                     onTap: (){
                                       mobileNumberCount--;
                                       if(mounted){

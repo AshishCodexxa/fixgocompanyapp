@@ -371,7 +371,6 @@ class _CompanyRegistrationState extends State<CompanyRegistration> {
                             Padding(
                               padding: EdgeInsets.only(right: parentWidth*0.03),
                               child: GestureDetector(
-                                onDoubleTap: (){},
                                 onTap: (){
                                   addressCount++;
                                   if(mounted){
@@ -671,7 +670,6 @@ class _CompanyRegistrationState extends State<CompanyRegistration> {
                             Padding(
                               padding: EdgeInsets.only(right: parentWidth*0.03),
                               child: GestureDetector(
-                                onDoubleTap: (){},
                                 onTap: (){
                                   phoneNumberCount++;
                                   if(mounted){
@@ -947,7 +945,6 @@ class _CompanyRegistrationState extends State<CompanyRegistration> {
                             Padding(
                               padding: EdgeInsets.only(right: parentWidth*0.03),
                               child: GestureDetector(
-                                onDoubleTap: (){},
                                 onTap: (){
                                   mobileNumberCount++;
                                   if(mounted){
@@ -1249,7 +1246,6 @@ class _CompanyRegistrationState extends State<CompanyRegistration> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
-                onDoubleTap: (){},
                 onTap: (){
                   showCupertinoDialog(
                     context: context,

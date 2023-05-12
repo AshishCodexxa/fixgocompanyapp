@@ -129,7 +129,6 @@ class _TransporterAmountPayDialogState extends State<TransporterAmountPayDialog>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           GestureDetector(
-                            onDoubleTap: (){},
                             onTap: (){
                               showCupertinoDialog(
                                 context: context,

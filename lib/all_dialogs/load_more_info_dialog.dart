@@ -106,7 +106,6 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                       Padding(
                         padding: EdgeInsets.only(right: SizeConfig.screenWidth*0.05),
                         child: GestureDetector(
-                          onDoubleTap: (){},
                           onTap: (){
                             Navigator.pop(context);
                           },

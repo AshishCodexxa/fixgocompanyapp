@@ -69,7 +69,6 @@ class _PickUpLocationState extends State<PickUpLocation> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            onDoubleTap: (){},
             onTap: (){
               Navigator.pop(context);
             },
@@ -477,7 +476,6 @@ class _PickUpLocationState extends State<PickUpLocation> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
-                onDoubleTap: (){},
                 onTap: (){
 
                 },

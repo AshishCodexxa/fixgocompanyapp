@@ -106,7 +106,6 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            onDoubleTap: (){},
             onTap: (){
               // Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfileChildScreen()));
             },
@@ -168,7 +167,6 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
                   ),
                   ScreenConstant.HOME_PAGE);
             },
-            onDoubleTap: () {},
             child: Container(
               height: parentHeight*0.07,
               width: parentWidth*0.17,
@@ -257,7 +255,6 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
                   ),
                   ScreenConstant.PROFILE_FRAGMENT);
             },
-            onDoubleTap: () {},
             child: Container(
               height: parentHeight*0.07,
               width: parentWidth*0.17,

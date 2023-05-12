@@ -386,7 +386,6 @@ class _AadhaarPanCardRegisterScreenState extends State<AadhaarPanCardRegisterScr
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
-                onDoubleTap: (){},
                 onTap: (){
                   showCupertinoDialog(
                     context: context,

@@ -53,7 +53,6 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            onDoubleTap: (){},
             onTap: (){
               Navigator.pop(context);
             },
@@ -116,7 +115,6 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
                     right: SizeConfig.screenWidth*0.05,
                   ),
                   child: GestureDetector(
-                    onDoubleTap: (){},
                     onTap: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>TransporterProfile()));
                     },

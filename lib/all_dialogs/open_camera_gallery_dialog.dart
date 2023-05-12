@@ -93,7 +93,6 @@ class _CameraGalleryDialogState extends State<CameraGalleryDialog> {
               left: SizeConfig.screenWidth*0.07,
               right: SizeConfig.screenWidth*0.07),
               child: GestureDetector(
-                onDoubleTap: (){},
                 onTap: () async {
 
                   // final XFile? photo = await imagePicker.pickImage(source: ImageSource.camera);

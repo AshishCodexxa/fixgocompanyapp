@@ -184,7 +184,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
-                        onDoubleTap: (){},
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpPutScreen()));
                         },

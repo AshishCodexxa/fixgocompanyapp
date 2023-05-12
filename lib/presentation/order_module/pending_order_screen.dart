@@ -85,7 +85,6 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                         right: SizeConfig.screenWidth*0.05,
                                       ),
                                       child: GestureDetector(
-                                        onDoubleTap: (){},
                                         onTap: (){
                                           Navigator.push(context, MaterialPageRoute(builder: (context)=>TransporterProfile()));
                                         },
@@ -263,7 +262,6 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                     Padding(
                                       padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.02),
                                       child: GestureDetector(
-                                        onDoubleTap: (){},
                                         onTap: (){
                                           Navigator.push(context, MaterialPageRoute(builder: (context)=>InterestedTransporterList()));
                                         },
@@ -862,7 +860,6 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                       padding: EdgeInsets.only(top: parentHeight*0.007,
                       left: parentWidth*0.03),
                       child:GestureDetector(
-                        onDoubleTap: (){},
                         onTap: (){
                           showCupertinoDialog(
                             context: context,
@@ -1052,7 +1049,6 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
             ),),
 
           GestureDetector(
-            onDoubleTap: (){},
             onTap: (){
               showModalBottomSheet(
                   context: context,

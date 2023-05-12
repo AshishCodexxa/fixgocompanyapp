@@ -59,7 +59,6 @@ class _BankAccountDetailsScreenState extends State<BankAccountDetailsScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            onDoubleTap: (){},
             onTap: (){
               Navigator.pop(context);
             },

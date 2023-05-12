@@ -147,7 +147,6 @@ class _GetTransporterReviewState extends State<GetTransporterReview> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           GestureDetector(
-                            onDoubleTap: (){},
                             onTap: (){
                               // showCupertinoDialog(
                               //   context: context,

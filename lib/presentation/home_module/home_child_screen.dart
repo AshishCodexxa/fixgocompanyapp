@@ -130,7 +130,6 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                                     right: SizeConfig.screenWidth*0.05,
                                                   ),
                                                   child: GestureDetector(
-                                                    onDoubleTap: (){},
                                                     onTap: (){
                                                       Navigator.push(context, MaterialPageRoute(builder: (context)=>TransporterProfile()));
                                                     },
@@ -243,7 +242,6 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                                                 ),
 
                                                                 GestureDetector(
-                                                                  onDoubleTap: (){},
                                                                   onTap: (){
                                                                     Navigator.push(context, MaterialPageRoute(builder: (context)=>BookingDetailsScreen()));
                                                                   },
@@ -301,7 +299,6 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                         Padding(
                                           padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.02,),
                                           child: GestureDetector(
-                                            onDoubleTap: (){},
                                             onTap: (){
                                               Navigator.push(context, MaterialPageRoute(builder: (context)=>InterestedTransporterList()));
                                             },
@@ -687,7 +684,6 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                       ]),
                 ),
                 GestureDetector(
-                  onDoubleTap: (){},
                   onTap: (){
                     showCupertinoDialog(
                       context: context,

@@ -182,7 +182,6 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
-                        onDoubleTap: (){},
                         onTap: (){
                           // Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyRegistration()));
 

@@ -372,7 +372,6 @@ class _CompleteOrderScreenState extends State<CompleteOrderScreen> {
                       padding: EdgeInsets.only(top: parentHeight * 0.007,
                           left: parentWidth * 0.03),
                       child: GestureDetector(
-                        onDoubleTap: () {},
                         onTap: () {
                           showCupertinoDialog(
                             context: context,
@@ -544,7 +543,6 @@ class _CompleteOrderScreenState extends State<CompleteOrderScreen> {
                 Row(
                   children: [
                     GestureDetector(
-                      onDoubleTap: () {},
                       onTap: () {
                         if (mounted) {
                           setState(() {
@@ -585,7 +583,6 @@ class _CompleteOrderScreenState extends State<CompleteOrderScreen> {
                         Visibility(
                           visible: !arrowShow,
                           child: GestureDetector(
-                            onDoubleTap: () {},
                             onTap: () {
                               if (mounted) {
                                 setState(() {

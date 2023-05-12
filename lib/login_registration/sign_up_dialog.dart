@@ -192,7 +192,6 @@ class _SignUpDialogState extends State<SignUpDialog> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
-                        onDoubleTap: (){},
                         onTap: (){
                           // Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyRegistration()));
                           Navigator.push(context, MaterialPageRoute(builder: (context)=>AadhaarPanCardRegisterScreen()));

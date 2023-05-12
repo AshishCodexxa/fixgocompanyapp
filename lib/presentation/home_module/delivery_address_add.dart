@@ -69,7 +69,6 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            onDoubleTap: (){},
             onTap: (){
               Navigator.pop(context);
             },
@@ -477,7 +476,6 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
-                onDoubleTap: (){},
                 onTap: (){
 
                 },

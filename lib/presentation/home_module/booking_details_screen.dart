@@ -75,7 +75,6 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            onDoubleTap: (){},
             onTap: (){
               Navigator.pop(context);
             },
@@ -605,7 +604,6 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                      onDoubleTap: (){},
                       onTap: (){
 
                         showCupertinoDialog(

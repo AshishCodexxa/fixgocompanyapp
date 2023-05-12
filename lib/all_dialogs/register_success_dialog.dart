@@ -103,7 +103,6 @@ class _RegisterSuccessDialogState extends State<RegisterSuccessDialog> {
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: GestureDetector(
-                    onDoubleTap: (){},
                     onTap: (){
                       Navigator.pop(context);
                     },

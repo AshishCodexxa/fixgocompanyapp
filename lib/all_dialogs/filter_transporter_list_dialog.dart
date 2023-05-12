@@ -70,7 +70,6 @@ class _TransporterListFilterState extends State<TransporterListFilter> {
                             ),),
                         ),
                         GestureDetector(
-                          onDoubleTap: (){},
                           onTap: (){
                             Navigator.pop(context);
                           },
