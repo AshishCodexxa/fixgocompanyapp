@@ -15,6 +15,11 @@ class PreviousAddressListScreen extends StatefulWidget {
 }
 
 class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
+
+
+  int selectedIndex = 0;
+
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -74,55 +79,59 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
                                   right: SizeConfig.screenWidth*0.05),
                               child: Column(
                                 children: [
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.01),
-                                        child: Stack(
-                                          alignment: Alignment.center,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: (){
-                                                // selectedIndex = index;
-                                                // setState(() {
-                                                //   selectAddId = snap.data?.data?[index].id ?? "";
-                                                //   print(" selectId $selectAddId");
-                                                // });
-                                              },
-                                              child: Container(
-                                                color: Colors.transparent,
-                                                child: Icon(Icons.circle_outlined,
-                                                  color: CommonColor.BLACK_COLOR,),
-                                              ),
+                                  GestureDetector(
+                                    onTap: (){
+                                      selectedIndex = index;
+                                      setState(() {
+                                        // selectAddId = snap.data?.data?[index].id ?? "";
+                                        // print(" selectId $selectAddId");
+                                        print(selectedIndex);
+                                      });
+                                    },
+                                    child: Container(
+                                      color: Colors.transparent,
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.01),
+                                            child: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                Container(
+                                                  color: Colors.transparent,
+                                                  child: Icon(Icons.circle_outlined,
+                                                    color: CommonColor.BLACK_COLOR,),
+                                                ),
+                                                Visibility(
+                                                  visible: selectedIndex == index,
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(right: SizeConfig.screenWidth*0.0027),
+                                                    child: Icon(Icons.circle,
+                                                      color: CommonColor.BLACK_COLOR,
+                                                      size: SizeConfig.blockSizeHorizontal*3.0,),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            Visibility(
-                                              visible: true,
-                                              child: Padding(
-                                                padding: EdgeInsets.only(right: SizeConfig.screenWidth*0.0027),
-                                                child: Icon(Icons.circle,
-                                                  color: CommonColor.BLACK_COLOR,
-                                                  size: SizeConfig.blockSizeHorizontal*3.0,),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.03, top: SizeConfig.screenHeight*0.02),
-                                        child: Container(
-                                          width: SizeConfig.screenWidth*0.8,
-                                          color: Colors.transparent,
-                                          child: Text("City Avenue ,Shankar Kalat Nagar, Wakad, Pimpri-Chinchwad, Pune - 57.",
-                                            style: TextStyle(
-                                              color: CommonColor.BLACK_COLOR,
-                                              fontSize: SizeConfig.blockSizeHorizontal*4.0,
-                                              fontFamily: 'Roboto_Medium',
-                                              fontWeight: FontWeight.w400,
-                                              )
                                           ),
-                                        ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.03, top: SizeConfig.screenHeight*0.02),
+                                            child: Container(
+                                              width: SizeConfig.screenWidth*0.8,
+                                              color: Colors.transparent,
+                                              child: Text("City Avenue ,Shankar Kalat Nagar, Wakad, Pimpri-Chinchwad, Pune - 57.",
+                                                style: TextStyle(
+                                                  color: CommonColor.BLACK_COLOR,
+                                                  fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                                  fontFamily: 'Roboto_Medium',
+                                                  fontWeight: FontWeight.w400,
+                                                  )
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.015),
@@ -147,7 +156,7 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
                     ),
 
                     SliverPadding(
-                      padding: EdgeInsets.only(bottom: SizeConfig.screenHeight*0.05),
+                      padding: EdgeInsets.only(bottom: SizeConfig.screenHeight*0.15),
                       sliver: SliverList(
                         delegate: SliverChildListDelegate(
                           [
@@ -270,16 +279,6 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
             color: Colors.transparent,)
         ],
       ),
-    );
-  }
-
-  Widget getAddressList(double parentHeight, double parentWidth){
-    return Column(
-      children: [
-
-
-
-      ],
     );
   }
 }

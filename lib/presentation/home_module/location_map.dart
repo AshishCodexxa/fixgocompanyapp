@@ -67,6 +67,9 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
   @override
   void initState() {
     super.initState();
+
+    print(widget.comeFrom);
+
     getUserCurrentLocation().then((value) async {
       print("${value?.latitude.toString()}    ${value?.longitude.toString()}");
 
@@ -250,15 +253,17 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                      widget.comeFrom == 1 ?
+
+                      widget.comeFrom == "1" ?
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>
                             PickUpLocation(
                               address: '$name, $street, $subLocality, $locality, $postalCode, $administrativeArea, $country.'
                             ))) :
+                      widget.comeFrom == "2" ?
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>
                           DeliveryLocationScreen(
                               address: '$name, $street, $subLocality, $locality, $postalCode, $administrativeArea, $country.'
-                          ))) ;
+                          ))) : Container();
                       },
                       child: const Text('Save Address'),
                     )

@@ -32,6 +32,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
   int submit = 0;
 
+  int count = 50;
+  String val = "";
+  double fareVal = 0.0;
+
+  double deliverPayment = 0.0;
+
   bool isChecked = false;
 
   TextEditingController dateInput = TextEditingController();
@@ -119,6 +125,44 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+
+
+
+    double percent = count/100;
+
+    print(percent);
+
+    if(totalFareController.text.isNotEmpty){
+      if(mounted) {
+        setState(() {
+          fareVal = double.parse(totalFareController.text);
+
+          print(fareVal.toString());
+        });
+      }
+
+    }
+
+    double price = percent * fareVal;
+
+
+
+    if(totalFareController.text.isNotEmpty) {
+      if (mounted) {
+        setState(() {
+          deliverPayment = double.parse(totalFareController.text) - price;
+          print("Hiii $deliverPayment");
+        });
+      }
+    }
+
+
+
+    print(price);
+
+
+
+
     return Scaffold(
       body: ListView(
         shrinkWrap: true,
@@ -3089,8 +3133,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                 child: Padding(
                                   padding: EdgeInsets.only(top: parentHeight*0.01),
                                   child: TextFormField(
-                                    controller: quantityLoadController,
-                                    // focusNode: _userNameFocus,
+                                    controller: totalFareController,
                                     textInputAction: TextInputAction.done,
                                     decoration: InputDecoration(
                                       label: Text("Total Fare",
@@ -3100,22 +3143,21 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                           fontSize: SizeConfig.blockSizeHorizontal*3.5,
                                         ),),
                                       contentPadding: EdgeInsets.only(left: parentWidth*0.05, right: parentWidth*0.05),
-                                      prefixText: "\u{20B9}",
-                                      prefixStyle: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: SizeConfig.blockSizeHorizontal*5.0
+                                      enabledBorder: const UnderlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.black26)
                                       ),
-                                      enabledBorder:  const UnderlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.black12)
+                                      focusedBorder: const UnderlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.black26)
                                       ),
-                                      focusedBorder:  const UnderlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.black12)
-                                      ),
+                                      prefixIcon: Icon(Icons.currency_rupee,
+                                        size: SizeConfig.screenHeight*0.025,
+                                        color: Colors.black,),
                                     ),
                                     style: TextStyle(
-                                        color: CommonColor.REGISTER_HINT_COLOR.withOpacity(0.5),
-                                        fontSize: SizeConfig.blockSizeHorizontal*5.0
-                                    ),onFieldSubmitted: (val){
+                                        color: CommonColor.BLACK_COLOR,
+                                        fontSize: SizeConfig.blockSizeHorizontal * 5.0,
+                                        fontFamily: 'Roboto_Medium'),
+                                    onFieldSubmitted: (val){
                                       if(mounted){
                                         setState(() {
                                           paymentFieldHide = !paymentFieldHide;
@@ -3147,26 +3189,37 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             ),
 
                             Padding(
-                              padding: EdgeInsets.only(right: parentWidth*0.03,
-                                  top: parentHeight*0.01),
+                              padding: EdgeInsets.only(right: SizeConfig.screenWidth*0.03,
+                                  top: SizeConfig.screenHeight*0.02),
                               child: Row(
                                 children: [
 
-                                  Container(
-                                    height: parentHeight*0.027,
-                                    width: parentWidth*0.07,
-                                    decoration: BoxDecoration(
-                                      color: CommonColor.ADVANCE_INCREMENT_COLOR,
-                                      borderRadius: BorderRadius.circular(5)
+                                  GestureDetector(
+                                    onTap: (){
+                                      if(mounted){
+                                        setState(() {
+                                          if(count != 0){
+                                            count = count - 10;
+                                          }
+                                        });
+                                      }
+                                    },
+                                    child: Container(
+                                      height: SizeConfig.screenHeight*0.027,
+                                      width: SizeConfig.screenWidth*0.07,
+                                      decoration: BoxDecoration(
+                                          color: CommonColor.ADVANCE_INCREMENT_COLOR,
+                                          borderRadius: BorderRadius.circular(5)
+                                      ),
+                                      child: Icon(Icons.remove,
+                                        color: Colors.white,
+                                        size: SizeConfig.screenHeight*0.02,),
                                     ),
-                                    child: Icon(Icons.remove,
-                                    color: Colors.white,
-                                      size: parentHeight*0.02,),
                                   ),
 
                                   Padding(
-                                    padding: EdgeInsets.only(left: parentWidth*0.02, right: parentWidth*0.02),
-                                    child: Text("50 %",
+                                    padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.02, right: SizeConfig.screenWidth*0.02),
+                                    child: Text("$count %",
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: SizeConfig.blockSizeHorizontal*3.7,
@@ -3175,16 +3228,27 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       ),),
                                   ),
 
-                                  Container(
-                                    height: parentHeight*0.027,
-                                    width: parentWidth*0.07,
-                                    decoration: BoxDecoration(
-                                        color: CommonColor.ADVANCE_INCREMENT_COLOR,
-                                        borderRadius: BorderRadius.circular(5)
+                                  GestureDetector(
+                                    onTap: (){
+                                      if(mounted){
+                                        setState(() {
+                                          if(count != 100) {
+                                            count = count + 10;
+                                          }
+                                        });
+                                      }
+                                    },
+                                    child: Container(
+                                      height: SizeConfig.screenHeight*0.027,
+                                      width: SizeConfig.screenWidth*0.07,
+                                      decoration: BoxDecoration(
+                                          color: CommonColor.ADVANCE_INCREMENT_COLOR,
+                                          borderRadius: BorderRadius.circular(5)
+                                      ),
+                                      child: Icon(Icons.add,
+                                        color: Colors.white,
+                                        size: SizeConfig.screenHeight*0.02,),
                                     ),
-                                    child: Icon(Icons.add,
-                                      color: Colors.white,
-                                    size: parentHeight*0.02,),
                                   ),
 
                                 ],
@@ -3325,13 +3389,13 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                     child: Padding(
                                       padding: EdgeInsets.only(top: parentHeight*0.01),
                                       child: TextFormField(
-                                        controller: quantityLoadController,
+                                        // controller: quantityLoadController,
                                         // focusNode: _userNameFocus,
                                         textInputAction: TextInputAction.next,
                                         decoration: InputDecoration(
-                                          hintText:"6000",
+                                          hintText:fareVal == 0.0 || totalFareController.text.isEmpty? "Amount" : ((count/100) * fareVal).toStringAsFixed(1),
                                           hintStyle: TextStyle(
-                                            color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                            color: fareVal == 0.0 || totalFareController.text.isEmpty ? CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0) : Colors.black,
                                             fontWeight: FontWeight.w400,
                                             fontSize: SizeConfig.blockSizeHorizontal*6.0,
                                           ),
@@ -3569,13 +3633,13 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                     child: Padding(
                                       padding: EdgeInsets.only(top: parentHeight*0.01),
                                       child: TextFormField(
-                                        controller: quantityLoadController,
+                                        // controller: quantityLoadController,
                                         // focusNode: _userNameFocus,
                                         textInputAction: TextInputAction.next,
                                         decoration: InputDecoration(
-                                          hintText:"6000",
+                                          hintText:deliverPayment == 0.0 || totalFareController.text.isEmpty? "Amount" : "${deliverPayment.toStringAsFixed(1)}",
                                           hintStyle: TextStyle(
-                                            color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                            color:deliverPayment == 0.0 || totalFareController.text.isEmpty ? CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0) : Colors.black,
                                             fontWeight: FontWeight.w400,
                                             fontSize: SizeConfig.blockSizeHorizontal*6.0,
                                           ),
