@@ -1,4 +1,5 @@
 import 'package:fixgocompanyapp/all_dialogs/load_more_info_dialog.dart';
+import 'package:fixgocompanyapp/all_dialogs/receiver_details_dialog.dart';
 import 'package:fixgocompanyapp/all_dialogs/transporter_amount_pay_dialog.dart';
 import 'package:fixgocompanyapp/all_dialogs/transporter_verify_details_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
@@ -169,101 +170,45 @@ class _CompleteOrderScreenState extends State<CompleteOrderScreen> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(right: parentWidth * 0.05,),
+                padding: EdgeInsets.only(
+                  right: parentWidth * 0.05,
+                ),
                 child: Column(
                   children: [
-                    Container(
-                      color: Colors.transparent,
-                      width: parentWidth*0.25,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          RichText(
-                            text: TextSpan(
-                                text: '\u{20B9}',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: SizeConfig.blockSizeHorizontal * 3.7,
-                                ),
-                                children: [
-                                  TextSpan(
-                                      text: ' 2000/-',
-                                      style: TextStyle(
-                                          fontSize: SizeConfig.blockSizeHorizontal *
-                                              4.0,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))
-                                ]),
+                    RichText(
+                      text: TextSpan(
+                          text: '\u{20B9}',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                            fontSize: SizeConfig.blockSizeHorizontal * 3.7,
                           ),
-                        ],
-                      ),
+                          children: [
+                            TextSpan(
+                                text: ' 99999/-',
+                                style: TextStyle(
+                                    fontSize:
+                                    SizeConfig.blockSizeHorizontal * 4.5,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold))
+                          ]),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: parentHeight*0.001),
-                      child: Row(
-                        children: [
-                          Text("(Transport Fare Per Vehicle)",
-                            style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: SizeConfig.blockSizeHorizontal*2.0,
-                                height: parentHeight*0.002
-                            ),),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                    left: parentWidth * 0.05, top: parentHeight * 0.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Post on 26th Jan 2023 | 10:30 am",
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: SizeConfig.blockSizeHorizontal * 3.0,
-                          fontFamily: "Roboto_Regular",
-                          fontWeight: FontWeight.w400
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "(Transport Fare)",
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: SizeConfig.blockSizeHorizontal * 2.0,
+                              fontFamily: "Roboto_Regular",
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(right: parentWidth * 0.05,
-                    top: parentHeight * 0.01),
-                child: Container(
-                  width: parentWidth * 0.15,
-                  height: parentHeight * 0.023,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          color: CommonColor.FROM_AREA_COLOR),
-                      borderRadius: BorderRadius.circular(20)
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Text("Completed",
-                        style: TextStyle(
-                            fontSize: SizeConfig.blockSizeHorizontal * 2.0,
-                            fontFamily: "Roboto_Medium",
-                            fontWeight: FontWeight.w500,
-                            color: CommonColor.FROM_AREA_COLOR
-                        ),),
-                    ),
-                  ),
-                ),
-              )
             ],
           ),
 
@@ -273,139 +218,144 @@ class _CompleteOrderScreenState extends State<CompleteOrderScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-
-                    Row(
-                      children: [
-                        Text(
-                          "Pick-up Date",
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: SizeConfig.blockSizeHorizontal * 3.0,
-                              fontFamily: "Roboto_Regular",
-                              fontWeight: FontWeight.w400
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.only(top: parentHeight * 0.007),
-                      child: Row(
-                        children: [
-                          Text(
-                            "28 Jan 2023",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: SizeConfig.blockSizeHorizontal * 3.5,
-                                fontFamily: "Roboto_Regular",
-                                fontWeight: FontWeight.w400
+                GestureDetector(
+                  onDoubleTap: () {},
+                  onTap: () {
+                    showModalBottomSheet(
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        elevation: 10,
+                        isScrollControlled: true,
+                        isDismissible: true,
+                        builder: (BuildContext bc) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom,
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                  ],
-                ),
-
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-
-                    Row(
-                      children: [
-                        Text(
-                          "Bid End Date",
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: SizeConfig.blockSizeHorizontal * 3.0,
-                              fontFamily: "Roboto_Regular",
-                              fontWeight: FontWeight.w400
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.only(top: parentHeight * 0.007),
-                      child: Row(
-                        children: [
-                          Text(
-                            "27 Jan 2023",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: SizeConfig.blockSizeHorizontal * 3.5,
-                                fontFamily: "Roboto_Regular",
-                                fontWeight: FontWeight.w400
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                  ],
-                ),
-
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-
-                    Row(
-                      children: [
-                        Text(
-                          "Bid End Date",
-                          style: TextStyle(
-                              color: Colors.transparent,
-                              fontSize: SizeConfig.blockSizeHorizontal * 3.0,
-                              fontFamily: "Roboto_Regular",
-                              fontWeight: FontWeight.w400
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.only(top: parentHeight * 0.007,
-                          left: parentWidth * 0.03),
-                      child: GestureDetector(
-                        onTap: () {
-                          showCupertinoDialog(
-                            context: context,
-                            barrierDismissible: true,
-                            builder: (context) {
-                              return const AnimatedOpacity(
-                                  opacity: 1.0,
-                                  duration: Duration(seconds: 2),
-                                  child: LoadMoreInfoDialog());
-                            },
+                            child: TransporterVerifyDialog(),
                           );
-                          // Navigator.push(context, MaterialPageRoute(builder: (context)=>ProcessTimelinePage()));
-                        },
-                        child: Container(
-                          color: Colors.transparent,
-                          child: Text(
-                            "More",
-                            style: TextStyle(
-                                color: CommonColor.SIGN_UP_TEXT_COLOR,
-                                fontSize: SizeConfig.blockSizeHorizontal * 3.7,
-                                fontFamily: "Roboto_Regular ",
-                                fontWeight: FontWeight.w500
+                        });
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              "Transporter Name",
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize:
+                                  SizeConfig.blockSizeHorizontal * 3.0,
+                                  fontFamily: "Roboto_Regular",
+                                  fontWeight: FontWeight.w400),
                             ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: parentHeight * 0.007),
+                          child: Row(
+                            children: [
+                              Text(
+                                "Mahesh Transporter",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize:
+                                    SizeConfig.blockSizeHorizontal * 3.5,
+                                    fontFamily: "Roboto_Regular",
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ],
                           ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onDoubleTap: () {},
+                  onTap: () {
+                    showModalBottomSheet(
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        elevation: 10,
+                        isScrollControlled: true,
+                        isDismissible: true,
+                        builder: (BuildContext bc) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom,
+                            ),
+                            child: ReceiverVerifyDialog(),
+                          );
+                        });
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Receiver Name",
+                            style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: SizeConfig.blockSizeHorizontal * 3.0,
+                                fontFamily: "Roboto_Regular",
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: parentHeight * 0.007),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Nikita Mahindrakar",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize:
+                                  SizeConfig.blockSizeHorizontal * 3.5,
+                                  fontFamily: "Roboto_Regular",
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      right: parentWidth * 0.05, top: parentHeight * 0.0),
+                  child: Container(
+                    width: parentWidth * 0.15,
+                    height: parentHeight * 0.02,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: CommonColor.FROM_AREA_COLOR),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Text(
+                          "Completed",
+                          style: TextStyle(
+                              fontSize: SizeConfig.blockSizeHorizontal * 2.0,
+                              fontFamily: "Roboto_Medium",
+                              fontWeight: FontWeight.w500,
+                              color: CommonColor.FROM_AREA_COLOR),
                         ),
                       ),
                     ),
-
-                  ],
+                  ),
                 )
-
               ],
             ),
           ),
+
+
 
           Padding(
             padding: EdgeInsets.only(top: SizeConfig.screenHeight * 0.015,
@@ -414,15 +364,15 @@ class _CompleteOrderScreenState extends State<CompleteOrderScreen> {
           ),
 
           Padding(
-            padding: EdgeInsets.only(left: parentWidth * 0.05,
-                top: parentHeight * 0.01),
+            padding: EdgeInsets.only(
+                left: parentWidth * 0.05, top: parentHeight * 0.005),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
+                    /* Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         RichText(
@@ -431,23 +381,22 @@ class _CompleteOrderScreenState extends State<CompleteOrderScreen> {
                               style: TextStyle(
                                 color: Colors.black54,
                                 fontWeight: FontWeight.w400,
-                                fontSize: SizeConfig.blockSizeHorizontal * 3.2,
+                                fontSize: SizeConfig.blockSizeHorizontal*3.2,
                               ),
                               children: [
                                 TextSpan(
                                     text: '10 Ton(s)',
                                     style: TextStyle(
-                                        fontSize: SizeConfig
-                                            .blockSizeHorizontal * 3.7,
+                                        fontSize: SizeConfig.blockSizeHorizontal*3.7,
                                         color: Colors.black,
                                         fontWeight: FontWeight.w400,
                                         fontFamily: 'Roboto_Regular'))
                               ]),
                         ),
                       ],
-                    ),
+                    ),*/
                     Padding(
-                      padding: EdgeInsets.only(top: parentHeight * 0.01),
+                      padding: EdgeInsets.only(top: parentHeight * 0.005),
                       child: Row(
                         children: [
                           Container(
@@ -456,20 +405,24 @@ class _CompleteOrderScreenState extends State<CompleteOrderScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Adv. - 1000/- (Online)",
+                                Text(
+                                  "Adv. - 1000/- (Online)",
                                   style: TextStyle(
                                     color: CommonColor.FROM_AREA_COLOR,
                                     fontWeight: FontWeight.w400,
-                                    fontSize: SizeConfig.blockSizeHorizontal *
-                                        2.5,
-                                  ),),
-                                Text("Due. - 1000/- ",
+                                    fontSize:
+                                    SizeConfig.blockSizeHorizontal * 2.5,
+                                  ),
+                                ),
+                                Text(
+                                  "Due. - 1000/- ",
                                   style: TextStyle(
                                     color: CommonColor.TO_AREA_COLOR,
                                     fontWeight: FontWeight.w400,
-                                    fontSize: SizeConfig.blockSizeHorizontal *
-                                        2.5,
-                                  ),),
+                                    fontSize:
+                                    SizeConfig.blockSizeHorizontal * 2.5,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -478,7 +431,7 @@ class _CompleteOrderScreenState extends State<CompleteOrderScreen> {
                     )
                   ],
                 ),
-                Padding(
+                /* Padding(
                   padding: EdgeInsets.only(right: parentWidth*0.05,),
                   child: GestureDetector(
                     onDoubleTap: (){},
@@ -529,7 +482,42 @@ class _CompleteOrderScreenState extends State<CompleteOrderScreen> {
                       ),
                     ),
                   ),
-                )
+                )*/
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: parentHeight * 0.007, right: parentWidth * 0.05),
+                      child: GestureDetector(
+                        onTap: () {
+                          showCupertinoDialog(
+                            context: context,
+                            barrierDismissible: true,
+                            builder: (context) {
+                              return const AnimatedOpacity(
+                                  opacity: 1.0,
+                                  duration: Duration(seconds: 2),
+                                  child: LoadMoreInfoDialog());
+                            },
+                          );
+                          // Navigator.push(context, MaterialPageRoute(builder: (context)=>ProcessTimelinePage()));
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Text(
+                            "More",
+                            style: TextStyle(
+                                color: CommonColor.SIGN_UP_TEXT_COLOR,
+                                fontSize: SizeConfig.blockSizeHorizontal * 3.7,
+                                fontFamily: "Roboto_Regular ",
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -704,14 +692,48 @@ class _CompleteOrderScreenState extends State<CompleteOrderScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Raj Vehicle",
-                                    style: TextStyle(
-                                        color: CommonColor.BLACK_COLOR,
-                                        fontSize: SizeConfig
-                                            .blockSizeHorizontal * 3.5,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: 'Roboto_Medium'
-                                    ),),
+
+                                  Container(
+                                    width: parentWidth*0.53,
+                                    color: Colors.transparent,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Raj Vehicle",
+                                          style: TextStyle(
+                                              color: CommonColor.BLACK_COLOR,
+                                              fontSize: SizeConfig
+                                                  .blockSizeHorizontal * 3.5,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Roboto_Medium'
+                                          ),),
+                                        Padding(
+                                          padding: EdgeInsets.only(top: parentHeight * 0.0),
+                                          child: Container(
+                                            width: parentWidth * 0.15,
+                                            height: parentHeight * 0.02,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: CommonColor.FROM_AREA_COLOR),
+                                                borderRadius: BorderRadius.circular(20)),
+                                            child: Center(
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(2.0),
+                                                child: Text(
+                                                  "Completed",
+                                                  style: TextStyle(
+                                                      fontSize: SizeConfig.blockSizeHorizontal * 2.5,
+                                                      fontFamily: "Roboto_Medium",
+                                                      fontWeight: FontWeight.w500,
+                                                      color: CommonColor.FROM_AREA_COLOR),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
 
                                   Padding(
                                     padding: EdgeInsets.only(

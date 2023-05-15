@@ -491,7 +491,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Text("Bidding End Date",
+                        child: Text("Pickup Time",
                           style: TextStyle(
                               color: Colors.black54,
                               fontSize: SizeConfig.blockSizeHorizontal*3.0,
@@ -529,7 +529,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Text("27 Jan 2023",
+                        child: Text("02 : 00 pm",
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: SizeConfig.blockSizeHorizontal*3.2,
@@ -683,7 +683,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Text("L x W -40 x 08 (Mts) ",
+                        child: Text("L x W -40 x 08 (Fts) ",
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: SizeConfig.blockSizeHorizontal*3.2,
@@ -884,7 +884,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                     ],
                   ),
                 ),
-                Container(
+               /* Container(
                   width: SizeConfig.screenWidth*0.3,
                   height: SizeConfig.screenHeight*0.04,
                   decoration: BoxDecoration(
@@ -905,7 +905,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
 
                     ],
                   ),
-                ),
+                ),*/
               ],
             ),
           ),

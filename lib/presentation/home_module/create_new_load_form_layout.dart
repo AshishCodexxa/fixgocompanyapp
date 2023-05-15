@@ -30,6 +30,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
   int next = 0;
 
+  int submit = 0;
+
   bool isChecked = false;
 
   TextEditingController dateInput = TextEditingController();
@@ -2779,7 +2781,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               children: [
                                 Expanded(
                                   child: Padding(
-                                    padding: EdgeInsets.only(right: parentWidth * 0.05),
+                                    padding: EdgeInsets.only(right: parentWidth * 0.15),
                                     child: Container(
                                       height: parentHeight*0.06,
                                       child: TextFormField(
@@ -2813,7 +2815,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                     ),
                                   ),
                                 ),
-                                Expanded(
+                               /* Expanded(
                                   child: Padding(
                                     padding: EdgeInsets.only(left: parentWidth * 0.05),
                                     child: Container(
@@ -2847,14 +2849,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       ),
                                     ),
                                   ),
-                                ),
+                                ),*/
                               ],
                             ),
                           ),
                         ),
 
                         SizedBox(
-                          height: parentHeight*0.01,
+                          height: parentHeight*0.02,
                         )
 
                       ],
@@ -2947,7 +2949,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
 
-                          Text(vehicleName,
+                          Text(vehicleName.isNotEmpty ? vehicleName : "V. Type",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: SizeConfig.blockSizeHorizontal*3.5,
@@ -2975,14 +2977,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             color: CommonColor.UNSELECT_TYPE_COLOR,
                           ),
 
-                          Text("  L : 40 ft.",
+                        /*  Text("  L : 40 ft.",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: SizeConfig.blockSizeHorizontal*3.5,
                                 fontWeight: FontWeight.w400,
                                 fontFamily: 'Roboto_Regular'
                             ),),
-
+*/
                           Text("W : 08 ft.",
                             style: TextStyle(
                                 color: Colors.black,
@@ -3058,613 +3060,651 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
             children: [
               Visibility(
                 visible: paymentFieldShow,
-                child: Column(
+                child: Stack(
+                  alignment: Alignment.bottomRight,
                   children: [
-                    Row(
+                    Column(
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.02),
-                          child: Text("Payment Details",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: SizeConfig.blockSizeHorizontal*4.5,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Roboto_Medium'
-                            ),),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      color: Colors.transparent,
-                      height: parentHeight*0.07,
-                      child: Row(
-                        children: [
-
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.only(top: parentHeight*0.01),
-                              child: TextFormField(
-                                controller: quantityLoadController,
-                                // focusNode: _userNameFocus,
-                                textInputAction: TextInputAction.done,
-                                decoration: InputDecoration(
-                                  label: Text("Total Fare",
-                                    style: TextStyle(
-                                      color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                                    ),),
-                                  contentPadding: EdgeInsets.only(left: parentWidth*0.05, right: parentWidth*0.05),
-                                  prefixText: "\u{20B9}",
-                                  prefixStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: SizeConfig.blockSizeHorizontal*5.0
-                                  ),
-                                  enabledBorder:  const UnderlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.black12)
-                                  ),
-                                  focusedBorder:  const UnderlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.black12)
-                                  ),
-                                ),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.02),
+                              child: Text("Payment Details",
                                 style: TextStyle(
-                                    color: CommonColor.REGISTER_HINT_COLOR.withOpacity(0.5),
-                                    fontSize: SizeConfig.blockSizeHorizontal*5.0
-                                ),onFieldSubmitted: (val){
-                                  if(mounted){
-                                    setState(() {
-                                      paymentFieldHide = !paymentFieldHide;
-                                      paymentFieldShow = !paymentFieldShow;
-                                    });
-                                  }
-                              },
-                              ),
+                                    color: Colors.black,
+                                    fontSize: SizeConfig.blockSizeHorizontal*4.5,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Roboto_Medium'
+                                ),),
                             ),
-                          ),
-
-                        ],
-                      ),
-
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-
-                        Padding(
-                          padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.007),
-                          child: Text("Advance Payment Will Be Given By",
-                            style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: SizeConfig.blockSizeHorizontal*3.0,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Roboto_Regular'
-                            ),),
+                          ],
                         ),
-
-                        Padding(
-                          padding: EdgeInsets.only(right: parentWidth*0.03,
-                              top: parentHeight*0.01),
+                        Container(
+                          color: Colors.transparent,
+                          height: parentHeight*0.07,
                           child: Row(
                             children: [
 
-                              Container(
-                                height: parentHeight*0.027,
-                                width: parentWidth*0.07,
-                                decoration: BoxDecoration(
-                                  color: CommonColor.ADVANCE_INCREMENT_COLOR,
-                                  borderRadius: BorderRadius.circular(5)
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: parentHeight*0.01),
+                                  child: TextFormField(
+                                    controller: quantityLoadController,
+                                    // focusNode: _userNameFocus,
+                                    textInputAction: TextInputAction.done,
+                                    decoration: InputDecoration(
+                                      label: Text("Total Fare",
+                                        style: TextStyle(
+                                          color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                                        ),),
+                                      contentPadding: EdgeInsets.only(left: parentWidth*0.05, right: parentWidth*0.05),
+                                      prefixText: "\u{20B9}",
+                                      prefixStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: SizeConfig.blockSizeHorizontal*5.0
+                                      ),
+                                      enabledBorder:  const UnderlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.black12)
+                                      ),
+                                      focusedBorder:  const UnderlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.black12)
+                                      ),
+                                    ),
+                                    style: TextStyle(
+                                        color: CommonColor.REGISTER_HINT_COLOR.withOpacity(0.5),
+                                        fontSize: SizeConfig.blockSizeHorizontal*5.0
+                                    ),onFieldSubmitted: (val){
+                                      if(mounted){
+                                        setState(() {
+                                          paymentFieldHide = !paymentFieldHide;
+                                          paymentFieldShow = !paymentFieldShow;
+                                        });
+                                      }
+                                  },
+                                  ),
                                 ),
-                                child: Icon(Icons.remove,
-                                color: Colors.white,
-                                  size: parentHeight*0.02,),
                               ),
 
+                            ],
+                          ),
+
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+
+                            Padding(
+                              padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.007),
+                              child: Text("Advance Payment Will Be Given By",
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Roboto_Regular'
+                                ),),
+                            ),
+
+                            Padding(
+                              padding: EdgeInsets.only(right: parentWidth*0.03,
+                                  top: parentHeight*0.01),
+                              child: Row(
+                                children: [
+
+                                  Container(
+                                    height: parentHeight*0.027,
+                                    width: parentWidth*0.07,
+                                    decoration: BoxDecoration(
+                                      color: CommonColor.ADVANCE_INCREMENT_COLOR,
+                                      borderRadius: BorderRadius.circular(5)
+                                    ),
+                                    child: Icon(Icons.remove,
+                                    color: Colors.white,
+                                      size: parentHeight*0.02,),
+                                  ),
+
+                                  Padding(
+                                    padding: EdgeInsets.only(left: parentWidth*0.02, right: parentWidth*0.02),
+                                    child: Text("50 %",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: SizeConfig.blockSizeHorizontal*3.7,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: 'Roboto_Regular'
+                                      ),),
+                                  ),
+
+                                  Container(
+                                    height: parentHeight*0.027,
+                                    width: parentWidth*0.07,
+                                    decoration: BoxDecoration(
+                                        color: CommonColor.ADVANCE_INCREMENT_COLOR,
+                                        borderRadius: BorderRadius.circular(5)
+                                    ),
+                                    child: Icon(Icons.add,
+                                      color: Colors.white,
+                                    size: parentHeight*0.02,),
+                                  ),
+
+                                ],
+                              ),
+                            ),
+
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: parentHeight*0.015,
+                            left: parentWidth*0.05,
+                            right: parentWidth*0.25
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+
+                              GestureDetector(
+                                onDoubleTap: (){},
+                                onTap: (){
+                                  if(mounted){
+                                    setState(() {
+                                      advancePay = 1;
+
+                                      if(advPayAmountShow == false){
+                                        advPayAmountShow = !advPayAmountShow;
+                                      }
+
+
+                                    });
+                                  }
+                                },
+                                child: Container(
+                                  color: Colors.transparent,
+                                  child: Row(
+                                    children: [
+
+                                      Container(
+                                        height: parentHeight*0.03,
+                                        width: parentWidth*0.06,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(color: Colors.black),
+                                            shape: BoxShape.circle,
+                                            color:advancePay == 1 ? CommonColor.SIGN_UP_TEXT_COLOR
+                                                : CommonColor.WHITE_COLOR
+                                        ),
+                                      ),
+
+                                      Padding(
+                                        padding:  EdgeInsets.only(left: parentWidth*0.03),
+                                        child: Text("Company",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                              fontFamily: 'Roboto_Regular'
+                                          ),
+                                        ),
+                                      ),
+
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                              GestureDetector(
+                                onDoubleTap: (){},
+                                onTap: (){
+                                  if(mounted){
+                                    setState(() {
+                                      advancePay = 2;
+                                      if(advPayAmountShow == false){
+                                        advPayAmountShow = !advPayAmountShow;
+                                      }
+                                    });
+                                  }
+                                },
+                                child: Container(
+                                  color: Colors.transparent,
+                                  child: Row(
+                                    children: [
+
+                                      Container(
+                                        height: parentHeight*0.03,
+                                        width: parentWidth*0.06,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(color: Colors.black),
+                                            shape: BoxShape.circle,
+                                            color:advancePay == 2 ? CommonColor.SIGN_UP_TEXT_COLOR
+                                                : CommonColor.WHITE_COLOR
+                                        ),
+                                      ),
+
+                                      Padding(
+                                        padding:  EdgeInsets.only(left: parentWidth*0.03),
+                                        child: Text("Receiver",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                              fontFamily: 'Roboto_Regular'
+                                          ),
+                                        ),
+                                      ),
+
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                            ],
+                          ),
+                        ),
+                        Visibility(
+                          visible: advPayAmountShow,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: parentWidth*0.05,right: parentWidth*0.05,
+                            top: parentHeight*0.015),
+                            child: Container(
+                              height: parentHeight*0.06,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(7),
+                                border: Border.all(color: Colors.black12)
+                              ),
+                              child: Row(
+                                children: [
+
+                                  Padding(
+                                    padding: EdgeInsets.only(left: parentWidth*0.03),
+                                    child: Icon(Icons.currency_rupee,
+                                    color: Colors.black,
+                                    size: parentHeight*0.022,),
+                                  ),
+
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: parentHeight*0.01),
+                                      child: TextFormField(
+                                        controller: quantityLoadController,
+                                        // focusNode: _userNameFocus,
+                                        textInputAction: TextInputAction.next,
+                                        decoration: InputDecoration(
+                                          hintText:"6000",
+                                          hintStyle: TextStyle(
+                                            color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: SizeConfig.blockSizeHorizontal*6.0,
+                                          ),
+                                          contentPadding: EdgeInsets.only(left: parentWidth*0.05, right: parentWidth*0.05,
+                                          bottom: parentHeight*0.016),
+                                          enabledBorder: const UnderlineInputBorder(
+                                              borderSide: BorderSide(color: Colors.transparent)
+                                          ),
+                                          focusedBorder: const UnderlineInputBorder(
+                                              borderSide: BorderSide(color: Colors.transparent)
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
+                                  Padding(
+                                    padding: EdgeInsets.only(right: parentWidth*0.02),
+                                    child: Container(
+                                      width: parentWidth*0.31,
+                                      color: Colors.transparent,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          GestureDetector(
+                                            onDoubleTap: (){},
+                                            onTap: (){
+                                              if(mounted){
+                                                setState(() {
+                                                  advPay = 1;
+                                                  advPayMethod = "Online";
+                                                });
+                                              }
+                                            },
+                                            child: Container(
+                                              height: parentHeight*0.025,
+                                              width: parentWidth*0.15,
+                                              decoration: BoxDecoration(
+                                                  color:advPay == 1 ? CommonColor.SIGN_UP_TEXT_COLOR : CommonColor.WEIGHT_COLOR,
+                                                  borderRadius: BorderRadius.circular(10)
+                                              ),
+                                              child: Center(
+                                                child: Text("Online",
+                                                  style: TextStyle(
+                                                      color:advPay == 1 ? Colors.white : Colors.black54,
+                                                      fontWeight: FontWeight.w400,
+                                                      fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                                                      fontFamily: 'Roboto_Regular'
+                                                  ),),
+                                              ),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onDoubleTap: (){},
+                                            onTap: (){
+                                              if(mounted){
+                                                setState(() {
+                                                  advPay = 2;
+                                                  advPayMethod = "Cash";
+                                                });
+                                              }
+                                            },
+                                            child: Container(
+                                              height: parentHeight*0.025,
+                                              width: parentWidth*0.15,
+                                              decoration: BoxDecoration(
+                                                  color:advPay == 2 ? CommonColor.SIGN_UP_TEXT_COLOR : CommonColor.WEIGHT_COLOR,
+                                                  borderRadius: BorderRadius.circular(10)
+                                              ),
+                                              child: Center(
+                                                child: Text("Cash",
+                                                  style: TextStyle(
+                                                      color:advPay == 2 ? Colors.white : Colors.black54,
+                                                      fontWeight: FontWeight.w400,
+                                                      fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                                                      fontFamily: 'Roboto_Regular'
+                                                  ),),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+
+                                ],
+                              ),
+
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: parentHeight*0.01),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+
                               Padding(
-                                padding: EdgeInsets.only(left: parentWidth*0.02, right: parentWidth*0.02),
-                                child: Text("50 %",
+                                padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.007),
+                                child: Text("Delivery  Payment Will Be Given By",
                                   style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: SizeConfig.blockSizeHorizontal*3.7,
+                                      color: Colors.black54,
+                                      fontSize: SizeConfig.blockSizeHorizontal*3.0,
                                       fontWeight: FontWeight.w500,
                                       fontFamily: 'Roboto_Regular'
                                   ),),
                               ),
 
-                              Container(
-                                height: parentHeight*0.027,
-                                width: parentWidth*0.07,
-                                decoration: BoxDecoration(
-                                    color: CommonColor.ADVANCE_INCREMENT_COLOR,
-                                    borderRadius: BorderRadius.circular(5)
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: parentHeight*0.015,
+                              left: parentWidth*0.05,
+                              right: parentWidth*0.25
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+
+                              GestureDetector(
+                                onDoubleTap: (){},
+                                onTap: (){
+                                  if(mounted){
+                                    setState(() {
+                                      deliveryPay = 1;
+
+                                      if(deliverPayAmountShow == false){
+                                        deliverPayAmountShow = !deliverPayAmountShow;
+                                      }
+
+                                    });
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+
+                                    Container(
+                                      height: parentHeight*0.03,
+                                      width: parentWidth*0.06,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.black),
+                                          shape: BoxShape.circle,
+                                          color:deliveryPay == 1 ? CommonColor.SIGN_UP_TEXT_COLOR
+                                              : CommonColor.WHITE_COLOR
+                                      ),
+                                    ),
+
+                                    Padding(
+                                      padding:  EdgeInsets.only(left: parentWidth*0.03),
+                                      child: Text("Company",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                            fontFamily: 'Roboto_Regular'
+                                        ),
+                                      ),
+                                    ),
+
+                                  ],
                                 ),
-                                child: Icon(Icons.add,
-                                  color: Colors.white,
-                                size: parentHeight*0.02,),
+                              ),
+
+                              GestureDetector(
+                                onDoubleTap: (){},
+                                onTap: (){
+                                  if(mounted){
+                                    setState(() {
+                                      deliveryPay = 2;
+
+                                      if(deliverPayAmountShow == false){
+                                        deliverPayAmountShow = !deliverPayAmountShow;
+                                      }
+                                    });
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+
+                                    Container(
+                                      height: parentHeight*0.03,
+                                      width: parentWidth*0.06,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.black),
+                                          shape: BoxShape.circle,
+                                          color:deliveryPay == 2 ? CommonColor.SIGN_UP_TEXT_COLOR
+                                              : CommonColor.WHITE_COLOR
+                                      ),
+                                    ),
+
+                                    Padding(
+                                      padding:  EdgeInsets.only(left: parentWidth*0.03),
+                                      child: Text("Receiver",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                            fontFamily: 'Roboto_Regular'
+                                        ),
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
                               ),
 
                             ],
                           ),
                         ),
+                        Visibility(
+                          visible: deliverPayAmountShow,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: parentWidth*0.05,right: parentWidth*0.05,
+                                top: parentHeight*0.015),
+                            child: Container(
+                              height: parentHeight*0.06,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(7),
+                                  border: Border.all(color: Colors.black12)
+                              ),
+                              child: Row(
+                                children: [
 
+                                  Padding(
+                                    padding: EdgeInsets.only(left: parentWidth*0.03),
+                                    child: Icon(Icons.currency_rupee,
+                                      color: Colors.black,
+                                      size: parentHeight*0.022,),
+                                  ),
+
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: parentHeight*0.01),
+                                      child: TextFormField(
+                                        controller: quantityLoadController,
+                                        // focusNode: _userNameFocus,
+                                        textInputAction: TextInputAction.next,
+                                        decoration: InputDecoration(
+                                          hintText:"6000",
+                                          hintStyle: TextStyle(
+                                            color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: SizeConfig.blockSizeHorizontal*6.0,
+                                          ),
+                                          contentPadding: EdgeInsets.only(left: parentWidth*0.05, right: parentWidth*0.05,
+                                              bottom: parentHeight*0.016),
+                                          enabledBorder: const UnderlineInputBorder(
+                                              borderSide: BorderSide(color: Colors.transparent)
+                                          ),
+                                          focusedBorder: const UnderlineInputBorder(
+                                              borderSide: BorderSide(color: Colors.transparent)
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
+                                  Padding(
+                                    padding: EdgeInsets.only(right: parentWidth*0.02),
+                                    child: Container(
+                                      width: parentWidth*0.31,
+                                      color: Colors.transparent,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          GestureDetector(
+                                            onDoubleTap: (){},
+                                            onTap: (){
+                                              if(mounted){
+                                                setState(() {
+                                                  deliverPay = 1;
+                                                  deliveryPayMethod = "Online";
+                                                });
+                                              }
+                                            },
+                                            child: Container(
+                                              height: parentHeight*0.025,
+                                              width: parentWidth*0.15,
+                                              decoration: BoxDecoration(
+                                                  color:deliverPay == 1 ? CommonColor.SIGN_UP_TEXT_COLOR : CommonColor.WEIGHT_COLOR,
+                                                  borderRadius: BorderRadius.circular(10)
+                                              ),
+                                              child: Center(
+                                                child: Text("Online",
+                                                  style: TextStyle(
+                                                      color:deliverPay == 1 ? Colors.white : Colors.black54,
+                                                      fontWeight: FontWeight.w400,
+                                                      fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                                                      fontFamily: 'Roboto_Regular'
+                                                  ),),
+                                              ),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onDoubleTap: (){},
+                                            onTap: (){
+                                              if(mounted){
+                                                setState(() {
+                                                  deliverPay = 2;
+                                                  deliveryPayMethod = "Cash";
+                                                });
+                                              }
+                                            },
+                                            child: Container(
+                                              height: parentHeight*0.025,
+                                              width: parentWidth*0.15,
+                                              decoration: BoxDecoration(
+                                                  color:deliverPay == 2 ? CommonColor.SIGN_UP_TEXT_COLOR : CommonColor.WEIGHT_COLOR,
+                                                  borderRadius: BorderRadius.circular(10)
+                                              ),
+                                              child: Center(
+                                                child: Text("Cash",
+                                                  style: TextStyle(
+                                                      color:deliverPay == 2 ? Colors.white : Colors.black54,
+                                                      fontWeight: FontWeight.w400,
+                                                      fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                                                      fontFamily: 'Roboto_Regular'
+                                                  ),),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+
+                                ],
+                              ),
+
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: parentHeight*0.02,
+                        ),
                       ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: parentHeight*0.015,
-                        left: parentWidth*0.05,
-                        right: parentWidth*0.25
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-
-                          GestureDetector(
-                            onDoubleTap: (){},
-                            onTap: (){
-                              if(mounted){
-                                setState(() {
-                                  advancePay = 1;
-
-                                  if(advPayAmountShow == false){
-                                    advPayAmountShow = !advPayAmountShow;
-                                  }
-
-
-                                });
-                              }
-                            },
-                            child: Container(
-                              color: Colors.transparent,
-                              child: Row(
-                                children: [
-
-                                  Container(
-                                    height: parentHeight*0.03,
-                                    width: parentWidth*0.06,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.black),
-                                        shape: BoxShape.circle,
-                                        color:advancePay == 1 ? CommonColor.SIGN_UP_TEXT_COLOR
-                                            : CommonColor.WHITE_COLOR
-                                    ),
-                                  ),
-
-                                  Padding(
-                                    padding:  EdgeInsets.only(left: parentWidth*0.03),
-                                    child: Text("Company",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: SizeConfig.blockSizeHorizontal*4.0,
-                                          fontFamily: 'Roboto_Regular'
-                                      ),
-                                    ),
-                                  ),
-
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          GestureDetector(
-                            onDoubleTap: (){},
-                            onTap: (){
-                              if(mounted){
-                                setState(() {
-                                  advancePay = 2;
-                                  if(advPayAmountShow == false){
-                                    advPayAmountShow = !advPayAmountShow;
-                                  }
-                                });
-                              }
-                            },
-                            child: Container(
-                              color: Colors.transparent,
-                              child: Row(
-                                children: [
-
-                                  Container(
-                                    height: parentHeight*0.03,
-                                    width: parentWidth*0.06,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.black),
-                                        shape: BoxShape.circle,
-                                        color:advancePay == 2 ? CommonColor.SIGN_UP_TEXT_COLOR
-                                            : CommonColor.WHITE_COLOR
-                                    ),
-                                  ),
-
-                                  Padding(
-                                    padding:  EdgeInsets.only(left: parentWidth*0.03),
-                                    child: Text("Receiver",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: SizeConfig.blockSizeHorizontal*4.0,
-                                          fontFamily: 'Roboto_Regular'
-                                      ),
-                                    ),
-                                  ),
-
-                                ],
-                              ),
-                            ),
-                          ),
-
-                        ],
-                      ),
-                    ),
-                    Visibility(
-                      visible: advPayAmountShow,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: parentWidth*0.05,right: parentWidth*0.05,
-                        top: parentHeight*0.015),
-                        child: Container(
-                          height: parentHeight*0.06,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(7),
-                            border: Border.all(color: Colors.black12)
-                          ),
-                          child: Row(
-                            children: [
-
-                              Padding(
-                                padding: EdgeInsets.only(left: parentWidth*0.03),
-                                child: Icon(Icons.currency_rupee,
-                                color: Colors.black,
-                                size: parentHeight*0.022,),
-                              ),
-
-                              Expanded(
-                                child: Padding(
-                                  padding: EdgeInsets.only(top: parentHeight*0.01),
-                                  child: TextFormField(
-                                    controller: quantityLoadController,
-                                    // focusNode: _userNameFocus,
-                                    textInputAction: TextInputAction.next,
-                                    decoration: InputDecoration(
-                                      hintText:"6000",
-                                      hintStyle: TextStyle(
-                                        color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: SizeConfig.blockSizeHorizontal*6.0,
-                                      ),
-                                      contentPadding: EdgeInsets.only(left: parentWidth*0.05, right: parentWidth*0.05,
-                                      bottom: parentHeight*0.016),
-                                      enabledBorder: const UnderlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.transparent)
-                                      ),
-                                      focusedBorder: const UnderlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.transparent)
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              Padding(
-                                padding: EdgeInsets.only(right: parentWidth*0.02),
-                                child: Container(
-                                  width: parentWidth*0.31,
-                                  color: Colors.transparent,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      GestureDetector(
-                                        onDoubleTap: (){},
-                                        onTap: (){
-                                          if(mounted){
-                                            setState(() {
-                                              advPay = 1;
-                                              advPayMethod = "Online";
-                                            });
-                                          }
-                                        },
-                                        child: Container(
-                                          height: parentHeight*0.025,
-                                          width: parentWidth*0.15,
-                                          decoration: BoxDecoration(
-                                              color:advPay == 1 ? CommonColor.SIGN_UP_TEXT_COLOR : CommonColor.WEIGHT_COLOR,
-                                              borderRadius: BorderRadius.circular(10)
-                                          ),
-                                          child: Center(
-                                            child: Text("Online",
-                                              style: TextStyle(
-                                                  color:advPay == 1 ? Colors.white : Colors.black54,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: SizeConfig.blockSizeHorizontal*3.0,
-                                                  fontFamily: 'Roboto_Regular'
-                                              ),),
-                                          ),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onDoubleTap: (){},
-                                        onTap: (){
-                                          if(mounted){
-                                            setState(() {
-                                              advPay = 2;
-                                              advPayMethod = "Cash";
-                                            });
-                                          }
-                                        },
-                                        child: Container(
-                                          height: parentHeight*0.025,
-                                          width: parentWidth*0.15,
-                                          decoration: BoxDecoration(
-                                              color:advPay == 2 ? CommonColor.SIGN_UP_TEXT_COLOR : CommonColor.WEIGHT_COLOR,
-                                              borderRadius: BorderRadius.circular(10)
-                                          ),
-                                          child: Center(
-                                            child: Text("Cash",
-                                              style: TextStyle(
-                                                  color:advPay == 2 ? Colors.white : Colors.black54,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: SizeConfig.blockSizeHorizontal*3.0,
-                                                  fontFamily: 'Roboto_Regular'
-                                              ),),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-
-                            ],
-                          ),
-
+                    GestureDetector(
+                      onTap: (){
+                        if(mounted){
+                          setState(() {
+                            paymentFieldShow = !paymentFieldShow;
+                            paymentFieldHide = !paymentFieldHide;
+                            // paymentDetails = !paymentDetails;
+                            // print(paymentDetails);
+                            submit = 1;
+                          });
+                        }
+                      },
+                      child: Container(
+                        height: parentHeight*0.03,
+                        width: parentWidth*0.15,
+                        decoration: BoxDecoration(
+                            color: CommonColor.SIGN_UP_TEXT_COLOR,
+                            borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(10),
+                                topLeft: Radius.circular(10)
+                            )
+                        ),
+                        child: Center(
+                          child: Text("Done",
+                            style: TextStyle(
+                                color: CommonColor.WHITE_COLOR,
+                                fontWeight: FontWeight.w400,
+                                fontSize: SizeConfig.blockSizeHorizontal*3.7,
+                                fontFamily: "Roboto_Medium"
+                            ),),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: parentHeight*0.01),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-
-                          Padding(
-                            padding: EdgeInsets.only(left: parentWidth*0.05, top: parentHeight*0.007),
-                            child: Text("Delivery  Payment Will Be Given By",
-                              style: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: SizeConfig.blockSizeHorizontal*3.0,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: 'Roboto_Regular'
-                              ),),
-                          ),
-
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: parentHeight*0.015,
-                          left: parentWidth*0.05,
-                          right: parentWidth*0.25
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-
-                          GestureDetector(
-                            onDoubleTap: (){},
-                            onTap: (){
-                              if(mounted){
-                                setState(() {
-                                  deliveryPay = 1;
-
-                                  if(deliverPayAmountShow == false){
-                                    deliverPayAmountShow = !deliverPayAmountShow;
-                                  }
-
-                                });
-                              }
-                            },
-                            child: Row(
-                              children: [
-
-                                Container(
-                                  height: parentHeight*0.03,
-                                  width: parentWidth*0.06,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.black),
-                                      shape: BoxShape.circle,
-                                      color:deliveryPay == 1 ? CommonColor.SIGN_UP_TEXT_COLOR
-                                          : CommonColor.WHITE_COLOR
-                                  ),
-                                ),
-
-                                Padding(
-                                  padding:  EdgeInsets.only(left: parentWidth*0.03),
-                                  child: Text("Company",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: SizeConfig.blockSizeHorizontal*4.0,
-                                        fontFamily: 'Roboto_Regular'
-                                    ),
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                          ),
-
-                          GestureDetector(
-                            onDoubleTap: (){},
-                            onTap: (){
-                              if(mounted){
-                                setState(() {
-                                  deliveryPay = 2;
-
-                                  if(deliverPayAmountShow == false){
-                                    deliverPayAmountShow = !deliverPayAmountShow;
-                                  }
-                                });
-                              }
-                            },
-                            child: Row(
-                              children: [
-
-                                Container(
-                                  height: parentHeight*0.03,
-                                  width: parentWidth*0.06,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.black),
-                                      shape: BoxShape.circle,
-                                      color:deliveryPay == 2 ? CommonColor.SIGN_UP_TEXT_COLOR
-                                          : CommonColor.WHITE_COLOR
-                                  ),
-                                ),
-
-                                Padding(
-                                  padding:  EdgeInsets.only(left: parentWidth*0.03),
-                                  child: Text("Receiver",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: SizeConfig.blockSizeHorizontal*4.0,
-                                        fontFamily: 'Roboto_Regular'
-                                    ),
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                          ),
-
-                        ],
-                      ),
-                    ),
-                    Visibility(
-                      visible: deliverPayAmountShow,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: parentWidth*0.05,right: parentWidth*0.05,
-                            top: parentHeight*0.015),
-                        child: Container(
-                          height: parentHeight*0.06,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(7),
-                              border: Border.all(color: Colors.black12)
-                          ),
-                          child: Row(
-                            children: [
-
-                              Padding(
-                                padding: EdgeInsets.only(left: parentWidth*0.03),
-                                child: Icon(Icons.currency_rupee,
-                                  color: Colors.black,
-                                  size: parentHeight*0.022,),
-                              ),
-
-                              Expanded(
-                                child: Padding(
-                                  padding: EdgeInsets.only(top: parentHeight*0.01),
-                                  child: TextFormField(
-                                    controller: quantityLoadController,
-                                    // focusNode: _userNameFocus,
-                                    textInputAction: TextInputAction.next,
-                                    decoration: InputDecoration(
-                                      hintText:"6000",
-                                      hintStyle: TextStyle(
-                                        color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: SizeConfig.blockSizeHorizontal*6.0,
-                                      ),
-                                      contentPadding: EdgeInsets.only(left: parentWidth*0.05, right: parentWidth*0.05,
-                                          bottom: parentHeight*0.016),
-                                      enabledBorder: const UnderlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.transparent)
-                                      ),
-                                      focusedBorder: const UnderlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.transparent)
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              Padding(
-                                padding: EdgeInsets.only(right: parentWidth*0.02),
-                                child: Container(
-                                  width: parentWidth*0.31,
-                                  color: Colors.transparent,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      GestureDetector(
-                                        onDoubleTap: (){},
-                                        onTap: (){
-                                          if(mounted){
-                                            setState(() {
-                                              deliverPay = 1;
-                                              deliveryPayMethod = "Online";
-                                            });
-                                          }
-                                        },
-                                        child: Container(
-                                          height: parentHeight*0.025,
-                                          width: parentWidth*0.15,
-                                          decoration: BoxDecoration(
-                                              color:deliverPay == 1 ? CommonColor.SIGN_UP_TEXT_COLOR : CommonColor.WEIGHT_COLOR,
-                                              borderRadius: BorderRadius.circular(10)
-                                          ),
-                                          child: Center(
-                                            child: Text("Online",
-                                              style: TextStyle(
-                                                  color:deliverPay == 1 ? Colors.white : Colors.black54,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: SizeConfig.blockSizeHorizontal*3.0,
-                                                  fontFamily: 'Roboto_Regular'
-                                              ),),
-                                          ),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onDoubleTap: (){},
-                                        onTap: (){
-                                          if(mounted){
-                                            setState(() {
-                                              deliverPay = 2;
-                                              deliveryPayMethod = "Cash";
-                                            });
-                                          }
-                                        },
-                                        child: Container(
-                                          height: parentHeight*0.025,
-                                          width: parentWidth*0.15,
-                                          decoration: BoxDecoration(
-                                              color:deliverPay == 2 ? CommonColor.SIGN_UP_TEXT_COLOR : CommonColor.WEIGHT_COLOR,
-                                              borderRadius: BorderRadius.circular(10)
-                                          ),
-                                          child: Center(
-                                            child: Text("Cash",
-                                              style: TextStyle(
-                                                  color:deliverPay == 2 ? Colors.white : Colors.black54,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: SizeConfig.blockSizeHorizontal*3.0,
-                                                  fontFamily: 'Roboto_Regular'
-                                              ),),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-
-                            ],
-                          ),
-
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: parentHeight*0.02,
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -3950,13 +3990,13 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
           height: parentHeight*0.055,
           width: parentWidth*0.6,
           decoration: BoxDecoration(
-            color: CommonColor.LOAD_SUBMIT_COLOR,
+            color: submit == 0 ? CommonColor.LOAD_SUBMIT_COLOR : CommonColor.SIGN_UP_TEXT_COLOR,
             borderRadius: BorderRadius.circular(15)
           ),
           child: Center(
             child: Text("Submit",
             style: TextStyle(
-              color: CommonColor.LOAD_SUBMIT_TEXT_COLOR,
+              color:submit == 0 ? CommonColor.LOAD_SUBMIT_TEXT_COLOR : CommonColor.WHITE_COLOR,
               fontSize: SizeConfig.blockSizeHorizontal*5.0,
               fontFamily: 'Roboto_Bold'
             ),),

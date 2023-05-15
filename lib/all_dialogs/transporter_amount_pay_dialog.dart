@@ -130,6 +130,9 @@ class _TransporterAmountPayDialogState extends State<TransporterAmountPayDialog>
                         children: [
                           GestureDetector(
                             onTap: (){
+
+                              Navigator.pop(context);
+
                               showCupertinoDialog(
                                 context: context,
                                 barrierDismissible: true,

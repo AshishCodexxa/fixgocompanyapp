@@ -23,6 +23,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController mobileNumberController = TextEditingController();
   TextEditingController gstNumberController = TextEditingController();
   TextEditingController tinNumberController = TextEditingController();
+  TextEditingController aadhaarNumberController = TextEditingController();
+  TextEditingController panNumberController = TextEditingController();
 
 
   final _userNameFocus = FocusNode();
@@ -33,6 +35,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _mobileNumberFocus = FocusNode();
   final _gstNumberFocus = FocusNode();
   final _tinNumberFocus = FocusNode();
+  final _aadhaarNumberFocus = FocusNode();
+  final _panNumberFocus = FocusNode();
 
   int addressCount = 0;
   int phoneNumberCount = 1;
@@ -1218,6 +1222,110 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   label: RichText(
                     text: TextSpan(
                       text: 'Tin Number',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w400,
+                        fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                      ),
+                    ),
+                  ),
+                  labelStyle: TextStyle(
+                      color: CommonColor.REGISTER_HINT_COLOR,
+                      fontSize: SizeConfig.blockSizeHorizontal * 3.5,
+                      fontFamily: 'Roboto_Regular'),
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        Padding(
+          padding: EdgeInsets.only(
+            top: parentHeight*0.02,
+            left: parentWidth*0.03,
+            right: parentWidth*0.03,
+          ),
+          child: Container(
+            height: parentHeight*0.09,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 5,
+                    spreadRadius: 1,
+                    offset: const Offset(2, 6)),
+              ],
+            ),
+            child:  Padding(
+              padding: EdgeInsets.only(
+                top: parentHeight*0.005,
+                left: parentWidth*0.03,
+                right: parentWidth*0.03,
+              ),
+              child: TextFormField(
+                controller: aadhaarNumberController,
+                focusNode: _aadhaarNumberFocus,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.person,
+                    color: Colors.black,),
+                  label: RichText(
+                    text: TextSpan(
+                      text: 'Aadhaar Number',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w400,
+                        fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                      ),
+                    ),
+                  ),
+                  labelStyle: TextStyle(
+                      color: CommonColor.REGISTER_HINT_COLOR,
+                      fontSize: SizeConfig.blockSizeHorizontal * 3.5,
+                      fontFamily: 'Roboto_Regular'),
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        Padding(
+          padding: EdgeInsets.only(
+            top: parentHeight*0.02,
+            left: parentWidth*0.03,
+            right: parentWidth*0.03,
+          ),
+          child: Container(
+            height: parentHeight*0.09,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 5,
+                    spreadRadius: 1,
+                    offset: const Offset(2, 6)),
+              ],
+            ),
+            child:  Padding(
+              padding: EdgeInsets.only(
+                top: parentHeight*0.01,
+                left: parentWidth*0.03,
+                right: parentWidth*0.03,
+              ),
+              child: TextFormField(
+                controller: panNumberController,
+                focusNode: _panNumberFocus,
+                textInputAction: TextInputAction.done,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.person,
+                    color: Colors.black,),
+                  label: RichText(
+                    text: TextSpan(
+                      text: 'Pan Number',
                       style: TextStyle(
                         color: Colors.black54,
                         fontWeight: FontWeight.w400,

@@ -51,7 +51,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                             color: Colors.black.withOpacity(0.1),
                             blurRadius: 5,
                             spreadRadius: 1,
-                            offset: const Offset(2, 6)),
+                            offset: const Offset(2, 2)),
                       ],
                     ),
                     child: getInfoCardLayout(SizeConfig.screenHeight, SizeConfig.screenWidth),
@@ -94,7 +94,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
               ),),
           ),
           const Icon(Icons.more_vert,
-            color: Colors.white,)
+            color: Colors.transparent,)
         ],
       ),
     );
@@ -107,7 +107,25 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
         children: [
 
           Padding(
-            padding: EdgeInsets.only(left: parentWidth*0.051),
+            padding: EdgeInsets.only(right: SizeConfig.screenWidth*0.05),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  "Time Left  23:59:59 hrs.",
+                  style: TextStyle(
+                      color: CommonColor.TO_AREA_COLOR,
+                      fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                      fontFamily: "Roboto_Medium",
+                      fontWeight: FontWeight.w400
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Padding(
+            padding: EdgeInsets.only(left: parentWidth*0.051, top: parentHeight*0.01),
             child: Row(
               children: [
 
@@ -284,7 +302,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                           Row(
                             children: [
                               Text(
-                                "Bid End Date",
+                                "Pick-Up Time",
                                 style: TextStyle(
                                     color: Colors.black54,
                                     fontSize: SizeConfig.blockSizeHorizontal*3.0,
@@ -300,7 +318,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                             child: Row(
                               children: [
                                 Text(
-                                  "27 Jan 2023",
+                                  "02 :00 pm",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: SizeConfig.blockSizeHorizontal*3.5,
@@ -366,7 +384,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                     child: Text(
                       "More",
                       style: TextStyle(
-                          color: Colors.black,
+                          color: CommonColor.SIGN_UP_TEXT_COLOR,
                           fontSize: SizeConfig.blockSizeHorizontal*3.7,
                           fontFamily: "Roboto_Medium",
                           fontWeight: FontWeight.w500

@@ -146,7 +146,7 @@ class _ProfileChildScreenState extends State<ProfileChildScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-              Padding(
+            /*  Padding(
                 padding: EdgeInsets.only(
                     top: SizeConfig.screenHeight*0.005,
                 left: parentWidth*0.05),
@@ -197,7 +197,7 @@ class _ProfileChildScreenState extends State<ProfileChildScreen> {
                     ],
                   ),
                 ),
-              ),
+              ),*/
               Padding(
                 padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.005,
                     left: parentWidth*0.05),

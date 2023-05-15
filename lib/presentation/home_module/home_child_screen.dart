@@ -433,6 +433,25 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
       child: Column(
         children: [
 
+
+          Padding(
+            padding: EdgeInsets.only(right: SizeConfig.screenWidth*0.05),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  "Time Left  23:59:59 hrs.",
+                  style: TextStyle(
+                      color: CommonColor.TO_AREA_COLOR,
+                      fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                      fontFamily: "Roboto_Medium",
+                      fontWeight: FontWeight.w400
+                  ),
+                ),
+              ],
+            ),
+          ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -702,7 +721,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                     child: Text(
                       "More",
                       style: TextStyle(
-                          color: Colors.black,
+                          color: CommonColor.SIGN_UP_TEXT_COLOR,
                           fontSize: SizeConfig.blockSizeHorizontal*3.7,
                           fontFamily: "Roboto_Medium",
                           fontWeight: FontWeight.w500
@@ -742,7 +761,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                 fontFamily: 'Roboto_Medium'
             ),),
 
-          GestureDetector(
+          /*GestureDetector(
             onDoubleTap: (){},
             onTap: (){
               showModalBottomSheet(
@@ -763,7 +782,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                   child: Image(image: AssetImage("assets/images/filter_icon.png")),
                 )
             ),
-          )
+          )*/
 
         ],
       ),
