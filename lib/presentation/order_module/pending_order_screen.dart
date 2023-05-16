@@ -1,8 +1,6 @@
 import 'package:fixgocompanyapp/all_dialogs/filter_transporter_list_dialog.dart';
 import 'package:fixgocompanyapp/all_dialogs/load_more_info_dialog.dart';
-import 'package:fixgocompanyapp/all_dialogs/transporter_verify_details_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
-import 'package:fixgocompanyapp/common_file/draw_dash_border_class.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:fixgocompanyapp/presentation/home_module/booking_details_screen.dart';
 import 'package:fixgocompanyapp/presentation/home_module/interested_transporter_list.dart';
@@ -580,15 +578,17 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
         slivers: <Widget>[
 
           SliverPadding(
-            padding: EdgeInsets.only(bottom: SizeConfig.screenHeight*0.1),
+            padding: EdgeInsets.only(bottom: SizeConfig.screenHeight*0.05,
+                top: SizeConfig.screenHeight*0.02),
             sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   childCount: 3,
                       (context, index) {
                     return  Padding(
-                      padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.015,
+                      padding: EdgeInsets.only(
+                        bottom:selectedIndex == index ? SizeConfig.screenHeight*0.02 : SizeConfig.screenHeight*0.0,
                           left: SizeConfig.screenWidth*0.03,
-                          right: SizeConfig.screenWidth*0.03),
+                          right: SizeConfig.screenWidth*0.03,),
                       child: Container(
                         decoration: BoxDecoration(
                             color: selectedIndex == index ? Colors.white : Colors.transparent,
@@ -603,13 +603,12 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                         ),
                         child: Column(
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.01,),
-                              child: GestureDetector(
-                                onTap: (){
+                            GestureDetector(
+                              onTap: (){
+                                if(selectedIndex != index){
                                   selectedIndex = index;
 
-                                  index = selectedIndex!;
+                                  // index = selectedIndex!;
 
                                   print(selectedIndex);
                                   if(mounted) {
@@ -617,31 +616,28 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
 
                                     });
                                   }
-                                },
-                                onDoubleTap: (){
-                                  if(selectedIndex == index){
-                                    selectedIndex = -1;
-                                    if(mounted){
-                                      setState(() {
+                                }else{
+                                  selectedIndex = -1;
+                                  if(mounted){
+                                    setState(() {
 
-                                      });
-                                    }
+                                    });
                                   }
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15),
-                                    boxShadow: <BoxShadow>[
-                                      BoxShadow(
-                                          color: Colors.black.withOpacity(0.1),
-                                          blurRadius: 5,
-                                          spreadRadius: 1,
-                                          offset: const Offset(2, 6)),
-                                    ],
-                                  ),
-                                  child: getInfoCardLayout(SizeConfig.screenHeight, SizeConfig.screenWidth),
+                                }
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        blurRadius: 5,
+                                        spreadRadius: 1,
+                                        offset: const Offset(2, 6)),
+                                  ],
                                 ),
+                                child: getInfoCardLayout(SizeConfig.screenHeight, SizeConfig.screenWidth),
                               ),
                             ),
                             Visibility(
@@ -651,6 +647,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                   getTransporterListHeading(SizeConfig.screenHeight, SizeConfig.screenWidth),
                                   Container(
                                     height: SizeConfig.screenHeight*0.38,
+                                    color: Colors.transparent,
                                     child: ListView.builder(
                                         itemCount: 3,
                                         physics: NeverScrollableScrollPhysics(),
@@ -1215,7 +1212,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                 fontFamily: 'Roboto_Medium'
             ),),
 
-          GestureDetector(
+         /* GestureDetector(
             onTap: (){
               showModalBottomSheet(
                   context: context,
@@ -1235,7 +1232,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                   child: Image(image: AssetImage("assets/images/filter_icon.png")),
                 )
             ),
-          )
+          )*/
 
         ],
       ),
