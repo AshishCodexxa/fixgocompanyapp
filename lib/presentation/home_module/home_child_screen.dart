@@ -52,7 +52,8 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                         childCount: 3,
                             (context, index) {
                           return  Padding(
-                            padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.015,
+                            padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.0,
+                                bottom:selectedIndex == index ? SizeConfig.screenHeight*0.02 : SizeConfig.screenHeight*0.0,
                                 left: SizeConfig.screenWidth*0.03,
                                 right: SizeConfig.screenWidth*0.03),
                             child: Container(
@@ -70,22 +71,19 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.01,),
+                                    padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.0,),
                                     child: GestureDetector(
                                       onTap: (){
-                                        selectedIndex = index;
+                                        if(selectedIndex != index){
+                                          selectedIndex = index;
 
-                                        index = selectedIndex!;
+                                          print(selectedIndex);
+                                          if(mounted) {
+                                            setState(() {
 
-                                        print(selectedIndex);
-                                        if(mounted) {
-                                          setState(() {
-
-                                        });
-                                        }
-                                      },
-                                      onDoubleTap: (){
-                                        if(selectedIndex == index){
+                                            });
+                                          }
+                                        }else{
                                           selectedIndex = -1;
                                           if(mounted){
                                             setState(() {
@@ -406,6 +404,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
   Widget getAdvContainer(double parentHeight, double parentWidth){
     return Padding(
       padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.02,
+          bottom: SizeConfig.screenHeight*0.02,
       left: SizeConfig.screenWidth*0.03,
       right: SizeConfig.screenWidth*0.03),
       child: Container(
