@@ -608,8 +608,6 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                 if(selectedIndex != index){
                                   selectedIndex = index;
 
-                                  // index = selectedIndex!;
-
                                   print(selectedIndex);
                                   if(mounted) {
                                     setState(() {
@@ -630,11 +628,11 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(15),
                                   boxShadow: <BoxShadow>[
-                                    BoxShadow(
+                                    index != selectedIndex ? BoxShadow(
                                         color: Colors.black.withOpacity(0.1),
                                         blurRadius: 5,
                                         spreadRadius: 1,
-                                        offset: const Offset(2, 6)),
+                                        offset: const Offset(2, 6)) : BoxShadow(color: Colors.transparent),
                                   ],
                                 ),
                                 child: getInfoCardLayout(SizeConfig.screenHeight, SizeConfig.screenWidth),

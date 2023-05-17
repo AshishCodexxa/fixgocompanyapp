@@ -128,6 +128,87 @@ class _KYCVerifyScreenState extends State<KYCVerifyScreen> {
             ),
           ),
         ),
+
+
+        Padding(
+          padding: EdgeInsets.only(left: parentWidth*0.01,
+              top: parentHeight*0.07),
+          child: Row(
+             mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: parentWidth*0.03),
+                child: Text("Note :",
+                  style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Roboto_Medium'
+                  ),),
+              ),
+            ],
+          ),
+        ),
+
+        Padding(
+          padding: EdgeInsets.only(left: parentWidth*0.05,
+              top: parentHeight*0.01),
+          child: Row(
+            children: [
+
+              Container(
+                height: parentHeight*0.013,
+                width: parentWidth*0.02,
+                decoration: BoxDecoration(
+                    color: Colors.black54,
+                  shape: BoxShape.circle
+                ),
+              ),
+
+
+          Padding(
+            padding: EdgeInsets.only(left: parentWidth*0.03),
+            child: Text("Aadhaar Card should be of the same person",
+                  style: TextStyle(
+                      color: Colors.black38,
+                      fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Roboto_Medium'
+                  ),),
+          ),
+            ],
+          ),
+        ),
+
+        Padding(
+          padding: EdgeInsets.only(left: parentWidth*0.05,
+              top: parentHeight*0.005),
+          child: Row(
+            children: [
+
+              Container(
+                height: parentHeight*0.013,
+                width: parentWidth*0.02,
+                decoration: BoxDecoration(
+                    color: Colors.black54,
+                    shape: BoxShape.circle
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(left: parentWidth*0.03),
+                child: Text("Verification will be completed within 48Hrs",
+                  style: TextStyle(
+                      color: Colors.black38,
+                      fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Roboto_Medium'
+                  ),),
+              ),
+            ],
+          ),
+        ),
+
         Padding(
           padding: EdgeInsets.only(top: SizeConfig.screenHeight * 0.15,
             left: SizeConfig.screenWidth*0.05,

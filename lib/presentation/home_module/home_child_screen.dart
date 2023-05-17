@@ -1,4 +1,3 @@
-import 'package:fixgocompanyapp/all_dialogs/filter_transporter_list_dialog.dart';
 import 'package:fixgocompanyapp/all_dialogs/load_more_info_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
@@ -97,11 +96,11 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                           color: Colors.white,
                                           borderRadius: BorderRadius.circular(15),
                                           boxShadow: <BoxShadow>[
-                                            BoxShadow(
+                                            index != selectedIndex ? BoxShadow(
                                                 color: Colors.black.withOpacity(0.1),
                                                 blurRadius: 5,
                                                 spreadRadius: 1,
-                                                offset: const Offset(2, 6)),
+                                                offset: const Offset(2, 6)) : BoxShadow(color: Colors.transparent),
                                           ],
                                         ),
                                         child: getInfoCardLayout(SizeConfig.screenHeight, SizeConfig.screenWidth),
