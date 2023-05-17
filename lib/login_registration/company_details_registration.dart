@@ -1,31 +1,31 @@
 import 'package:fixgocompanyapp/all_dialogs/register_success_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/login_registration/kyc_verification_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
 
 
-class AadhaarPanCardRegisterScreen extends StatefulWidget {
-  const AadhaarPanCardRegisterScreen({Key? key}) : super(key: key);
+class CompanyDetailsRegistrationScreen extends StatefulWidget {
+  const CompanyDetailsRegistrationScreen({Key? key}) : super(key: key);
 
   @override
-  State<AadhaarPanCardRegisterScreen> createState() => _AadhaarPanCardRegisterScreenState();
+  State<CompanyDetailsRegistrationScreen> createState() => _CompanyDetailsRegistrationScreenState();
 }
 
-class _AadhaarPanCardRegisterScreenState extends State<AadhaarPanCardRegisterScreen> {
+class _CompanyDetailsRegistrationScreenState extends State<CompanyDetailsRegistrationScreen> {
 
   TextEditingController userNameController = TextEditingController();
-  TextEditingController aadhaarNumberController = TextEditingController();
-  TextEditingController panNumberController = TextEditingController();
+  TextEditingController companyNameController = TextEditingController();
+  TextEditingController companyLocationController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
   TextEditingController otpController = TextEditingController();
 
   final _userNameFocus = FocusNode();
-  final _aadhaarNumberFocus = FocusNode();
-  final _panNumberFocus = FocusNode();
-  final _mobileNumberFocus = FocusNode();
+  final _companyNameFocus = FocusNode();
+  final _companyLocationFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -178,15 +178,14 @@ class _AadhaarPanCardRegisterScreenState extends State<AadhaarPanCardRegisterScr
                 right: parentWidth*0.03,
               ),
               child: TextFormField(
-                controller: aadhaarNumberController,
-                focusNode: _aadhaarNumberFocus,
+                controller: companyNameController,
+                focusNode: _companyNameFocus,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.person,
-                  color: Colors.black,),
+                  prefixIcon: Image(image: AssetImage("assets/images/company.png"),),
                   label: RichText(
                     text: TextSpan(
-                        text: 'Aadhaar Number',
+                        text: 'Company Name',
                         style: TextStyle(
                           color: Colors.black54,
                           fontWeight: FontWeight.w400,
@@ -237,22 +236,26 @@ class _AadhaarPanCardRegisterScreenState extends State<AadhaarPanCardRegisterScr
                 right: parentWidth*0.03,
               ),
               child: TextFormField(
-                controller: panNumberController,
-                focusNode: _panNumberFocus,
+                controller: companyLocationController,
+                focusNode: _companyLocationFocus,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.person,
-                    color: Colors.black,),
+                  prefixIcon: Image(image: AssetImage("assets/images/company_location.png"),),
                   label: RichText(
                     text: TextSpan(
-                        text: 'Pan Number',
+                        text: 'Company Location',
                         style: TextStyle(
                           color: Colors.black54,
                           fontWeight: FontWeight.w400,
                           fontSize: SizeConfig.blockSizeHorizontal*3.5,
                         ),
                         children: [
-
+                          TextSpan(
+                              text: '*',
+                              style: TextStyle(
+                                  fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold))
                         ]),
                   ),
                   labelStyle: TextStyle(
@@ -265,7 +268,7 @@ class _AadhaarPanCardRegisterScreenState extends State<AadhaarPanCardRegisterScr
           ),
         ),
 
-        Padding(
+        /*Padding(
           padding: EdgeInsets.only(
             top: parentHeight*0.02,
             left: parentWidth*0.03,
@@ -376,6 +379,7 @@ class _AadhaarPanCardRegisterScreenState extends State<AadhaarPanCardRegisterScr
             ),
           ),
         ),
+*/
 
         Padding(
           padding: EdgeInsets.only(top: SizeConfig.screenHeight * 0.07,
@@ -387,16 +391,18 @@ class _AadhaarPanCardRegisterScreenState extends State<AadhaarPanCardRegisterScr
             children: [
               GestureDetector(
                 onTap: (){
-                  showCupertinoDialog(
-                    context: context,
-                    barrierDismissible: true,
-                    builder: (context) {
-                      return const AnimatedOpacity(
-                          opacity: 1.0,
-                          duration: Duration(seconds: 2),
-                          child: RegisterSuccessDialog());
-                    },
-                  );
+                  // showCupertinoDialog(
+                  //   context: context,
+                  //   barrierDismissible: true,
+                  //   builder: (context) {
+                  //     return const AnimatedOpacity(
+                  //         opacity: 1.0,
+                  //         duration: Duration(seconds: 2),
+                  //         child: RegisterSuccessDialog());
+                  //   },
+                  // );
+
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => KYCVerifyScreen()));
                 },
                 child: Container(
                   height: SizeConfig.screenHeight*0.057,
@@ -406,7 +412,7 @@ class _AadhaarPanCardRegisterScreenState extends State<AadhaarPanCardRegisterScr
                       borderRadius: BorderRadius.circular(10)
                   ),
                   child: Center(
-                    child: Text("Register",
+                    child: Text("Submit",
                       style: TextStyle(
                           color: CommonColor.WHITE_COLOR,
                           fontSize: SizeConfig.blockSizeHorizontal*5.0,

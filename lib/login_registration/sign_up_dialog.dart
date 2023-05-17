@@ -1,6 +1,6 @@
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
-import 'package:fixgocompanyapp/login_registration/adhar_pan_register_screen.dart';
+import 'package:fixgocompanyapp/login_registration/company_details_registration.dart';
 import 'package:fixgocompanyapp/login_registration/company_registeration_screen.dart';
 import 'package:fixgocompanyapp/login_registration/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +18,8 @@ class SignUpDialog extends StatefulWidget {
 class _SignUpDialogState extends State<SignUpDialog> {
 
   bool isChecked = false;
+
+  int isType = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -40,21 +42,21 @@ class _SignUpDialogState extends State<SignUpDialog> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.03),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Sign Up",
-                      style: TextStyle(
-                        color: CommonColor.SIGN_UP_TEXT_COLOR,
-                        fontSize: SizeConfig.blockSizeHorizontal*6.0,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Roboto_Medium'
-                      ),),
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.03),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       Text("",
+                //       style: TextStyle(
+                //         color: CommonColor.SIGN_UP_TEXT_COLOR,
+                //         fontSize: SizeConfig.blockSizeHorizontal*6.0,
+                //         fontWeight: FontWeight.w500,
+                //         fontFamily: 'Roboto_Medium'
+                //       ),),
+                //     ],
+                //   ),
+                // ),
 
                 Padding(
                   padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.04,
@@ -64,50 +66,76 @@ class _SignUpDialogState extends State<SignUpDialog> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
 
-                      Column(
-                        children: [
-                          Container(
-                            height: SizeConfig.screenHeight*0.085,
-                            width: SizeConfig.screenWidth*0.17,
-                            decoration: const BoxDecoration(
-                              color:CommonColor.SELECT_TYPE_COLOR,
-                              shape: BoxShape.circle
-                            ),
+                      GestureDetector(
+                        onTap: (){
+                          isType = 1;
+                          if(mounted){
+                            setState(() {
+
+                            });
+                          }
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Column(
+                            children: [
+                              Container(
+                                height: SizeConfig.screenHeight*0.085,
+                                width: SizeConfig.screenWidth*0.17,
+                                decoration:  BoxDecoration(
+                                  color: isType == 1 ? CommonColor.SELECT_TYPE_COLOR : CommonColor.UNSELECT_TYPE_COLOR,
+                                  shape: BoxShape.circle
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.015),
+                                child: Text("Company",
+                                  style: TextStyle(
+                                      color: isType == 1 ? CommonColor.SELECT_TYPE_COLOR : CommonColor.UNSELECT_TYPE_COLOR,
+                                      fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Roboto_Bold'
+                                  ),),
+                              ),
+                            ],
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.015),
-                            child: Text("Company",
-                              style: TextStyle(
-                                  color: CommonColor.BLACK_COLOR,
-                                  fontSize: SizeConfig.blockSizeHorizontal*4.0,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: 'Roboto_Bold'
-                              ),),
-                          ),
-                        ],
+                        ),
                       ),
 
-                      Column(
-                        children: [
-                          Container(
-                            height: SizeConfig.screenHeight*0.085,
-                            width: SizeConfig.screenWidth*0.17,
-                            decoration: const BoxDecoration(
-                                color:CommonColor.UNSELECT_TYPE_COLOR,
-                                shape: BoxShape.circle
-                            ),
+                      GestureDetector(
+                        onTap: (){
+                          isType = 2;
+                          if(mounted){
+                            setState(() {
+
+                            });
+                          }
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Column(
+                            children: [
+                              Container(
+                                height: SizeConfig.screenHeight*0.085,
+                                width: SizeConfig.screenWidth*0.17,
+                                decoration: BoxDecoration(
+                                    color: isType == 2 ? CommonColor.SELECT_TYPE_COLOR : CommonColor.UNSELECT_TYPE_COLOR,
+                                    shape: BoxShape.circle
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.015),
+                                child: Text("Receiver",
+                                  style: TextStyle(
+                                      color: isType == 2 ? CommonColor.SELECT_TYPE_COLOR : CommonColor.UNSELECT_TYPE_COLOR,
+                                      fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Roboto_Bold'
+                                  ),),
+                              ),
+                            ],
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.015),
-                            child: Text("Receiver",
-                              style: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: SizeConfig.blockSizeHorizontal*4.0,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: 'Roboto_Bold'
-                              ),),
-                          ),
-                        ],
+                        ),
                       )
 
                     ],
@@ -194,17 +222,17 @@ class _SignUpDialogState extends State<SignUpDialog> {
                       GestureDetector(
                         onTap: (){
                           // Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyRegistration()));
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>AadhaarPanCardRegisterScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
                         },
                         child: Container(
                           height: SizeConfig.screenHeight*0.057,
                           width: SizeConfig.screenWidth*0.7,
                           decoration: BoxDecoration(
-                            color: CommonColor.SIGN_UP_TEXT_COLOR,
+                              color: isType == 0 ? CommonColor.UNSELECT_TYPE_COLOR : CommonColor.SIGN_UP_TEXT_COLOR,
                             borderRadius: BorderRadius.circular(10)
                           ),
                           child: Center(
-                            child: Text("Register Now",
+                            child: Text("Next",
                               style: TextStyle(
                                   color: CommonColor.WHITE_COLOR,
                                   fontSize: SizeConfig.blockSizeHorizontal*5.0,

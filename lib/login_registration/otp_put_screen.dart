@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:fixgocompanyapp/login_registration/company_details_registration.dart';
 import 'package:http/http.dart' as http;
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
@@ -143,25 +144,36 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
 
                 Padding(
                   padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.05,
-                  left: SizeConfig.screenWidth*0.07,
-                  right: SizeConfig.screenWidth*0.07),
+                  left: SizeConfig.screenWidth*0.15,
+                  right: SizeConfig.screenWidth*0.15),
                   child: Theme(
                     data: Theme.of(context).copyWith(
                       inputDecorationTheme: const InputDecorationTheme(
-                        fillColor: Color(0xfff5f5f5),
-                        filled: false,
+                        // fillColor: CommonColor.UNSELECT_TYPE_COLOR,
+                        // filled: true,
                       ),
                     ),
                     child: PinFieldAutoFill(
                       currentCode: otpCode,
+                      cursor: Cursor(
+                        width: SizeConfig.screenWidth*0.005,
+                        height: SizeConfig.screenHeight*0.02,
+                        color: CommonColor.SIGN_UP_TEXT_COLOR,
+                        radius: Radius.circular(1),
+                        enabled: true,
+                      ),
                       decoration:  BoxLooseDecoration(
                           radius: Radius.circular(7),
                           strokeColorBuilder: FixedColorBuilder(
-                              Color(0xFF8C4A52)
+                              Colors.transparent
                           ),
+                          gapSpace: 25,
+                        bgColorBuilder: FixedColorBuilder(
+                          CommonColor.APP_BAR_COLOR.withOpacity(0.1)
+                        )
 
                       ),
-                      codeLength: 6,
+                      codeLength: 4,
                       onCodeChanged: (code) {
                         print("OnCodeChanged : $code");
                         otpCode = code.toString();
@@ -174,7 +186,7 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(top: SizeConfig.screenHeight * 0.07,
+                  padding: EdgeInsets.only(top: SizeConfig.screenHeight * 0.05,
                     left: SizeConfig.screenWidth*0.05,
                     right: SizeConfig.screenWidth*0.05,
                   ),
@@ -183,9 +195,7 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
                     children: [
                       GestureDetector(
                         onTap: (){
-                          // Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyRegistration()));
-
-
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyDetailsRegistrationScreen()));
                         },
                         child: Container(
                           height: SizeConfig.screenHeight*0.05,
@@ -195,7 +205,7 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
                               borderRadius: BorderRadius.circular(10)
                           ),
                           child: Center(
-                            child: Text("Next",
+                            child: Text("Verify",
                               style: TextStyle(
                                   color: CommonColor.WHITE_COLOR,
                                   fontSize: SizeConfig.blockSizeHorizontal*5.0,
@@ -217,36 +227,38 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
                           top: SizeConfig.screenHeight*0.02),
                       child: GestureDetector(
                         onTap: (){
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          reSendCode=false;
-                          if(mounted) {
-                            setState(() {
-                            _start=60;
-                            timeVisible = true;
-                            const oneSec = const Duration(seconds: 1);
-                            _timer = Timer.periodic(
-                              oneSec,
-                                  (Timer timer) {
-                                if (_start == 1) {
-                                  if(mounted) {
-                                    setState(() {
-                                    timer.cancel();
-                                    reSendCode = true;
-                                    timeVisible = false;
-                                  });
-                                  }
-                                } else {
-                                  if(mounted) {
-                                    setState(() {
-                                    _start--;
-                                    reSendCode = false;
-                                    timeVisible = true;
-                                  });
-                                  }
-                                }
-                              },
-                            );
-                          });
+                          if(_start == 1){
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            reSendCode=false;
+                            if(mounted) {
+                              setState(() {
+                                _start=60;
+                                timeVisible = true;
+                                const oneSec = const Duration(seconds: 1);
+                                _timer = Timer.periodic(
+                                  oneSec,
+                                      (Timer timer) {
+                                    if (_start == 1) {
+                                      if(mounted) {
+                                        setState(() {
+                                          timer.cancel();
+                                          reSendCode = true;
+                                          timeVisible = false;
+                                        });
+                                      }
+                                    } else {
+                                      if(mounted) {
+                                        setState(() {
+                                          _start--;
+                                          reSendCode = false;
+                                          timeVisible = true;
+                                        });
+                                      }
+                                    }
+                                  },
+                                );
+                              });
+                            }
                           }
                         },
                         child: Container(
@@ -283,9 +295,9 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '$_start s',
+                          '$_start sec',
                           style: TextStyle(
-                              color:_start > 10 ? Colors.black : Colors.red,
+                              color:_start > 10 ? CommonColor.FROM_AREA_COLOR : Colors.red,
                               fontSize: SizeConfig.blockSizeHorizontal*4.0,
                             fontFamily: 'Roboto_Bold'
                           ),
