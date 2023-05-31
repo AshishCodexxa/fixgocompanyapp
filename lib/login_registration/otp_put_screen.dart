@@ -29,6 +29,8 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
   Timer? _timer;
   int _start = 60;
 
+  String userNumber = "";
+
   void startTimer() {
     const oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(
@@ -61,6 +63,7 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
     _listenOtp();
     super.initState();
     startTimer();
+    userNumber = GetStorage().read(ConstantData.userMobileNumber);
   }
 
   void _listenOtp() async {
@@ -132,7 +135,7 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
                         padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.01,
                             left: SizeConfig.screenWidth*0.0,
                             right: SizeConfig.screenWidth*0.03),
-                        child: Text("+911234567890",
+                        child: Text(userNumber,
                           style: TextStyle(
                               color: Colors.black54,
                               fontSize: SizeConfig.blockSizeHorizontal*3.5,
@@ -179,7 +182,7 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
                       onCodeChanged: (code) {
                         // print("OnCodeChanged : $code");
                         otpCode = code.toString();
-                        // print("OnCodeChanged : $otpCode");
+                        print("OnCodeChanged : $otpCode");
                       },
                       onCodeSubmitted: (val) {
                         // print("OnCodeSubmitted : $val");
@@ -198,29 +201,39 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
                     children: [
                       GestureDetector(
                         onTap: (){
-                          ApiClient().verifyOtp(otpCode).then((value){
 
-                            if(value.isEmpty) return;
-
-                            if(value['data'] == null){
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(content: Text("The OTP entered is incorrect.")));
-                            }
-
-                            GetStorage().write(ConstantData.userAccessToken, "${value['data']['accessToken']}");
-                            GetStorage().write(ConstantData.userRefreshToken, "${value['data']['refreshToken']}");
-
-                            // print(value['data']['hasProfileSetup']);
-
-                            value['data']['hasProfileSetup'] == false?
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const CompanyDetailsRegistrationScreen()))
-                                : Navigator.push(context, MaterialPageRoute(builder: (context)=>const Dashboard()));
+                          if(otpCode.isEmpty){
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(content: Text("Please Enter Otp.")));
+                          }else{
+                            ApiClient().verifyOtp(otpCode).then((value){
 
 
+                              print(value['message']);
 
-                            // print(GetStorage().read<String>(ConstantData.userRefreshToken));
+                              if(value['data'][0] == "Invalid OTP format"){
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(content: Text("Invalid OTP format.")));
+                              }else if(value['message'] == "The OTP entered is incorrect ."){
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(content: Text("The OTP entered is incorrect.")));
+                              }else{
+                                GetStorage().write(ConstantData.userAccessToken, "${value['data']['accessToken']}");
+                                GetStorage().write(ConstantData.userRefreshToken, "${value['data']['refreshToken']}");
 
-                          });
+                                print(value['data']['hasProfileSetup']);
+
+                                value['data']['hasProfileSetup'] == false?
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const CompanyDetailsRegistrationScreen()))
+                                    : Navigator.push(context, MaterialPageRoute(builder: (context)=>const Dashboard()));
+                              }
+
+
+                            });
+                          }
+
+
+
                         },
                         child: Container(
                           height: SizeConfig.screenHeight*0.05,

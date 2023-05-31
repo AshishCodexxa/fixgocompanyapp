@@ -3,6 +3,7 @@ import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:fixgocompanyapp/data/data_constant/constant_data.dart';
 import 'package:fixgocompanyapp/login_registration/sign_up_dialog.dart';
+import 'package:fixgocompanyapp/presentation/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
@@ -10,7 +11,6 @@ import 'package:get_storage/get_storage.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
-  print("-----> ${GetStorage().read<String>(ConstantData.userType)}");
   runApp(const MyApp());
 }
 
@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routes: <String, WidgetBuilder>{
           '/frame': (BuildContext context) => const SignUpDialog(),
+          '/dashboard': (BuildContext context) => const Dashboard(),
         }
     );
   }
@@ -37,6 +38,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  String name = GetStorage().read(ConstantData.userName);
+  String emailId = GetStorage().read(ConstantData.emailId);
+  String phoneNo = GetStorage().read(ConstantData.contactNo);
+  String accessToken = GetStorage().read(ConstantData.userAccessToken);
+
 
   @override
   void initState() {
@@ -77,8 +84,24 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pushReplacementNamed('/frame');
   }
 
+  void navigateHomePage() {
+    Navigator.of(context).pushReplacementNamed('/dashboard');
+  }
+
   startTimer() {
     var durtaion = new Duration(seconds: 3);
+    try {
+
+      print("-----> $accessToken");
+
+      if (accessToken == null) {
+        return Timer(durtaion, navigateParentPage);
+      } else if (accessToken != null) {
+        return Timer(durtaion, navigateHomePage);
+      }
+    } catch (e) {
+      print("eeeeeeee  $e");
+    }
     return Timer(durtaion, navigateParentPage);
   }
 

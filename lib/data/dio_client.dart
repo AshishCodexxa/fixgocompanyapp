@@ -48,7 +48,7 @@ class ApiClient {
           'userType': userType == "1" ? ConstantData.COMPANY_USER : ConstantData.RECEIVER_USER,
           'phone': userNumber,
           'hash': userHash,
-          'otp': "1234"
+          'otp': otp
         },
       );
       print("verifyOtpSC --> ${response.statusCode}");
