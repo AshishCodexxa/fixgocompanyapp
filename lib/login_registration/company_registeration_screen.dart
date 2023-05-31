@@ -1284,7 +1284,7 @@ class _CompanyRegistrationState extends State<CompanyRegistration> {
           padding: EdgeInsets.only(top: parentHeight*0.02),
           child: GestureDetector(
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>const LoginScreen(userType: 0,)));
             },
             child: Container(
               color: Colors.transparent,

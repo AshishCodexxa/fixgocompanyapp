@@ -1,9 +1,11 @@
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/data/data_constant/constant_data.dart';
 import 'package:fixgocompanyapp/login_registration/company_details_registration.dart';
 import 'package:fixgocompanyapp/login_registration/company_registeration_screen.dart';
 import 'package:fixgocompanyapp/login_registration/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
 
 
@@ -20,6 +22,19 @@ class _SignUpDialogState extends State<SignUpDialog> {
   bool isChecked = false;
 
   int isType = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    isType = 1;
+    print(isType);
+    if(mounted){
+      setState(() {
+        GetStorage().write(ConstantData.userType, "$isType");
+        print("--> ${GetStorage().read<String>(ConstantData.userType)}");
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,22 +57,6 @@ class _SignUpDialogState extends State<SignUpDialog> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Padding(
-                //   padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.03),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     children: [
-                //       Text("",
-                //       style: TextStyle(
-                //         color: CommonColor.SIGN_UP_TEXT_COLOR,
-                //         fontSize: SizeConfig.blockSizeHorizontal*6.0,
-                //         fontWeight: FontWeight.w500,
-                //         fontFamily: 'Roboto_Medium'
-                //       ),),
-                //     ],
-                //   ),
-                // ),
-
                 Padding(
                   padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.04,
                   left: SizeConfig.screenWidth*0.22,
@@ -69,9 +68,11 @@ class _SignUpDialogState extends State<SignUpDialog> {
                       GestureDetector(
                         onTap: (){
                           isType = 1;
+                          print(isType);
                           if(mounted){
                             setState(() {
-
+                              GetStorage().write(ConstantData.userType, "$isType");
+                              print("--> ${GetStorage().read<String>(ConstantData.userType)}");
                             });
                           }
                         },
@@ -105,9 +106,11 @@ class _SignUpDialogState extends State<SignUpDialog> {
                       GestureDetector(
                         onTap: (){
                           isType = 2;
+                          print(isType);
                           if(mounted){
                             setState(() {
-
+                              GetStorage().write(ConstantData.userType, "$isType");
+                              print("--> ${GetStorage().read<String>(ConstantData.userType)}");
                             });
                           }
                         },
@@ -221,8 +224,12 @@ class _SignUpDialogState extends State<SignUpDialog> {
                     children: [
                       GestureDetector(
                         onTap: (){
-                          // Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyRegistration()));
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+                          if(isChecked == false){
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(content: Text("Please Check the Privacy Policy and Terms of Service.")));
+                          }else{
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen(userType: isType,)));
+                          }
                         },
                         child: Container(
                           height: SizeConfig.screenHeight*0.057,
@@ -245,42 +252,6 @@ class _SignUpDialogState extends State<SignUpDialog> {
                     ],
                   ),
                 ),
-
-                /*Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: SizeConfig.screenWidth * 0.01,
-                      top: SizeConfig.screenHeight*0.02),
-                      child: GestureDetector(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
-                        },
-                        child: Container(
-                          color: Colors.transparent,
-                          child: RichText(
-                              text: TextSpan(
-                                  text: "Already have an Account?",
-                                  style: TextStyle(
-                                      color: CommonColor.BLACK_COLOR,
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: 'Roboto-Regular',
-                                      fontSize: 13),
-                                  children: [
-                                    TextSpan(
-                                        text: " Sign In",
-                                        style: TextStyle(
-                                            color: CommonColor.SIGN_UP_TEXT_COLOR,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'Roboto-Regular',
-                                            fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                                        decoration: TextDecoration.underline,)),
-                                  ])),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),*/
 
                 SizedBox(
                   height: SizeConfig.screenHeight*0.03,

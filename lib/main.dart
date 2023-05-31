@@ -1,11 +1,16 @@
 import 'dart:async';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/data/data_constant/constant_data.dart';
 import 'package:fixgocompanyapp/login_registration/sign_up_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
+  print("-----> ${GetStorage().read<String>(ConstantData.userType)}");
   runApp(const MyApp());
 }
 
@@ -73,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   startTimer() {
-    var durtaion = new Duration(seconds: 5);
+    var durtaion = new Duration(seconds: 3);
     return Timer(durtaion, navigateParentPage);
   }
 

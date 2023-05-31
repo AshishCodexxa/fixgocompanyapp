@@ -1,7 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
+import 'package:fixgocompanyapp/data/data_constant/constant_data.dart';
+import 'package:fixgocompanyapp/data/dio_client.dart';
 import 'package:fixgocompanyapp/login_registration/company_details_registration.dart';
-import 'package:http/http.dart' as http;
+import 'package:fixgocompanyapp/presentation/dashboard_screen.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +30,7 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
   int _start = 60;
 
   void startTimer() {
-    const oneSec = const Duration(seconds: 1);
+    const oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(
       oneSec,
           (Timer timer) {
@@ -63,13 +65,13 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
 
   void _listenOtp() async {
     await SmsAutoFill().listenForCode();
-    print("OTP Listen is called");
+    // print("OTP Listen is called");
   }
 
   @override
   void dispose() {
     SmsAutoFill().unregisterListener();
-    print("Unregistered Listener");
+    // print("Unregistered Listener");
     _timer?.cancel();
     super.dispose();
   }
@@ -159,12 +161,12 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
                         width: SizeConfig.screenWidth*0.005,
                         height: SizeConfig.screenHeight*0.02,
                         color: CommonColor.SIGN_UP_TEXT_COLOR,
-                        radius: Radius.circular(1),
+                        radius: const Radius.circular(1),
                         enabled: true,
                       ),
                       decoration:  BoxLooseDecoration(
-                          radius: Radius.circular(7),
-                          strokeColorBuilder: FixedColorBuilder(
+                          radius: const Radius.circular(7),
+                          strokeColorBuilder: const FixedColorBuilder(
                               Colors.transparent
                           ),
                           gapSpace: 25,
@@ -175,11 +177,12 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
                       ),
                       codeLength: 4,
                       onCodeChanged: (code) {
-                        print("OnCodeChanged : $code");
+                        // print("OnCodeChanged : $code");
                         otpCode = code.toString();
+                        // print("OnCodeChanged : $otpCode");
                       },
                       onCodeSubmitted: (val) {
-                        print("OnCodeSubmitted : $val");
+                        // print("OnCodeSubmitted : $val");
                       },
                     ),
                   ),
@@ -195,7 +198,29 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
                     children: [
                       GestureDetector(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyDetailsRegistrationScreen()));
+                          ApiClient().verifyOtp(otpCode).then((value){
+
+                            if(value.isEmpty) return;
+
+                            if(value['data'] == null){
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(content: Text("The OTP entered is incorrect.")));
+                            }
+
+                            GetStorage().write(ConstantData.userAccessToken, "${value['data']['accessToken']}");
+                            GetStorage().write(ConstantData.userRefreshToken, "${value['data']['refreshToken']}");
+
+                            // print(value['data']['hasProfileSetup']);
+
+                            value['data']['hasProfileSetup'] == false?
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const CompanyDetailsRegistrationScreen()))
+                                : Navigator.push(context, MaterialPageRoute(builder: (context)=>const Dashboard()));
+
+
+
+                            // print(GetStorage().read<String>(ConstantData.userRefreshToken));
+
+                          });
                         },
                         child: Container(
                           height: SizeConfig.screenHeight*0.05,
@@ -234,7 +259,7 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
                               setState(() {
                                 _start=60;
                                 timeVisible = true;
-                                const oneSec = const Duration(seconds: 1);
+                                const oneSec = Duration(seconds: 1);
                                 _timer = Timer.periodic(
                                   oneSec,
                                       (Timer timer) {
@@ -266,7 +291,7 @@ class _OtpPutScreenState extends State<OtpPutScreen>  with TickerProviderStateMi
                           child: RichText(
                               text: TextSpan(
                                   text: "Didn’t receive SMS?",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: CommonColor.BLACK_COLOR,
                                       fontWeight: FontWeight.w400,
                                       fontFamily: 'Roboto-Regular',
