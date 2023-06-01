@@ -10,6 +10,9 @@ class ApiClient {
   final Dio _dio = Dio();
 
 
+  /////////////////////// User Authentication Api /////////////////////////////
+
+
   Future<Map<String, dynamic>> login(String userNumber) async {
 
     String url = ApiConstants().baseUrl + ApiConstants().loginUrl;
@@ -43,7 +46,7 @@ class ApiClient {
     print("$otp $userType $userNumber $userHash");
 
     try {
-      Response response = await _dio.post<Map<String, dynamic>>(ApiConstants().baseUrl + ApiConstants().verifyOtpUrl,
+      Response response = await _dio.post<Map<String, dynamic>>(url,
         data: {
           'userType': userType == "1" ? ConstantData.COMPANY_USER : ConstantData.RECEIVER_USER,
           'phone': userNumber,
@@ -130,6 +133,36 @@ class ApiClient {
 
       print("editUserProfileDataSC --> ${response.statusCode}");
       print("editUserProfileData --> ${response.data}");
+
+      return response.data;
+    } on DioError catch (e) {
+      return e.response!.data;
+    }
+  }
+
+
+  /////////////////////// Company Post Api ////////////////////////////////////
+
+
+  Future<Map<String, dynamic>> getCompanyAllPost() async {
+
+    String url = "${ApiConstants().baseUrl}${ApiConstants().companyAllPost}${ConstantData.PENDING_POST}";
+
+    String? sessionToken = GetStorage().read<String>(
+        ConstantData.userAccessToken);
+
+    try {
+      Response response = await _dio.get(
+        url,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $sessionToken',
+          },
+        ),
+      );
+
+      print("getCompanyAllPostSC --> ${response.statusCode}");
+      print("getCompanyAllPost --> ${response.data}");
 
       return response.data;
     } on DioError catch (e) {

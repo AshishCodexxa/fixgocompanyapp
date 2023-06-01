@@ -13,5 +13,6 @@ class ConstantData {
   static const String userName = 'UserName';
   static const String emailId = 'emailId';
   static const String contactNo = 'contactNo';
+  static const String PENDING_POST = 'PENDING';
 
 }

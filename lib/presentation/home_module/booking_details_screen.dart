@@ -374,7 +374,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                         return const AnimatedOpacity(
                             opacity: 1.0,
                             duration: Duration(seconds: 2),
-                            child: LoadMoreInfoDialog());
+                            child: LoadMoreInfoDialog(postDetails: [], postIndex: 0,));
                       },
                     );
                     // Navigator.push(context, MaterialPageRoute(builder: (context)=>ProcessTimelinePage()));

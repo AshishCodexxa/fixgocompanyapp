@@ -272,7 +272,7 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
                   fontSize: SizeConfig.blockSizeHorizontal*6.0,
                   fontFamily: "Roboto_Medium",
                   fontWeight: FontWeight.w500,
-                  color: CommonColor.WHITE_COLOR
+                  color: Colors.transparent
               ),),
           ),
           const Icon(Icons.more_vert,
