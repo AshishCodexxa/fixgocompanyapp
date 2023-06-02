@@ -3,6 +3,7 @@ import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:fixgocompanyapp/data/data_constant/constant_data.dart';
 import 'package:fixgocompanyapp/data/dio_client.dart';
 import 'package:fixgocompanyapp/data/model/get_all_pickup_address_response_model.dart';
+import 'package:fixgocompanyapp/presentation/home_module/create_new_load_form_layout.dart';
 import 'package:fixgocompanyapp/presentation/home_module/pick_up_location_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -21,11 +22,13 @@ class PreviousAddressListScreen extends StatefulWidget {
 class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
 
 
-  int selectedIndex = 0;
+  int selectedIndex = -1;
 
   final items = <Docs>[];
 
   bool isLoading = false;
+
+  String pickUpAddress = '';
 
   @override
   void initState() {
@@ -126,6 +129,8 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
                                         onTap: (){
                                           selectedIndex = index;
                                           setState(() {
+
+                                            pickUpAddress = "${items[index].address.street}, ${items[index].address.city}, ${items[index].address.state}, ${items[index].address.country}, ${items[index].address.postalCode}";
 
                                             GetStorage().write(ConstantData.pickupAddressId, items[index].id);
 
@@ -274,13 +279,15 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
                         children: [
                           GestureDetector(
                             onTap: (){
-
+                              selectedIndex != -1 ?
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>NewLoadScreenForm(pickUpAddress: pickUpAddress,)))
+                              : Container();
                             },
                             child: Container(
                               height: SizeConfig.screenHeight*0.05,
                               width: SizeConfig.screenWidth*0.7,
                               decoration: BoxDecoration(
-                                  color: CommonColor.LOAD_SUBMIT_COLOR,
+                                  color:selectedIndex == -1 ? CommonColor.LOAD_SUBMIT_COLOR : CommonColor.SIGN_UP_TEXT_COLOR,
                                   borderRadius: BorderRadius.circular(10)
                               ),
                               child: Center(
