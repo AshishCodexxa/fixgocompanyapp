@@ -1,9 +1,11 @@
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/data/data_constant/constant_data.dart';
 import 'package:fixgocompanyapp/data/dio_client.dart';
 import 'package:fixgocompanyapp/presentation/home_module/create_new_load_form_layout.dart';
 import 'package:fixgocompanyapp/presentation/home_module/location_map.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
 
 
@@ -557,9 +559,9 @@ class _PickUpLocationState extends State<PickUpLocation> {
                         widget.long
                     ).then((value) {
 
-                     var pickAdd = widget.address;
+                     print(value['data']);
 
-                      // Navigator.pop(context, pickAdd);
+                     GetStorage().write(ConstantData.pickupAddressId, value['data']);
 
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => NewLoadScreenForm(pickUpAddress: widget.address,)));
                     });
