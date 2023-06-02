@@ -21,12 +21,15 @@ class DeliveryLocationScreen extends StatefulWidget {
   final String states;
   final String pincodes;
 
+  final String pickUpAddress;
+
   const DeliveryLocationScreen({Key? key,
     this.lat = '',
     this.long = '',
     this.country = '',
     this.address = '',
-    this.personName = '', this.phoneNo = '', this.addresses = '', this.citys = '', this.states = '', this.pincodes = ''
+    this.personName = '', this.phoneNo = '', this.addresses = '', this.citys = '', this.states = '', this.pincodes = '',
+    this.pickUpAddress = ''
   }) : super(key: key);
 
   @override
@@ -437,6 +440,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                     citys: cityController.text,
                     states: stateController.text,
                     pincodes: pinCodeController.text,
+                    pickUpLocation: widget.pickUpAddress,
                   )));
                 },
                 child: Container(
@@ -482,6 +486,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                       citys: cityController.text,
                       states: stateController.text,
                       pincodes: pinCodeController.text,
+                      pickUpLocation: widget.pickUpAddress,
                     )));
                   },
                   child: Container(
@@ -537,7 +542,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                         .showSnackBar(const SnackBar(content: Text("Please Enter valid Phone Number")));
                   }
                   else{
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => NewLoadScreenForm(deliveryAddress: widget.address,)));
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => NewLoadScreenForm(deliveryAddress: widget.address, pickUpAddress: widget.pickUpAddress,)));
                   }
 
 

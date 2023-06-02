@@ -24,8 +24,13 @@ class LocationMapScreen extends StatefulWidget {
   final String citys;
   final String states;
   final String pincodes;
+  final String pickUpLocation;
 
-  const LocationMapScreen({Key? key, required this.comeFrom, required this.personName, required this.phoneNo, required this.addresses, required this.citys, required this.states, required this.pincodes}) : super(key: key);
+  const LocationMapScreen({Key? key, required this.comeFrom,
+    required this.personName, required this.phoneNo,
+    required this.addresses, required this.citys,
+    required this.states, required this.pincodes, this.pickUpLocation = '',
+    }) : super(key: key);
 
   @override
   State<LocationMapScreen> createState() => _LocationMapScreenState();
@@ -286,6 +291,7 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
                             citys: widget.citys,
                             states: widget.states,
                             pincodes: widget.pincodes,
+                            pickUpAddress: widget.pickUpLocation,
                           ))) : Container();
                       },
                       child: const Text('Save Address'),

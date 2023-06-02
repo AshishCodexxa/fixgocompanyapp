@@ -318,18 +318,20 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       child: GestureDetector(
                         onDoubleTap: (){},
                         onTap: (){
-                          print("w");
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>const DeliveryLocationScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> DeliveryLocationScreen(pickUpAddress: widget.pickUpAddress,)));
                         },
                         child: Container(
                           color: Colors.transparent,
+                          width: parentWidth*0.8,
                           child: Text(widget.deliveryAddress.isEmpty ? "Delivery Location" : widget.deliveryAddress,
                             style: TextStyle(
                                 color: Colors.black54,
                                 fontSize: SizeConfig.blockSizeHorizontal*4.0,
                                 fontWeight: FontWeight.w500,
                                 fontFamily: 'Roboto_Regular'
-                            ),),
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
                     ),
