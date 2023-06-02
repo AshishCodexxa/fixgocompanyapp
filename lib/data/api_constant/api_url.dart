@@ -5,7 +5,7 @@ class ApiConstants {
   String baseUrl = "http://170.64.186.168:5005/api/v1/";
 
 
-  /////////////////////// User Authentication Api ////////////////////////////////////
+/////////////////////// User Authentication Api ////////////////////////////////
 
 
   String loginUrl = "user/login";
@@ -14,10 +14,19 @@ class ApiConstants {
   String userEditProfile = "user/edit-profile";
 
 
-/////////////////////// Company Post Api ////////////////////////////////////
+/////////////////////// Company Pick Up Address Api ////////////////////////////
+
+
+  String allPickUpAddress = "pickup/?limit=5";
+  String createPickUpAddress = "pickup/";
+
+
+
+/////////////////////// Company Post Api ///////////////////////////////////////
 
 
   String companyAllPost = "post/?status=";
+
 
 
 }

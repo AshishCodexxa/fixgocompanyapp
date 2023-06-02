@@ -18,8 +18,14 @@ import 'package:google_maps_webservice/places.dart';
 class LocationMapScreen extends StatefulWidget {
 
   final String comeFrom;
+  final String personName;
+  final String phoneNo;
+  final String addresses;
+  final String citys;
+  final String states;
+  final String pincodes;
 
-  const LocationMapScreen({Key? key, required this.comeFrom}) : super(key: key);
+  const LocationMapScreen({Key? key, required this.comeFrom, required this.personName, required this.phoneNo, required this.addresses, required this.citys, required this.states, required this.pincodes}) : super(key: key);
 
   @override
   State<LocationMapScreen> createState() => _LocationMapScreenState();
@@ -34,7 +40,6 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
   GoogleMapController? controller;
 
   List<Placemark>? placeMark;
-  String _address = '';
   Timer? _debounce;
   String name = "";
   String street = "";
@@ -56,7 +61,7 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
 
 
   final List<Marker> _markers = <Marker>[
-    Marker(
+    const Marker(
       markerId: MarkerId('1'),
       position: LatLng(28.7041, 77.1025),
       infoWindow: InfoWindow(title: 'marker'),
@@ -68,19 +73,19 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
   void initState() {
     super.initState();
 
-    print(widget.comeFrom);
+    // print(widget.comeFrom);
 
     getUserCurrentLocation().then((value) async {
-      print("${value?.latitude.toString()}    ${value?.longitude.toString()}");
+      // print("${value?.latitude.toString()}    ${value?.longitude.toString()}");
 
       selectLat = value?.latitude ?? 0.0;
       selectLong = value?.longitude ?? 0.0;
 
       _markers.add(
           Marker(
-              markerId:MarkerId('2'),
+              markerId:const MarkerId('2'),
               position: LatLng(double.parse("${value?.latitude.toString()}"), double.parse("${value?.longitude.toString()}")),
-              infoWindow: InfoWindow(
+              infoWindow: const InfoWindow(
                   title: 'Current'
               )
           )
@@ -99,7 +104,7 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
       placeMark = await placemarkFromCoordinates(double.parse("${value?.latitude.toString()}"),
           double.parse("${value?.longitude.toString()}"));
 
-      print("placemark  ${placeMark?[0].name}  ${placeMark?[0].locality}  ${placeMark?[0].postalCode}");
+      // print("placemark  ${placeMark?[0].name}  ${placeMark?[0].locality}  ${placeMark?[0].postalCode}");
 
       setState(() {
 
@@ -127,9 +132,9 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
       _markers.clear();
       _markers.add(
           Marker(
-              markerId:MarkerId('2'),
+              markerId:const MarkerId('2'),
               position: LatLng(double.parse("${target.latitude}"), double.parse("${target.longitude}")),
-              infoWindow: InfoWindow(
+              infoWindow: const InfoWindow(
                   title: 'Current'
               )
           )
@@ -156,7 +161,7 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
 
       });
 
-      print(placeMark);
+      // print(placeMark);
     });
   }
 
@@ -167,9 +172,9 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
       _markers.clear();
       _markers.add(
           Marker(
-              markerId: MarkerId('2'),
+              markerId: const MarkerId('2'),
               position: LatLng(lat, long),
-              infoWindow: InfoWindow(
+              infoWindow: const InfoWindow(
                   title: 'Current'
               )
           )
@@ -183,7 +188,7 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
 
         });
 
-        print(value);
+        // print(value);
 
         name = value[0].name.toString();
         street = value[0].street.toString();
@@ -238,11 +243,11 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
                             elevation: 5,
                             child: Center(
                               child: Padding(
-                                padding: EdgeInsets.all(20.0),
+                                padding: const EdgeInsets.all(20.0),
                                 child: name.isNotEmpty ? Text('$name, $street, $subLocality, $locality, $postalCode, $administrativeArea, $country.',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.black
-                                  ),) : Text(""),
+                                  ),) : const Text(""),
                               ),
                             )),
                       )
@@ -255,14 +260,32 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
                       onPressed: () {
 
                       widget.comeFrom == "1" ?
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>
                             PickUpLocation(
-                              address: '$name, $street, $subLocality, $locality, $postalCode, $administrativeArea, $country.'
+                              address: '$name, $street, $subLocality, $locality, $postalCode, $administrativeArea, $country.',
+                              lat: "$selectLat",
+                              long: "$selectLong",
+                              country: country,
+                              personName: widget.personName,
+                              phoneNo: widget.phoneNo,
+                              addresses: widget.addresses,
+                              citys: widget.citys,
+                              states: widget.states,
+                              pincodes: widget.pincodes,
                             ))) :
                       widget.comeFrom == "2" ?
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>
                           DeliveryLocationScreen(
-                              address: '$name, $street, $subLocality, $locality, $postalCode, $administrativeArea, $country.'
+                              address: '$name, $street, $subLocality, $locality, $postalCode, $administrativeArea, $country.',
+                            lat: "$selectLat",
+                            long: "$selectLong",
+                            country: country,
+                            personName: widget.personName,
+                            phoneNo: widget.phoneNo,
+                            addresses: widget.addresses,
+                            citys: widget.citys,
+                            states: widget.states,
+                            pincodes: widget.pincodes,
                           ))) : Container();
                       },
                       child: const Text('Save Address'),
@@ -278,16 +301,16 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
         child: FloatingActionButton(
           onPressed: () {
             getUserCurrentLocation().then((value) async {
-              print("${value?.latitude.toString()}    ${value?.longitude.toString()}");
+              // print("${value?.latitude.toString()}    ${value?.longitude.toString()}");
 
               selectLat = value?.latitude ?? 0.0;
               selectLong = value?.longitude ?? 0.0;
 
               _markers.add(
                   Marker(
-                      markerId:MarkerId('2'),
+                      markerId:const MarkerId('2'),
                       position: LatLng(double.parse("${value?.latitude.toString()}"), double.parse("${value?.longitude.toString()}")),
-                      infoWindow: InfoWindow(
+                      infoWindow: const InfoWindow(
                           title: 'Current'
                       )
                   )
@@ -306,7 +329,7 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
               placeMark = await placemarkFromCoordinates(double.parse("${value?.latitude.toString()}"),
                   double.parse("${value?.longitude.toString()}"));
 
-              print("placemark  ${placeMark?[0].name}  ${placeMark?[0].locality}  ${placeMark?[0].postalCode}");
+              // print("placemark  ${placeMark?[0].name}  ${placeMark?[0].locality}  ${placeMark?[0].postalCode}");
 
               setState(() {
 
@@ -314,7 +337,7 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
 
             });
           },
-          child: Icon(Icons.my_location),
+          child: const Icon(Icons.my_location),
         ),
       ),
     );
@@ -397,7 +420,7 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
       GoogleMapsPlaces _places = GoogleMapsPlaces(
         apiKey: kGoogleApiKey,
 
-        apiHeaders: await GoogleApiHeaders().getHeaders(),
+        apiHeaders: await const GoogleApiHeaders().getHeaders(),
       );
 
       PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId!);
@@ -425,9 +448,9 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
           _markers.clear();
           _markers.add(
               Marker(
-                  markerId:MarkerId('2'),
+                  markerId:const MarkerId('2'),
                   position: LatLng(selectLat, selectLong),
-                  infoWindow: InfoWindow(
+                  infoWindow: const InfoWindow(
                       title: 'Current'
                   )
               )
@@ -441,6 +464,9 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
 
             });
 
+            // print(selectLat);
+            // print(selectLong);
+
             name = value[0].name.toString();
             street = value[0].street.toString();
             subLocality = value[0].subLocality.toString();
@@ -451,7 +477,7 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
 
           });
 
-          print(placeMark);
+          // print(placeMark);
         });
 
       });

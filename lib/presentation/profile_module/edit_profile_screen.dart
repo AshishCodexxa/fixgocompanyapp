@@ -54,11 +54,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void initState() {
     super.initState();
 
+    if(mounted){
+      setState(() {
+        isLoading = true;
+      });
+    }
+
 
     ApiClient().getUserProfileData().then((value) {
       if (value.isEmpty) return;
 
-      // print(value['data']['_id']);
+      if(mounted){
+        setState(() {
+          isLoading = false;
+        });
+      }
 
       GetStorage().write(ConstantData.userId, value['data']['_id']);
       GetStorage().write(ConstantData.userName, value['data']['name']);
@@ -71,8 +81,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       // companyAddressController.text = value['data']['companyName'];
       landlineNumber = value['data']['landlines'];
       mobileNumber = value['data']['mobiles'];
-      print("landlineNumber $landlineNumber");
-      print("mobileNumber $mobileNumber");
+      // print("landlineNumber $landlineNumber");
+      // print("mobileNumber $mobileNumber");
 
       if(mounted){
         setState(() {
@@ -83,7 +93,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
             phoneNumberController[index].text = landlineNumber[index].toString();
 
-            print(phoneNumberController[index].text);
+            // print(phoneNumberController[index].text);
 
 
           }
@@ -98,7 +108,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
             mobileNumberController[index].text = mobileNumber[index].toString();
 
-            print(mobileNumberController[index].text);
+            // print(mobileNumberController[index].text);
           }
         });
       }
@@ -138,7 +148,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
           Visibility(
             visible: isLoading,
-              child: CircularProgressIndicator()
+              child: Image(
+                image: const AssetImage("assets/images/grid_loading.gif"),
+                height: SizeConfig.screenHeight*.1,
+                width: SizeConfig.screenWidth*.1,
+              )
           ),
         ],
       ),
@@ -587,7 +601,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                               if (mounted) {
                                                 setState(() {});
                                               }
-                                              print(phoneNumberController.length);
+                                              // print(phoneNumberController.length);
                                               // print(phoneNumberController[i].text);
                                             },
                                             child: Container(
@@ -1020,7 +1034,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
-                onDoubleTap: () {},
                 onTap: () {
 
                   if(mounted){

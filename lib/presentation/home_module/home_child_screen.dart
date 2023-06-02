@@ -554,7 +554,11 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
             ],
           ),
           Visibility(
-              visible: isLoading, child: const CircularProgressIndicator()),
+              visible: isLoading, child: Image(
+            image: const AssetImage("assets/images/grid_loading.gif"),
+            height: SizeConfig.screenHeight*.1,
+            width: SizeConfig.screenWidth*.1,
+          )),
         ],
       ),
     );

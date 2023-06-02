@@ -1,5 +1,6 @@
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/presentation/home_module/create_new_load_form_layout.dart';
 import 'package:fixgocompanyapp/presentation/home_module/location_map.dart';
 import 'package:flutter/material.dart';
 
@@ -9,9 +10,24 @@ import 'package:flutter/material.dart';
 class DeliveryLocationScreen extends StatefulWidget {
 
   final String address;
+  final String lat;
+  final String long;
+  final String country;
+
+  final String personName;
+  final String phoneNo;
+  final String addresses;
+  final String citys;
+  final String states;
+  final String pincodes;
 
   const DeliveryLocationScreen({Key? key,
-    this.address = ''}) : super(key: key);
+    this.lat = '',
+    this.long = '',
+    this.country = '',
+    this.address = '',
+    this.personName = '', this.phoneNo = '', this.addresses = '', this.citys = '', this.states = '', this.pincodes = ''
+  }) : super(key: key);
 
   @override
   State<DeliveryLocationScreen> createState() => _DeliveryLocationScreenState();
@@ -35,7 +51,22 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
   final _stateFocus = FocusNode();
   final _pinCodeFocus = FocusNode();
 
+@override
+  void initState() {
+    super.initState();
 
+    if(mounted){
+      setState(() {
+        receiverNameController =  TextEditingController(text: widget.personName);
+        phoneNoController =  TextEditingController(text: widget.phoneNo);
+        addressController = TextEditingController(text: widget.addresses);
+        cityController = TextEditingController(text: widget.citys);
+        stateController = TextEditingController(text: widget.states);
+        pinCodeController = TextEditingController(text: widget.pincodes);
+      });
+    }
+
+}
 
   @override
   Widget build(BuildContext context) {
@@ -399,9 +430,14 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
             children: [
               widget.address.isEmpty ?
               GestureDetector(
-                onDoubleTap: (){},
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LocationMapScreen(comeFrom: '2',)));
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LocationMapScreen(comeFrom: '2',
+                    personName: receiverNameController.text,
+                    phoneNo: phoneNoController.text, addresses: addressController.text,
+                    citys: cityController.text,
+                    states: stateController.text,
+                    pincodes: pinCodeController.text,
+                  )));
                 },
                 child: Container(
                   height: parentHeight*0.03,
@@ -438,27 +474,38 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                   left: parentWidth*0.05,
                   right: parentWidth*0.05,
                 ),
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(13)
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.location_on_outlined,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: parentWidth*0.02,
-                            top: parentHeight*0.01,
-                            bottom: parentHeight*0.01),
-                        child: Container(
-                            color: Colors.transparent,
-                            width: parentWidth*0.7,
-                            child: Text("${widget.address}")
+                child: GestureDetector(
+                  onTap: (){
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LocationMapScreen(comeFrom: '2',
+                      personName: receiverNameController.text,
+                      phoneNo: phoneNoController.text, addresses: addressController.text,
+                      citys: cityController.text,
+                      states: stateController.text,
+                      pincodes: pinCodeController.text,
+                    )));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(13)
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.location_on_outlined,
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: EdgeInsets.only(left: parentWidth*0.02,
+                              top: parentHeight*0.01,
+                              bottom: parentHeight*0.01),
+                          child: Container(
+                              color: Colors.transparent,
+                              width: parentWidth*0.7,
+                              child: Text(widget.address)
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -477,6 +524,22 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
             children: [
               GestureDetector(
                 onTap: (){
+
+                  if(receiverNameController.text.isEmpty && phoneNoController.text.isEmpty && addressController.text.isEmpty &&
+                      cityController.text.isEmpty && stateController.text.isEmpty && pinCodeController.text.isEmpty){
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(content: Text("All Fields Are Required")));
+                  }else if(widget.lat.isEmpty){
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(content: Text("Please Select Location on Map")));
+                  }else if(phoneNoController.text.length != 10){
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(content: Text("Please Enter valid Phone Number")));
+                  }
+                  else{
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => NewLoadScreenForm(deliveryAddress: widget.address,)));
+                  }
+
 
                 },
                 child: Container(

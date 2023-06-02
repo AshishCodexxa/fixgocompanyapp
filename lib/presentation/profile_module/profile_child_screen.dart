@@ -275,7 +275,6 @@ class _ProfileChildScreenState extends State<ProfileChildScreen> {
                 padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.012,
                 left: parentWidth*0.05),
                 child: GestureDetector(
-                  onDoubleTap: (){},
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>TransactionHistoryScreen()));
                   },

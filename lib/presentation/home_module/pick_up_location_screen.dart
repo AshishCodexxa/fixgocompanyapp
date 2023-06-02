@@ -1,5 +1,7 @@
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/data/dio_client.dart';
+import 'package:fixgocompanyapp/presentation/home_module/create_new_load_form_layout.dart';
 import 'package:fixgocompanyapp/presentation/home_module/location_map.dart';
 import 'package:flutter/material.dart';
 
@@ -9,9 +11,24 @@ import 'package:flutter/material.dart';
 class PickUpLocation extends StatefulWidget {
 
   final String address;
+  final String lat;
+  final String long;
+  final String country;
+
+  final String personName;
+  final String phoneNo;
+  final String addresses;
+  final String citys;
+  final String states;
+  final String pincodes;
 
   const PickUpLocation({Key? key,
-    this.address = ''}) : super(key: key);
+    this.address = '',
+    this.lat = '',
+    this.long = '',
+    this.country = '',
+    this.personName = '', this.phoneNo = '', this.addresses = '', this.citys = '', this.states = '', this.pincodes = ''
+  }) : super(key: key);
 
   @override
   State<PickUpLocation> createState() => _PickUpLocationState();
@@ -36,6 +53,26 @@ class _PickUpLocationState extends State<PickUpLocation> {
   final _pinCodeFocus = FocusNode();
 
 
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    print("${widget.lat}, ${widget.long}, ${widget.country}");
+
+   if(mounted){
+     setState(() {
+       contactPersonController =  TextEditingController(text: widget.personName);
+       phoneNoController =  TextEditingController(text: widget.phoneNo);
+       addressController = TextEditingController(text: widget.addresses);
+       cityController = TextEditingController(text: widget.citys);
+       stateController = TextEditingController(text: widget.states);
+       pinCodeController = TextEditingController(text: widget.pincodes);
+     });
+   }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -176,6 +213,7 @@ class _PickUpLocationState extends State<PickUpLocation> {
                 controller: phoneNoController,
                 focusNode: _phoneNumberFocus,
                 textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.phone_android_outlined,
                     color: Colors.black,),
@@ -399,9 +437,14 @@ class _PickUpLocationState extends State<PickUpLocation> {
             children: [
              widget.address.isEmpty ?
              GestureDetector(
-                onDoubleTap: (){},
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LocationMapScreen(comeFrom: '1',)));
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LocationMapScreen(comeFrom: '1',
+                    personName: contactPersonController.text,
+                    phoneNo: phoneNoController.text, addresses: addressController.text,
+                    citys: cityController.text,
+                    states: stateController.text,
+                    pincodes: pinCodeController.text,
+                  )));
                 },
                 child: Container(
                   height: parentHeight*0.03,
@@ -438,27 +481,38 @@ class _PickUpLocationState extends State<PickUpLocation> {
                  left: parentWidth*0.05,
                  right: parentWidth*0.05,
                ),
-               child: Container(
-                 decoration: BoxDecoration(
-                     border: Border.all(color: Colors.black),
-                     borderRadius: BorderRadius.circular(13)
-                 ),
-                 child: Row(
-                   mainAxisAlignment: MainAxisAlignment.center,
-                   children: [
-                     Icon(Icons.location_on_outlined,
-                     ),
-                     Padding(
-                       padding: EdgeInsets.only(left: parentWidth*0.02,
-                           top: parentHeight*0.01,
-                           bottom: parentHeight*0.01),
-                       child: Container(
-                           color: Colors.transparent,
-                           width: parentWidth*0.7,
-                           child: Text("${widget.address}")
+               child: GestureDetector(
+                 onTap: (){
+                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LocationMapScreen(comeFrom: '1',
+                     personName: contactPersonController.text,
+                     phoneNo: phoneNoController.text, addresses: addressController.text,
+                     citys: cityController.text,
+                     states: stateController.text,
+                     pincodes: pinCodeController.text,
+                   )));
+                 },
+                 child: Container(
+                   decoration: BoxDecoration(
+                       border: Border.all(color: Colors.black),
+                       borderRadius: BorderRadius.circular(13)
+                   ),
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: [
+                       Icon(Icons.location_on_outlined,
                        ),
-                     ),
-                   ],
+                       Padding(
+                         padding: EdgeInsets.only(left: parentWidth*0.02,
+                             top: parentHeight*0.01,
+                             bottom: parentHeight*0.01),
+                         child: Container(
+                             color: Colors.transparent,
+                             width: parentWidth*0.7,
+                             child: Text("${widget.address}")
+                         ),
+                       ),
+                     ],
+                   ),
                  ),
                ),
              ),
@@ -478,12 +532,47 @@ class _PickUpLocationState extends State<PickUpLocation> {
               GestureDetector(
                 onTap: (){
 
+
+                  if(contactPersonController.text.isEmpty && phoneNoController.text.isEmpty && addressController.text.isEmpty &&
+                      cityController.text.isEmpty && stateController.text.isEmpty && pinCodeController.text.isEmpty){
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(content: Text("All Fields Are Required")));
+                  }else if(widget.lat.isEmpty){
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(content: Text("Please Select Location on Map")));
+                  }else if(phoneNoController.text.length != 10){
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(content: Text("Please Enter valid Phone Number")));
+                  }
+                  else{
+                    ApiClient().createPickUpAddress(
+                        contactPersonController.text,
+                        phoneNoController.text,
+                        addressController.text,
+                        cityController.text,
+                        stateController.text,
+                        widget.country,
+                        pinCodeController.text,
+                        widget.lat,
+                        widget.long
+                    ).then((value) {
+
+                     var pickAdd = widget.address;
+
+                      // Navigator.pop(context, pickAdd);
+
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => NewLoadScreenForm(pickUpAddress: widget.address,)));
+                    });
+                  }
+
+
+
                 },
                 child: Container(
                   height: SizeConfig.screenHeight*0.05,
                   width: SizeConfig.screenWidth*0.7,
                   decoration: BoxDecoration(
-                      color: CommonColor.LOAD_SUBMIT_COLOR,
+                      color:widget.lat.isEmpty ? CommonColor.LOAD_SUBMIT_COLOR : CommonColor.SIGN_UP_TEXT_COLOR,
                       borderRadius: BorderRadius.circular(10)
                   ),
                   child: Center(

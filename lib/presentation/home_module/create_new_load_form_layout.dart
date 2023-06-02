@@ -15,9 +15,10 @@ import 'package:intl/intl.dart';
 
 class NewLoadScreenForm extends StatefulWidget {
 
+  final String pickUpAddress;
+  final String deliveryAddress;
 
-
-  const NewLoadScreenForm({Key? key}) : super(key: key);
+  const NewLoadScreenForm({Key? key, this.pickUpAddress = '', this.deliveryAddress = ''}) : super(key: key);
 
   @override
   State<NewLoadScreenForm> createState() => _NewLoadScreenFormState();
@@ -117,8 +118,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
   @override
   void initState() {
-    dateInput.text = "";
     super.initState();
+    dateInput.text = "";
+
   }
 
 
@@ -273,13 +275,16 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                         },
                         child: Container(
                           color: Colors.transparent,
-                          child: Text("Pick-up Location",
+                          width: parentWidth*0.8,
+                          child: Text( widget.pickUpAddress.isEmpty ? "Pick-up Location" : widget.pickUpAddress,
                             style: TextStyle(
                                 color: Colors.black54,
                                 fontSize: SizeConfig.blockSizeHorizontal*4.0,
                                 fontWeight: FontWeight.w500,
                                 fontFamily: 'Roboto_Regular'
-                            ),),
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
                     ),
@@ -313,11 +318,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       child: GestureDetector(
                         onDoubleTap: (){},
                         onTap: (){
+                          print("w");
                           Navigator.push(context, MaterialPageRoute(builder: (context)=>const DeliveryLocationScreen()));
                         },
                         child: Container(
                           color: Colors.transparent,
-                          child: Text("Delivery",
+                          child: Text(widget.deliveryAddress.isEmpty ? "Delivery Location" : widget.deliveryAddress,
                             style: TextStyle(
                                 color: Colors.black54,
                                 fontSize: SizeConfig.blockSizeHorizontal*4.0,

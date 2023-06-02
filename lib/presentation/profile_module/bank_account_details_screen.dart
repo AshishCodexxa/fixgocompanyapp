@@ -329,7 +329,6 @@ class _BankAccountDetailsScreenState extends State<BankAccountDetailsScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onDoubleTap: (){},
                   onTap: (){
                     // showCupertinoDialog(
                     //   context: context,

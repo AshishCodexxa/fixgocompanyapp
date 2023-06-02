@@ -10,7 +10,7 @@ class ApiClient {
   final Dio _dio = Dio();
 
 
-  /////////////////////// User Authentication Api /////////////////////////////
+/////////////////////// User Authentication Api ////////////////////////////////
 
 
   Future<Map<String, dynamic>> login(String userNumber) async {
@@ -141,7 +141,86 @@ class ApiClient {
   }
 
 
-  /////////////////////// Company Post Api ////////////////////////////////////
+/////////////////////// Company PickUp Address Api ///////////////////////////////////////
+
+
+  Future<Map<String, dynamic>> getAllPickUpAddressList() async {
+
+    String url = ApiConstants().baseUrl + ApiConstants().allPickUpAddress;
+
+    String? sessionToken = GetStorage().read<String>(
+        ConstantData.userAccessToken);
+
+    try {
+      Response response = await _dio.get(
+        url,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $sessionToken',
+          },
+        ),
+      );
+
+      print("getAllPickUpAddressListSC --> ${response.statusCode}");
+      print("getAllPickUpAddressList --> ${response.data}");
+
+      return response.data;
+    } on DioError catch (e) {
+      return e.response!.data;
+    }
+  }
+
+  Future<Map<String, dynamic>> createPickUpAddress(
+      String personName,
+      String phoneNo,
+      String street,
+      String city,
+      String state,
+      String country,
+      String pinCode,
+      String lat,
+      String long,
+      ) async {
+
+    String url = ApiConstants().baseUrl + ApiConstants().createPickUpAddress;
+
+    String? sessionToken = GetStorage().read<String>(
+        ConstantData.userAccessToken);
+
+    try {
+      Response response = await _dio.post<Map<String, dynamic>>(url,
+        data: {
+          "name": personName,
+          "phone": phoneNo,
+          "address": {
+            "street": street,
+            "city": city,
+            "state": state,
+            "country": country,
+            "postalCode": pinCode
+          },
+          "coordinate": {
+            "latitude": lat,
+            "longitude": long
+          }
+        },
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $sessionToken',
+          },
+        ),
+      );
+      print("createPickUpAddressSC --> ${response.statusCode}");
+      print("createPickUpAddressData --> ${response.data}");
+      return response.data;
+    } on DioError catch (e) {
+      return e.response!.data;
+    }
+  }
+
+
+
+/////////////////////// Company Post Api ///////////////////////////////////////
 
 
   Future<Map<String, dynamic>> getCompanyAllPost() async {
@@ -169,5 +248,6 @@ class ApiClient {
       return e.response!.data;
     }
   }
+
 
   }
