@@ -1,12 +1,17 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:fixgocompanyapp/all_dialogs/load_post_success_dialog.dart';
 import 'package:fixgocompanyapp/all_dialogs/open_camera_gallery_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/data/api_constant/api_url.dart';
+import 'package:fixgocompanyapp/data/data_constant/constant_data.dart';
 import 'package:fixgocompanyapp/presentation/home_module/delivery_address_add.dart';
 import 'package:fixgocompanyapp/presentation/home_module/recent_pickup_address_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -18,7 +23,28 @@ class NewLoadScreenForm extends StatefulWidget {
   final String pickUpAddress;
   final String deliveryAddress;
 
-  const NewLoadScreenForm({Key? key, this.pickUpAddress = '', this.deliveryAddress = ''}) : super(key: key);
+  final String reciverName;
+  final String reciverPhone;
+  final String street;
+  final String city;
+  final String state;
+  final String country;
+  final String postalCode;
+  final String lat;
+  final String long;
+
+  const NewLoadScreenForm({Key? key, this.pickUpAddress = '',
+    this.deliveryAddress = '',
+    this.reciverName = '',
+    this.reciverPhone = '',
+    this.street = '',
+    this.city = '',
+    this.state = '',
+    this.country = '',
+    this.postalCode = '',
+    this.lat = "",
+    this.long = ""
+  }) : super(key: key);
 
   @override
   State<NewLoadScreenForm> createState() => _NewLoadScreenFormState();
@@ -28,6 +54,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
 
   int addDeliveryCount = 0;
+
+  final Dio _dio = Dio();
 
   int next = 0;
 
@@ -48,10 +76,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
   TextEditingController vehicleNumberController = TextEditingController();
   TextEditingController lengthController = TextEditingController();
   TextEditingController widthController = TextEditingController();
+  TextEditingController heightController = TextEditingController();
+  TextEditingController vehicleLengthController = TextEditingController();
   TextEditingController totalFareController = TextEditingController();
 
-  String? pickUpDate;
-  String? pickUpTime;
+  DateTime? pickUpDate;
+  DateTime? pickUpTime;
   DateTime? pickedDates;
 
   String employeeValue = 'Type of Load';
@@ -71,6 +101,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
   bool showAllTyresType = false;
   int tyreTypes = 0;
   String tyreName = "";
+
+  String carringCapacity = "";
 
   int trailerTyreTypes = 0;
   String trailerTyreName = "";
@@ -115,11 +147,16 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
   List<XFile> images = [];
 
+  int lat = 0;
+  int long = 0;
 
   @override
   void initState() {
     super.initState();
     dateInput.text = "";
+
+    print(widget.lat);
+
 
   }
 
@@ -140,6 +177,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
           fareVal = double.parse(totalFareController.text);
 
           print(fareVal.toString());
+          print(widget.lat);
         });
       }
 
@@ -446,18 +484,16 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
 
                   if (pickedDates != null) {
-                    print(
-                        pickedDates);
-                    pickUpDate =
-                    DateFormat('dd-MM-yyyy').format(pickedDates!);
+                    // print(pickedDates);
+                    pickUpDate =pickedDates;
 
 
 
                     print(
-                        pickUpDate); //formatted date output using intl package =>  2021-03-16
+                        pickUpDate);
                     setState(() {
                       dateInput.text =
-                          pickUpDate.toString(); //set output date to TextField value.
+                          pickUpDate.toString();
                     });
                   } else {}
 
@@ -473,7 +509,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       const Icon(Icons.date_range_outlined,
                         color: Colors.black,),
 
-                      Text(pickUpDate == null ?"Pick-up Date":"$pickUpDate",
+                      Text(pickUpDate == null ?"Pick-up Date":"${DateFormat('dd/MM/y').format(pickUpDate!)}",
                         style: TextStyle(
                             fontSize: SizeConfig.blockSizeHorizontal*3.5,
                             fontFamily: "Roboto_Regular",
@@ -503,7 +539,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                 onDoubleTap: (){},
                 onTap: () async {
 
-                  Future<String?> result = showModalBottomSheet<String>(
+                  Future<DateTime?> result = showModalBottomSheet<DateTime>(
                       context: context,
                       isScrollControlled: true,
                       // backgroundColor: CommonColor.APP_BAR_COLOR.w,
@@ -513,7 +549,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                         ),
                       ),
                       builder: (context) {
-                        String? _time;
+                        DateTime? _time;
 
                         return Padding(
                           padding: MediaQuery.of(context).viewInsets,
@@ -523,7 +559,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               child: CupertinoDatePicker(
                                 mode: CupertinoDatePickerMode.time,
                                 onDateTimeChanged: (DateTime newTime) {
-                                  _time = DateFormat.jm().format(newTime);
+                                  _time = newTime;
                                 },
                               ),
                             ),
@@ -531,7 +567,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             GestureDetector(
                               onTap: (){
                                 Navigator.of(context)
-                                    .pop(_time ?? DateFormat.jm().format(DateTime.now()));
+                                    .pop(_time);
                               },
                               child: Container(
                                 height: parentHeight*0.05,
@@ -588,7 +624,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       const Icon(Icons.watch_later_outlined,
                         color: Colors.black,),
 
-                      Text(pickUpTime == null ? "  Pickup Time" : "  $pickUpTime",
+                      Text(pickUpTime == null ? "  Pickup Time" : "  ${DateFormat('hh:mm a').format(pickUpTime!)}",
                         style: TextStyle(
                             fontSize: SizeConfig.blockSizeHorizontal*3.5,
                             fontFamily: "Roboto_Regular",
@@ -1136,7 +1172,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                         child: SizedBox(
                                           height: parentHeight*0.05,
                                           child: TextFormField(
-                                            controller: lengthController,
+                                            controller: vehicleLengthController,
                                             // focusNode: _cityFocus,
                                             textInputAction: TextInputAction.next,
                                             decoration: InputDecoration(
@@ -1172,7 +1208,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                         child: SizedBox(
                                           height: parentHeight*0.05,
                                           child: TextFormField(
-                                            controller: lengthController,
+                                            controller: widthController,
                                             // focusNode: _cityFocus,
                                             textInputAction: TextInputAction.next,
                                             decoration: InputDecoration(
@@ -1208,7 +1244,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                         child: SizedBox(
                                           height: parentHeight*0.05,
                                           child: TextFormField(
-                                            controller: lengthController,
+                                            controller: heightController,
                                             // focusNode: _cityFocus,
                                             textInputAction: TextInputAction.next,
                                             decoration: InputDecoration(
@@ -1309,16 +1345,13 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             showAllGoodsField = !showAllGoodsField;
                             hideAllGoodsField = !hideAllGoodsField;
                             vehicleDetails = !vehicleDetails;
-                            // if(paymentDetails == true) {
-                            //   paymentDetails = !paymentDetails;
-                            // }
                           });
                         }
                       },
                       child: Container(
                         height: parentHeight*0.03,
                         width: parentWidth*0.15,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             color: CommonColor.SIGN_UP_TEXT_COLOR,
                           borderRadius: BorderRadius.only(
                             bottomRight: Radius.circular(10),
@@ -1370,12 +1403,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
                                   if(vehicleDetails == true) {
                                     vehicleDetails = !vehicleDetails;
-                                    print(vehicleDetails);
+                                    // print(vehicleDetails);
                                   }
 
                                   if(paymentDetails == true) {
                                     paymentDetails = !paymentDetails;
-                                    print(paymentDetails);
+                                    // print(paymentDetails);
                                   }
                                 });
                               }
@@ -1433,7 +1466,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                   child: GestureDetector(
                                     onDoubleTap: (){},
                                     onTap: (){
-                                      print("clear");
+                                      // print("clear");
                                       images.removeAt(i);
                                       setState(() {
 
@@ -1481,7 +1514,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       child: Row(
                         children: [
 
-                          Text("Type of Load :",
+                          Text("Type of Load : ",
                             style: TextStyle(
                                 color: Colors.black45,
                                 fontSize: SizeConfig.blockSizeHorizontal*3.5,
@@ -1489,7 +1522,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                 fontFamily: 'Roboto_Regular'
                             ),),
 
-                          Text(" Over Dimensional Load",
+                          Text(typeLoad,
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: SizeConfig.blockSizeHorizontal*3.7,
@@ -1508,7 +1541,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
                           Padding(
                             padding: EdgeInsets.only(left: parentWidth*0.02),
-                            child: Text("10 Ton(s)",
+                            child: Text("${quantityLoadController.text} $loadUnits",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: SizeConfig.blockSizeHorizontal*3.7,
@@ -1525,13 +1558,17 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       padding: EdgeInsets.only(left: parentWidth*0.05,
                       right: parentWidth*0.05,
                       top: parentHeight*0.01),
-                      child: Text("Lorem Ipsum is simply dummy text of the printing and typesetting.",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: SizeConfig.blockSizeHorizontal*3.0,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Roboto_Regular'
-                        ),),
+                      child: Row(
+                        children: [
+                          Text(descriptionLoadController.text,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Roboto_Regular'
+                            ),),
+                        ],
+                      ),
                     ),
 
                     SizedBox(
@@ -1907,6 +1944,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               if(mounted){
                                                 setState(() {
                                                   tyreName = "6 Tyre";
+                                                  carringCapacity = "18500";
                                                 });
                                               }
                                             },
@@ -1971,6 +2009,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               if(mounted){
                                                 setState(() {
                                                   tyreName = "10 Tyre";
+                                                  carringCapacity = "28000";
                                                 });
                                               }
                                             },
@@ -2035,6 +2074,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               if(mounted){
                                                 setState(() {
                                                   tyreName = "12 Tyre";
+                                                  carringCapacity = "35000";
                                                 });
                                               }
                                             },
@@ -2099,6 +2139,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               if(mounted){
                                                 setState(() {
                                                   tyreName = "14 Tyre";
+                                                  carringCapacity = "42000";
                                                 });
                                               }
                                             },
@@ -2163,6 +2204,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               if(mounted){
                                                 setState(() {
                                                   tyreName = "16 Tyre";
+                                                  carringCapacity = "47500";
                                                 });
                                               }
                                             },
@@ -2392,6 +2434,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   if(mounted){
                                                     setState(() {
                                                       trailerTyreName = "14 Tyre";
+                                                      carringCapacity = "28500";
                                                     });
                                                   }
                                                 },
@@ -2456,6 +2499,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   if(mounted){
                                                     setState(() {
                                                       trailerTyreName = "16 Tyre";
+                                                      carringCapacity = "42500";
                                                     });
                                                   }
                                                 },
@@ -2520,6 +2564,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   if(mounted){
                                                     setState(() {
                                                       trailerTyreName = "18 Tyre";
+                                                      carringCapacity = "45500";
                                                     });
                                                   }
                                                 },
@@ -2584,6 +2629,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   if(mounted){
                                                     setState(() {
                                                       trailerTyreName = "22 Tyre";
+                                                      carringCapacity = "55000";
                                                     });
                                                   }
                                                 },
@@ -2662,21 +2708,21 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
                               Padding(
                                 padding: EdgeInsets.only(left: parentWidth*0.05),
-                                child:vehicleType == 1 || vehicleType == 2 ?
-                                Text(tyreTypes == 0 ? "Carrying Capacity" :
+                                child:/*vehicleType == 1 || vehicleType == 2 ?*/
+                                Text(/*tyreTypes == 0 ? "Carrying Capacity" :
                                 tyreTypes == 1 ? "18,500" :
                                 tyreTypes == 2 ? "28,000" :
                                 tyreTypes == 3 ? "35,000" :
                                 tyreTypes == 4 ? "42,000" :
                                 tyreTypes == 5 ? "47,500" :
-                                "50,000",
+                                "50,000"*/carringCapacity,
                                   style: TextStyle(
-                                      color:tyreTypes == 0 ? Colors.black26 : CommonColor.BLACK_COLOR,
+                                      color:carringCapacity.isEmpty ? Colors.black26 : CommonColor.BLACK_COLOR,
                                       fontWeight: FontWeight.w400,
                                       fontSize: SizeConfig.blockSizeHorizontal*4.0,
                                       fontFamily: 'Roboto_Regular'
                                   ),)
-                                : Text(trailerTyreTypes == 0 ? "Carrying Capacity" :
+                                /*: Text(trailerTyreTypes == 0 ? "Carrying Capacity" :
                                 trailerTyreTypes == 1 ? "28,500" :
                                 trailerTyreTypes == 2 ? "42,500" :
                                 trailerTyreTypes == 3 ? "45,500" :
@@ -2686,7 +2732,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       fontWeight: FontWeight.w400,
                                       fontSize: SizeConfig.blockSizeHorizontal*4.0,
                                       fontFamily: 'Roboto_Regular'
-                                  ),),
+                                  ),),*/
                               ),
 
                               Padding(
@@ -2833,9 +2879,10 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               children: [
                                 Expanded(
                                   child: Padding(
-                                    padding: EdgeInsets.only(right: parentWidth * 0.15),
+                                    padding: EdgeInsets.only(right: parentWidth * 0.5),
                                     child: Container(
                                       height: parentHeight*0.06,
+                                      color: Colors.transparent,
                                       child: TextFormField(
                                         controller: lengthController,
                                         // focusNode: _cityFocus,
@@ -2862,46 +2909,10 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               borderSide:
                                               BorderSide(width: 1.0, color: Colors.black)),
                                         ),
-                                        textAlign: TextAlign.center,
                                       ),
                                     ),
                                   ),
                                 ),
-                               /* Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: parentWidth * 0.05),
-                                    child: Container(
-                                      height: parentHeight*0.06,
-                                      child: TextFormField(
-                                        controller: widthController,
-                                        // focusNode: _zipCodeFocus,
-                                        textInputAction: TextInputAction.next,
-                                        decoration: InputDecoration(
-                                          labelText: "Width(Ft.)",
-                                          labelStyle: TextStyle(
-                                              color: CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0),
-                                              fontSize: SizeConfig.blockSizeHorizontal * 3.5,
-                                              fontFamily: 'Roboto_Regular'),
-                                          border: const OutlineInputBorder(
-                                              borderSide:
-                                              BorderSide(width: 1.0, color: Colors.black)),
-                                          focusedBorder: const OutlineInputBorder(
-                                              borderSide:
-                                              BorderSide(width: 1.0, color: Colors.black)),
-                                        ),
-                                        textAlign: TextAlign.center,
-                                        onFieldSubmitted: (val){
-                                          if(mounted){
-                                            setState(() {
-                                              hideAllVehicleTypeField = !hideAllVehicleTypeField;
-                                              showAllVehicleTypes = !showAllVehicleTypes;
-                                            });
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ),*/
                               ],
                             ),
                           ),
@@ -2927,7 +2938,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       child: Container(
                         height: parentHeight*0.03,
                         width: parentWidth*0.15,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             color: CommonColor.SIGN_UP_TEXT_COLOR,
                             borderRadius: BorderRadius.only(
                                 bottomRight: Radius.circular(10),
@@ -3015,13 +3026,41 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             color: CommonColor.UNSELECT_TYPE_COLOR,
                           ),
 
-                          Text("1550 RLW(kg)",
+                          /*Text(" RLW(kg)",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: SizeConfig.blockSizeHorizontal*3.5,
                                 fontWeight: FontWeight.w400,
                                 fontFamily: 'Roboto_Regular'
-                            ),),
+                            ),),*/
+                          Padding(
+                            padding: EdgeInsets.only(left: parentWidth*0.0),
+                            child:/*vehicleType == 1 || vehicleType == 2 ?*/
+                            Text(/*tyreTypes == 0 ? "Carrying Capacity" :
+                            tyreTypes == 1 ? "18,500 RLW(kg)" :
+                            tyreTypes == 2 ? "28,000 RLW(kg)" :
+                            tyreTypes == 3 ? "35,000 RLW(kg)" :
+                            tyreTypes == 4 ? "42,000 RLW(kg)" :
+                            tyreTypes == 5 ? "47,500 RLW(kg)" :
+                            "50,000 RLW(kg)"*/"$carringCapacity RLW(kg)",
+                              style: TextStyle(
+                                  color:tyreTypes == 0 ? Colors.black26 : CommonColor.BLACK_COLOR,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                                  fontFamily: 'Roboto_Regular'
+                              ),)/*
+                                : Text(trailerTyreTypes == 0 ? "Carrying Capacity" :
+                            trailerTyreTypes == 1 ? "28,500 RLW(kg)" :
+                            trailerTyreTypes == 2 ? "42,500 RLW(kg)" :
+                            trailerTyreTypes == 3 ? "45,500 RLW(kg)" :
+                            trailerTyreTypes == 4 ? "55,000 RLW(kg)" : "55,500 RLW(kg)",
+                              style: TextStyle(
+                                  color:trailerTyreTypes == 0 ? Colors.black26 : CommonColor.BLACK_COLOR,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                                  fontFamily: 'Roboto_Regular'
+                              ),),*/
+                          ),
 
                           Container(
                             height: parentHeight*0.035,
@@ -3029,15 +3068,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             color: CommonColor.UNSELECT_TYPE_COLOR,
                           ),
 
-                        /*  Text("  L : 40 ft.",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: 'Roboto_Regular'
-                            ),),
-*/
-                          Text("W : 08 ft.",
+                          Text("L : ${lengthController.text} ft.",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: SizeConfig.blockSizeHorizontal*3.5,
@@ -3063,7 +3094,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                 ),
                                 children: [
                                   TextSpan(
-                                      text: ' 04',
+                                      text: ' ${vehicleNumberController.text}',
                                       style: TextStyle(
                                           fontSize: SizeConfig.blockSizeHorizontal*4.5,
                                           color: Colors.black,
@@ -3645,7 +3676,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                         // focusNode: _userNameFocus,
                                         textInputAction: TextInputAction.next,
                                         decoration: InputDecoration(
-                                          hintText:deliverPayment == 0.0 || totalFareController.text.isEmpty? "Amount" : "${deliverPayment.toStringAsFixed(1)}",
+                                          hintText:deliverPayment == 0.0 || totalFareController.text.isEmpty? "Amount" : deliverPayment.toStringAsFixed(1),
                                           hintStyle: TextStyle(
                                             color:deliverPayment == 0.0 || totalFareController.text.isEmpty ? CommonColor.UNSELECT_TYPE_COLOR.withOpacity(1.0) : Colors.black,
                                             fontWeight: FontWeight.w400,
@@ -3759,7 +3790,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       child: Container(
                         height: parentHeight*0.03,
                         width: parentWidth*0.15,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             color: CommonColor.SIGN_UP_TEXT_COLOR,
                             borderRadius: BorderRadius.only(
                                 bottomRight: Radius.circular(10),
@@ -3850,7 +3881,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                   ),
                                   children: [
                                     TextSpan(
-                                        text: ' 12000',
+                                        text: ' ${totalFareController.text}',
                                         style: TextStyle(
                                             fontSize: SizeConfig.blockSizeHorizontal*4.5,
                                             color: Colors.black54,
@@ -3898,7 +3929,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Company",
+                                  Text(advancePay == 1 ? "Company" : "Receiver",
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: SizeConfig.blockSizeHorizontal*3.7,
@@ -3910,7 +3941,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                     width: parentWidth*0.003,
                                     color: CommonColor.UNSELECT_TYPE_COLOR,
                                   ),
-                                  Text("Online",
+                                  Text(advPay == 1 ? "Online" : "Cash",
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: SizeConfig.blockSizeHorizontal*3.7,
@@ -3931,7 +3962,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                   ),
                                   children: [
                                     TextSpan(
-                                        text: ' 6000',
+                                        text: ' $count',
                                         style: TextStyle(
                                             fontSize: SizeConfig.blockSizeHorizontal*4.5,
                                             color: Colors.black54,
@@ -3979,7 +4010,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Company",
+                                  Text(deliveryPay == 1 ? "Company" : "Receiver",
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: SizeConfig.blockSizeHorizontal*3.7,
@@ -3991,7 +4022,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                     width: parentWidth*0.003,
                                     color: CommonColor.UNSELECT_TYPE_COLOR,
                                   ),
-                                  Text("Cash",
+                                  Text(deliveryPayMethod,
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: SizeConfig.blockSizeHorizontal*3.7,
@@ -4012,7 +4043,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                   ),
                                   children: [
                                     TextSpan(
-                                        text: ' 6000',
+                                        text: ' ${100 - count}',
                                         style: TextStyle(
                                             fontSize: SizeConfig.blockSizeHorizontal*4.5,
                                             color: Colors.black54,
@@ -4046,7 +4077,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
       child: GestureDetector(
         onDoubleTap: (){},
         onTap: (){
-          showCupertinoDialog(
+        /*  showCupertinoDialog(
             context: context,
             barrierDismissible: true,
             builder: (context) {
@@ -4055,14 +4086,53 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                   duration: Duration(seconds: 2),
                   child: LoadPostSuccessDialog());
             },
+          );*/
+
+          print(DateTime(pickUpDate!.year, pickUpDate!.month, pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute).toIso8601String());
+          print(DateTime(pickUpDate!.year, pickUpDate!.month, pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute).toUtc());
+          print(DateTime(pickUpDate!.year, pickUpDate!.month, pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute).toLocal());
+          print(DateTime(pickUpDate!.year, pickUpDate!.month, pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute).toString());
+
+
+          print(pickUpTime);
+          print(pickUpDate);
+
+
+          createCompanyPost(
+            // widget.reciverName,
+            // widget.reciverPhone,
+            // widget.street,
+            // widget.city,
+            // widget.state,
+            // widget.country,
+            // widget.postalCode,
+            // widget.lat,
+            // widget.long,
+            // "$pickUpDate $pickUpTime",
+            // quantityLoadController.text,
+            // loadUnit == 1 ? "Tone(s)" : loadUnit == 2 ? "Kg(s)" : "",
+            // loadType == 1 ? "Pack Load" : loadType == 2 ? "Loose Load" : loadType == 3 ? "Over Dimensional Load" : "",
+            // lengthController.text,
+            // widthController.text,
+            // heightController.text,
+            // descriptionLoadController.text,
+            // vehicleType == 1 ? "Open Body" : vehicleType == 2 ? "Closed Body" : vehicleType == 3 ? "Trailer" : "",
+            // carringCapacity,
+            // vehicleNumberController.text,
+            // totalFareController.text,
+            // "$count",
+            // advancePay == 1 ? "Company" : advancePay == 2 ? "Receiver" : "",
+            // advPay == 1 ? "Online" : advPay == 2 ? "Cash" : "",
+            // "${100 - count}",
+            // deliveryPay == 1 ? "Company" : deliveryPay == 2 ? "Receiver" : "",
+            // deliverPay == 1 ? "Online" : deliverPay == 2 ? "Cash" : "",
           );
-          // next = 1;
         },
         child: Container(
           height: parentHeight*0.055,
           width: parentWidth*0.6,
           decoration: BoxDecoration(
-            color: submit == 0 ? CommonColor.LOAD_SUBMIT_COLOR : CommonColor.SIGN_UP_TEXT_COLOR,
+            color: submit == 0 || deliverPay == 0? CommonColor.LOAD_SUBMIT_COLOR : CommonColor.SIGN_UP_TEXT_COLOR,
             borderRadius: BorderRadius.circular(15)
           ),
           child: Center(
@@ -4078,4 +4148,171 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
     );
   }
 
+  Future<Map<String, dynamic>> createCompanyPost(
+      // String receiverName,
+      // String receiverPhone,
+      // String receiverStreet,
+      // String receiverCity,
+      // String receiverState,
+      // String receiverCountry,
+      // String receiverPostalCode,
+      // String receiverLat,
+      // String receiverLong,
+      // String pickUpDate,
+      // String totalLoad,
+      // String loadUnit,
+      // String loadType,
+      // String loadLength,
+      // String loadWidth,
+      // String loadHeight,
+      // String loadDescription,
+      // String vehicleType,
+      // String vehicleCapacity,
+      // String vehicleQuantity,
+      // String totalFare,
+      // String advancePayRatio,
+      // String advancePayBy,
+      // String advancePayMode,
+      // String deliveryPayRatio,
+      // String deliveryPayBy,
+      // String deliveryPayMode,
+      ) async {
+
+
+/*
+    print(receiverName);
+    print(receiverPhone);
+    print(receiverStreet);
+    print(receiverCity);
+    print(receiverState);
+    print(receiverCountry);
+    print(receiverPostalCode);
+    print(receiverLat);
+    print(receiverLong);
+    print(pickUpDate);
+    print(totalLoad);
+    print(loadUnit);
+    print(loadType);
+    print(loadLength);
+    print(loadWidth);
+    print(loadHeight);
+    print(loadDescription);
+    print(vehicleType);
+    print(vehicleCapacity);
+    print(vehicleQuantity);
+    print(totalFare);
+    print(advancePayRatio);
+    print(advancePayBy);
+    print(advancePayMode);
+    print(deliveryPayRatio);
+    print(deliveryPayBy);
+    print(deliveryPayMode);
+*/
+
+
+    String url = ApiConstants().baseUrl + ApiConstants().createCompanyPost;
+
+    print(url);
+
+    String? sessionToken = GetStorage().read<String>(
+        ConstantData.userAccessToken);
+
+    print(sessionToken);
+
+    String? pickUpAddressId = GetStorage().read<String>(
+        ConstantData.pickupAddressId);
+
+    print(pickUpAddressId);
+
+    try {
+      print(vehicleLengthController.text);
+      print("Hii");
+
+
+      final sendingData = {
+        "pickup": "647876965d0941849900a6fa",
+        "receiver": {
+          "name": widget.reciverName,
+          "phone": widget.reciverPhone,
+          "address": {
+            "street": widget.street,
+            "city": widget.city,
+            "state": widget.state,
+            "country": widget.country,
+            "postalCode": widget.postalCode
+          },
+          "coordinate": {
+            "latitude": widget.lat,
+            "longitude": widget.long,
+          }
+        },
+        "pickupDate": DateTime(pickUpDate!.year, pickUpDate!.month, pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute).toIso8601String(),
+        "loadDetail": {
+          "load": int.parse(quantityLoadController.text),
+          "loadUnit": loadUnit == 1 ? "Ton" : loadUnit == 2 ? "K.G." : "",
+          "loadType": loadType == 1 ? "Pack Load" : loadType == 2 ? "Loose Load" : loadType == 3 ? "Over Load" : "",
+          "loadSize": {
+            "length": vehicleLengthController.text.isEmpty ? "0" : vehicleLengthController.text,
+            "width": widthController.text.isEmpty ? "0" : widthController.text,
+            "height":heightController.text.isEmpty ? "0" : heightController.text,
+          },
+          "description": descriptionLoadController.text
+        },
+        "vehicle": {
+          "vehicleType": vehicleType == 1 ? "Open Body" : vehicleType == 2 ? "Closed Body" : vehicleType == 3 ? "Trailor" : "",
+          "capacity": "${int.parse(carringCapacity)} RLW, KG",
+          "quantity": int.parse(vehicleNumberController.text)
+
+        },
+        "fare": int.parse(totalFareController.text),
+        "advancePayment": {
+          "ratio": count,
+          "payBy": advancePay == 1 ? "COMPANY" : advancePay == 2 ? "RECEIVER" : "",
+          "mode": advPay == 1 ? "ONLINE" : advPay == 2 ? "CASH" : "",
+        },
+        "deliveryPayment": {
+          "ratio": 60,
+          "payBy": deliveryPay == 1 ? "COMPANY" : deliveryPay == 2 ? "RECEIVER" : "",
+          "mode":  deliverPay == 1 ? "ONLINE" : deliverPay == 2 ? "CASH" : "",
+        }
+      };
+
+      print(jsonEncode(sendingData));
+
+      Response response = await _dio.post<Map<String, dynamic>>(url,
+        data: sendingData,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $sessionToken',
+          },
+        ),
+      );
+      print("createCompanyPostSC --> ${response.statusCode}");
+      print("createCompanyPostData --> ${response.data}");
+
+
+      if(response.statusCode == 200){
+        showCupertinoDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) {
+            return const AnimatedOpacity(
+                opacity: 1.0,
+                duration: Duration(seconds: 2),
+                child: LoadPostSuccessDialog());
+          },
+        );
+      }
+
+      return response.data;
+    } on DioError catch (e) {
+      return e.response!.data;
+    }
+  }
+
 }
+
+
+
+
+

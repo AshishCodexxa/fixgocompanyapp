@@ -25,6 +25,7 @@ class ApiConstants {
 /////////////////////// Company Post Api ///////////////////////////////////////
 
 
+  String createCompanyPost = "post/";
   String companyAllPost = "post/?status=";
 
 

@@ -28,7 +28,9 @@ class DeliveryLocationScreen extends StatefulWidget {
     this.long = '',
     this.country = '',
     this.address = '',
-    this.personName = '', this.phoneNo = '', this.addresses = '', this.citys = '', this.states = '', this.pincodes = '',
+    this.personName = '', this.phoneNo = '',
+    this.addresses = '', this.citys = '',
+    this.states = '', this.pincodes = '',
     this.pickUpAddress = ''
   }) : super(key: key);
 
@@ -542,7 +544,19 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                         .showSnackBar(const SnackBar(content: Text("Please Enter valid Phone Number")));
                   }
                   else{
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => NewLoadScreenForm(deliveryAddress: widget.address, pickUpAddress: widget.pickUpAddress,)));
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => NewLoadScreenForm(
+                        deliveryAddress: widget.address,
+                      pickUpAddress: widget.pickUpAddress,
+                      reciverName: receiverNameController.text,
+                      reciverPhone: phoneNoController.text,
+                      street: addressController.text,
+                      city: cityController.text,
+                      postalCode: pinCodeController.text,
+                      lat: widget.lat,
+                      long: widget.long,
+                      state: stateController.text,
+                      country: "India",
+                    )));
                   }
 
 
@@ -551,7 +565,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                   height: SizeConfig.screenHeight*0.05,
                   width: SizeConfig.screenWidth*0.7,
                   decoration: BoxDecoration(
-                      color: CommonColor.LOAD_SUBMIT_COLOR,
+                      color: widget.long.isEmpty ? CommonColor.LOAD_SUBMIT_COLOR : CommonColor.SIGN_UP_TEXT_COLOR,
                       borderRadius: BorderRadius.circular(10)
                   ),
                   child: Center(

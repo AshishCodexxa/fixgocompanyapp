@@ -33,7 +33,7 @@ class _LoadPostSuccessDialogState extends State<LoadPostSuccessDialog> {
 
 
   void navigateParentPage() {
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> Dashboard()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Dashboard()));
   }
 
   @override
@@ -54,65 +54,47 @@ class _LoadPostSuccessDialogState extends State<LoadPostSuccessDialog> {
               borderRadius:  BorderRadius.all(Radius.circular(25.0)),
               //color: CommonColor.RED_COLOR,
             ),
-            child:  Stack(
-              alignment: Alignment.topRight,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
+            child:  Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
 
-                    Padding(
-                      padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.05),
-                      child: Image(image: AssetImage("assets/images/register_success_tick.png")),
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.02),
-                      child: Text("Successfully Posted ",
-                        style: TextStyle(
-                            color: CommonColor.SIGN_UP_TEXT_COLOR,
-                            fontSize: SizeConfig.blockSizeHorizontal*5.0,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Roboto_Medium'
-                        ),),
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.03),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Your Load Is Posted Successfully",
-                            style: TextStyle(
-                                color: CommonColor.BLACK_COLOR,
-                                fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: 'Roboto_Regular'
-                            ),),
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(
-                      height: SizeConfig.screenHeight*0.05,
-                    )
-
-                  ],
-                ),
                 Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: GestureDetector(
-                    onTap: (){
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      color: Colors.transparent,
-                      child: Icon(Icons.clear,
-                        color: Colors.black,),
-                    ),
+                  padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.05),
+                  child: Image(image: AssetImage("assets/images/register_success_tick.png")),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.02),
+                  child: Text("Successfully Posted ",
+                    style: TextStyle(
+                        color: CommonColor.SIGN_UP_TEXT_COLOR,
+                        fontSize: SizeConfig.blockSizeHorizontal*5.0,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'Roboto_Medium'
+                    ),),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.03),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Your Load Is Posted Successfully",
+                        style: TextStyle(
+                            color: CommonColor.BLACK_COLOR,
+                            fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Roboto_Regular'
+                        ),),
+                    ],
                   ),
+                ),
+
+                SizedBox(
+                  height: SizeConfig.screenHeight*0.05,
                 )
+
               ],
             ),
           ),
