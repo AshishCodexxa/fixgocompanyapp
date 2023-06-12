@@ -27,6 +27,7 @@ class ApiConstants {
 
   String createCompanyPost = "post/";
   String companyAllPost = "post/?status=";
+  String companyPostImagesUpload = "file";
 
 
 

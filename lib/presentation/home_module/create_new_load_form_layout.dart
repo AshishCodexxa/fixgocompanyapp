@@ -4088,17 +4088,26 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
             },
           );*/
 
-          print(DateTime(pickUpDate!.year, pickUpDate!.month, pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute).toIso8601String());
-          print(DateTime(pickUpDate!.year, pickUpDate!.month, pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute).toUtc());
-          print(DateTime(pickUpDate!.year, pickUpDate!.month, pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute).toLocal());
-          print(DateTime(pickUpDate!.year, pickUpDate!.month, pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute).toString());
+          // print(DateTime(pickUpDate!.year, pickUpDate!.month, pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute).toIso8601String());
+          // print(DateTime(pickUpDate!.year, pickUpDate!.month, pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute).toUtc());
+          // print(DateTime(pickUpDate!.year, pickUpDate!.month, pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute).toLocal());
+          // print(DateTime(pickUpDate!.year, pickUpDate!.month, pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute).toString());
 
 
-          print(pickUpTime);
-          print(pickUpDate);
+          // print(pickUpTime);
+          // print(pickUpDate);
+
+          // XFile? image;
+          //
+          // for(int i=0; i<images.length;i++){
+          //   image = images[i];
+          //   print(image);
+          // }
+
+          uploadImages();
 
 
-          createCompanyPost(
+         /* createCompanyPost(
             // widget.reciverName,
             // widget.reciverPhone,
             // widget.street,
@@ -4126,7 +4135,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
             // "${100 - count}",
             // deliveryPay == 1 ? "Company" : deliveryPay == 2 ? "Receiver" : "",
             // deliverPay == 1 ? "Online" : deliverPay == 2 ? "Cash" : "",
-          );
+          );*/
         },
         child: Container(
           height: parentHeight*0.055,
@@ -4147,6 +4156,44 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
       ),
     );
   }
+
+
+
+
+  Future<void> uploadImages() async {
+    Dio dio = Dio(); // Create a Dio instance
+
+    String url = ApiConstants().baseUrl + ApiConstants().companyPostImagesUpload;
+
+    String? sessionToken = GetStorage().read<String>(
+        ConstantData.userAccessToken);
+
+
+    for (XFile image in images) {
+      File file = File(image.path);
+
+      FormData formData = FormData.fromMap({
+        'file': await MultipartFile.fromFileSync(file.path),
+      });
+
+      try {
+      Response response =  await dio.post(url,
+            data: formData,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $sessionToken',
+            },
+          ),);
+        print('Image uploaded: ${image.path}');
+        print('Image uploaded: $response');
+      } catch (e) {
+        print('Failed to upload image: ${image.path}');
+        print(e);
+      }
+    }
+  }
+
+
 
   Future<Map<String, dynamic>> createCompanyPost(
       // String receiverName,
@@ -4227,6 +4274,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
     try {
       print(vehicleLengthController.text);
       print("Hii");
+      print("$images");
 
 
       final sendingData = {
@@ -4251,6 +4299,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
           "load": int.parse(quantityLoadController.text),
           "loadUnit": loadUnit == 1 ? "Ton" : loadUnit == 2 ? "K.G." : "",
           "loadType": loadType == 1 ? "Pack Load" : loadType == 2 ? "Loose Load" : loadType == 3 ? "Over Load" : "",
+          "goodsImage":images,
           "loadSize": {
             "length": vehicleLengthController.text.isEmpty ? "0" : vehicleLengthController.text,
             "width": widthController.text.isEmpty ? "0" : widthController.text,
