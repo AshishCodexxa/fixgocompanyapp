@@ -1,6 +1,8 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/data/api_constant/api_url.dart';
 import 'package:fixgocompanyapp/data/model/get_all_pending_post_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
@@ -73,6 +75,10 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
   int totalsFare = widget.postDetails[widget.postIndex].fare;
   double ratios = widget.postDetails[widget.postIndex].deliveryPayment.ratio / 100;
   deliveryPay = totalsFare * ratios;
+
+    for(int i = 0; i < widget.postDetails[widget.postIndex].loadDetail.goodsImage.length; i++)
+      print("${ApiConstants().uploadImageUrl}${widget.postDetails[widget.postIndex].loadDetail.goodsImage[i]}");
+
 
   }
 
@@ -941,73 +947,38 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
 
-                widget.postDetails[widget.postIndex].loadDetail.goodsImage.length == 0 ?
-                Container(
-                  height: parentHeight*0.074,
-                  width: parentWidth*0.172,
-                  decoration: BoxDecoration(
-                    color: CommonColor.LOAD_IMAGE_COLOR,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
-                          blurRadius: 7,
-                          spreadRadius: 3,
-                          offset: const Offset(2, 2.0))
-                    ],
-                  ),
-                )
-                    : Container(),
-
                 for(int i = 0; i < widget.postDetails[widget.postIndex].loadDetail.goodsImage.length; i++)
-
-                  Container(
-                    height: parentHeight*0.074,
-                    width: parentWidth*0.172,
-                    decoration: BoxDecoration(
-                      color: CommonColor.LOAD_IMAGE_COLOR,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.15),
-                            blurRadius: 7,
-                            spreadRadius: 3,
-                            offset: const Offset(2, 2.0))
-                      ],
-                    ),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Image(
+                        image: const AssetImage("assets/images/grid_loading.gif"),
+                        height: SizeConfig.screenHeight*.05,
+                        width: SizeConfig.screenWidth*.05,
+                      ),
+                      Container(
+                        height: parentHeight*0.074,
+                        width: parentWidth*0.172,
+                        decoration: BoxDecoration(
+                          // color: CommonColor.LOAD_IMAGE_COLOR,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: Colors.black.withOpacity(0.15),
+                                blurRadius: 7,
+                                spreadRadius: 3,
+                                offset: const Offset(2, 2.0))
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network("${ApiConstants().uploadImageUrl}${widget.postDetails[widget.postIndex].loadDetail.goodsImage[i]}",
+                          fit: BoxFit.cover,),
+                        ),
+                      ),
+                    ],
                   )
 
-                /*Container(
-                  height: parentHeight*0.074,
-                  width: parentWidth*0.172,
-                  decoration: BoxDecoration(
-                    color: CommonColor.LOAD_IMAGE_COLOR,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
-                          blurRadius: 7,
-                          spreadRadius: 3,
-                          offset: const Offset(2, 2.0))
-                    ],
-                  ),
-                ),
-
-                Container(
-                  height: parentHeight*0.074,
-                  width: parentWidth*0.172,
-                  decoration: BoxDecoration(
-                    color: CommonColor.LOAD_IMAGE_COLOR,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
-                          blurRadius: 7,
-                          spreadRadius: 3,
-                          offset: const Offset(2, 2.0))
-                    ],
-                  ),
-                ),*/
 
               ],
             ),

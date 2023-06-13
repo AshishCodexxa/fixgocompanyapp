@@ -4,6 +4,8 @@ class ApiConstants {
 
   String baseUrl = "http://170.64.186.168:5005/api/v1/";
 
+  String uploadImageUrl = "http://170.64.186.168:5005/api/v1/file/detail/";
+
 
 /////////////////////// User Authentication Api ////////////////////////////////
 
