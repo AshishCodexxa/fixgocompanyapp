@@ -40,6 +40,8 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
 
   String? passPickIndexAddress;
   String? passLastIndexAddress;
+  String? pickUpIndexDate;
+  String? pickUpIndexTime;
 
   @override
   void initState() {
@@ -703,6 +705,17 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                     passLastIndexAddress =
                     "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
 
+                    DateTime tempDate = DateFormat("yyyy-MM-dd").parse(items[index].pickupDate);
+                    var inputDate = DateTime.parse(tempDate.toString());
+                    var outputFormat = DateFormat('dd MMMM yyyy');
+                    pickUpIndexDate = outputFormat.format(inputDate);
+
+                    DateTime parseDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                        .parse(items[index].pickupDate);
+                    var inputTime = DateTime.parse(parseDate.toString());
+                    var inputFormat = DateFormat('hh:mm a');
+                    pickUpIndexTime = inputFormat.format(inputTime);
+
 
 
                     showCupertinoDialog(
@@ -715,8 +728,8 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                             child: LoadMoreInfoDialog(
                               postDetails: items,
                               postIndex: index,
-                              pickupDate: pickUpDate.toString(),
-                              pickupTime: pickUpTime.toString(),
+                              pickupDate: pickUpIndexDate.toString(),
+                              pickupTime: pickUpIndexTime.toString(),
                               pickupLocation: passPickIndexAddress.toString(),
                               finalLocation: passLastIndexAddress.toString(),
                             ));
