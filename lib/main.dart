@@ -39,11 +39,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  String name = GetStorage().read(ConstantData.userName);
-  String emailId = GetStorage().read(ConstantData.emailId);
-  String phoneNo = GetStorage().read(ConstantData.contactNo);
-  String accessToken = GetStorage().read(ConstantData.userAccessToken);
-
 
   @override
   void initState() {
@@ -91,12 +86,13 @@ class _MyHomePageState extends State<MyHomePage> {
   startTimer() {
     var durtaion = new Duration(seconds: 3);
     try {
+      String accessToken = GetStorage().read(ConstantData.userAccessToken);
 
       print("-----> $accessToken");
 
-      if (accessToken == null) {
+      if (accessToken.isEmpty) {
         return Timer(durtaion, navigateParentPage);
-      } else if (accessToken != null) {
+      } else if (accessToken.isNotEmpty) {
         return Timer(durtaion, navigateHomePage);
       }
     } catch (e) {

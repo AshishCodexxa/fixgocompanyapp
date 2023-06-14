@@ -154,14 +154,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
   bool isLoading = false;
 
-  AlertDialog alert = AlertDialog(
+/*  AlertDialog alert = AlertDialog(
     title: Text("Please wait a moment"),
     content: Column(
       children: [
         Text("Your Image Will Be Uploaded."),
       ],
     ),
-  );
+  );*/
 
   @override
   void initState() {
@@ -374,7 +374,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       child: GestureDetector(
                         onDoubleTap: () {},
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
@@ -426,7 +426,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                       child: GestureDetector(
                         onDoubleTap: () {},
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => DeliveryLocationScreen(
@@ -543,20 +543,36 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                 onTap: () async {
                   pickedDates = await showDatePicker(
                     context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime.now().subtract(const Duration(days: 1)),
+                    initialDate: DateTime.now().add(const Duration(days: 3)),
+                    firstDate: DateTime.now().add(const Duration(days: 3)),
                     lastDate: DateTime(2100),
                   );
 
-                  if (pickedDates != null) {
-                    // print(pickedDates);
-                    pickUpDate = pickedDates;
+                  pickUpDate = pickedDates;
+
+                  print(pickUpDate);
+                  setState(() {
+                    dateInput.text = pickUpDate.toString();
+                  });
+
+                  /*  if(pickedDates!.isBefore(DateTime.now())){
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(const SnackBar(
+                          content: Text(
+                              "Please Select After 2 Days Date of Current Date")));
+                    }else if(pickedDates!.isBefore(DateTime.now().add(Duration(days: 2)))){
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(const SnackBar(
+                          content: Text(
+                              "Please Select After")));
+                    }else{
+                      pickUpDate = pickedDates;
 
                     print(pickUpDate);
                     setState(() {
                       dateInput.text = pickUpDate.toString();
                     });
-                  } else {}
+                    }*/
                 },
                 child: Container(
                   width: parentWidth * 0.3,
@@ -769,7 +785,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       child: TextFormField(
                                         controller: quantityLoadController,
                                         // focusNode: _userNameFocus,
-                                        textInputAction: TextInputAction.next,
+                                        textInputAction: TextInputAction.done,
                                         decoration: InputDecoration(
                                           label: Text(
                                             "Qty. of Goods/Load",
@@ -1562,17 +1578,25 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            if (quantityLoadController.text.isEmpty ||
-                                loadUnit == 0) {
+                            if (quantityLoadController.text.isEmpty) {
                               loadError =
-                                  "Please Enter Quantity of Loads and Weight.";
+                                  "Please Enter Quantity of Loads";
                               if (mounted) {
                                 setState(() {
                                   loadErrorShow = true;
                                   hideLoadError();
                                 });
                               }
-                            } else if (loadType == 0) {
+                            } else if(loadUnit == 0){
+                              loadError =
+                              "Please Select Unit of Weight";
+                              if (mounted) {
+                                setState(() {
+                                  loadErrorShow = true;
+                                  hideLoadError();
+                                });
+                              }
+                            }  else if (loadType == 0) {
                               loadError = "Please Select Load Type.";
                               if (mounted) {
                                 setState(() {
@@ -3399,13 +3423,13 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
                             Padding(
                               padding: EdgeInsets.only(
-                                top: SizeConfig.screenHeight * 0.01,
+                                top: SizeConfig.screenHeight * 0.02,
                                 left: SizeConfig.screenWidth * 0.03,
                                 right: SizeConfig.screenWidth * 0.05,
                               ),
                               child: Row(
                                 children: [
-                                  SizedBox(
+                                /*  SizedBox(
                                     height: SizeConfig.screenHeight * 0.07,
                                     width: SizeConfig.screenWidth * 0.07,
                                     child: Column(
@@ -3430,7 +3454,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                         ),
                                       ],
                                     ),
-                                  ),
+                                  ),*/
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -3456,9 +3480,10 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             ),
 
                             Visibility(
-                              visible: lengthWidthVehicle,
+                              // visible: lengthWidthVehicle,
                               child: Padding(
                                 padding: EdgeInsets.only(
+                                    top:parentHeight*0.007,
                                     left: parentWidth * 0.05,
                                     right: parentWidth * 0.05),
                                 child: Row(
@@ -3474,7 +3499,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                             controller: lengthController,
                                             // focusNode: _cityFocus,
                                             textInputAction:
-                                                TextInputAction.next,
+                                                TextInputAction.done,
                                             decoration: InputDecoration(
                                               label: RichText(
                                                 text: TextSpan(
@@ -3532,16 +3557,16 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                   hideVehicleError();
                                 });
                               }
-                            } /*else if (tyreTypes == 0) {
-                              vehicleError = "Please Select Type of Tyre.";
+                            }else if (vehicleNumberController.text.isEmpty) {
+                              vehicleError = "Please add number of Vehicles";
                               if (mounted) {
                                 setState(() {
                                   vehicleErrorShow = true;
                                   hideVehicleError();
                                 });
                               }
-                            }*/ else if (vehicleNumberController.text.isEmpty) {
-                              vehicleError = "Please add number of Vehicles";
+                            }else if (lengthController.text.isEmpty) {
+                              vehicleError = "Please Add Length of Vehicle.";
                               if (mounted) {
                                 setState(() {
                                   vehicleErrorShow = true;
@@ -4163,6 +4188,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                           .withOpacity(1.0)
                                                       : Colors.black,
                                                   fontWeight: FontWeight.w400,
+                                                  fontFamily: 'Roboto_Medium',
                                                   fontSize: SizeConfig
                                                           .blockSizeHorizontal *
                                                       6.0,
@@ -4172,7 +4198,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                     right: parentWidth * 0.05,
                                                     bottom:
                                                         parentHeight * 0.016),
-                                                enabledBorder:
+                                                /*enabledBorder:
                                                     const UnderlineInputBorder(
                                                         borderSide: BorderSide(
                                                             color: Colors
@@ -4181,7 +4207,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                     const UnderlineInputBorder(
                                                         borderSide: BorderSide(
                                                             color: Colors
-                                                                .transparent)),
+                                                                .transparent))*/
+                                                border: InputBorder.none,
                                               ),
                                             ),
                                           ),
@@ -4468,6 +4495,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                           .withOpacity(1.0)
                                                       : Colors.black,
                                                   fontWeight: FontWeight.w400,
+                                                  fontFamily: 'Roboto_Medium',
                                                   fontSize: SizeConfig
                                                           .blockSizeHorizontal *
                                                       6.0,
@@ -4477,7 +4505,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                     right: parentWidth * 0.05,
                                                     bottom:
                                                         parentHeight * 0.016),
-                                                enabledBorder:
+                                              /*  enabledBorder:
                                                     const UnderlineInputBorder(
                                                         borderSide: BorderSide(
                                                             color: Colors
@@ -4486,7 +4514,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                     const UnderlineInputBorder(
                                                         borderSide: BorderSide(
                                                             color: Colors
-                                                                .transparent)),
+                                                                .transparent)),*/
+                                                border: InputBorder.none,
                                               ),
                                             ),
                                           ),
@@ -4864,7 +4893,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                             fontFamily: "Roboto_Regular"),
                                         children: [
                                           TextSpan(
-                                              text: ' $count',
+                                              text: ' ${((count / 100) * fareVal).toStringAsFixed(1)}',
                                               style: TextStyle(
                                                   fontSize: SizeConfig
                                                           .blockSizeHorizontal *
@@ -4962,7 +4991,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                             fontFamily: "Roboto_Regular"),
                                         children: [
                                           TextSpan(
-                                              text: ' ${100 - count}',
+                                              text: ' ${deliverPayment.toStringAsFixed(1)}',
                                               style: TextStyle(
                                                   fontSize: SizeConfig
                                                           .blockSizeHorizontal *
@@ -5049,16 +5078,22 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
           //   print(image);
           // }
 
-          if (submit == 1) {
-            if (images.length == 0) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text("Minimum 1 Load Image must be required")));
-            } else {
-              uploadImages().then((value) {
-                createCompanyPost();
-              });
+
+          if(submit == 1){
+            if (isLoading == false) {
+              print("One Time");
+
+              if(mounted){
+                setState(() {
+                  isLoading = true;
+                  uploadImages().then((value) {
+                    createCompanyPost();
+                  });
+                });
+              }
             }
           }
+
 
          /* showDialog(
             context: context,
@@ -5128,8 +5163,6 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
     String url =
         ApiConstants().baseUrl + ApiConstants().companyPostImagesUpload;
-
-    isLoading = true;
 
     String? sessionToken =
         GetStorage().read<String>(ConstantData.userAccessToken);
@@ -5239,7 +5272,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
     String? pickUpAddressId =
         GetStorage().read<String>(ConstantData.pickupAddressId);
 
-    print(pickUpAddressId);
+    print("pickUpAddressId $pickUpAddressId");
 
     try {
       print(vehicleLengthController.text);
@@ -5247,7 +5280,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
       print("$images");
 
       final sendingData = {
-        "pickup": "647876965d0941849900a6fa",
+        "pickup": pickUpAddressId,
         "receiver": {
           "name": widget.reciverName,
           "phone": widget.reciverPhone,
@@ -5323,7 +5356,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                   : "",
         },
         "deliveryPayment": {
-          "ratio": 60,
+          "ratio": 100 - count,
           "payBy": deliveryPay == 1
               ? "COMPANY"
               : deliveryPay == 2

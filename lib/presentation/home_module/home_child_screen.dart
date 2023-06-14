@@ -34,6 +34,11 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
   String? pickUpLocation;
   String? finalLocation;
 
+  String? passPickIndexAddress;
+  String? passLastIndexAddress;
+  String? pickUpIndexDate;
+  String? pickUpIndexTime;
+
   @override
   void initState() {
     super.initState();
@@ -615,11 +620,13 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
     var inputCreateFormat = DateFormat('hh:mm a');
     createPostTime = inputCreateFormat.format(inputCreateTime);
 
-    pickUpLocation =
-        "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
+    pickUpLocation = "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
+
+
+    print(pickUpLocation);
 
     finalLocation =
-        "${items[index].receiver.address.street},   ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
+        "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
 
     return Padding(
       padding: EdgeInsets.only(top: parentHeight * 0.015),
@@ -887,6 +894,27 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
+
+                    passPickIndexAddress = "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
+
+
+                    print(passPickIndexAddress);
+
+                    passLastIndexAddress =
+                    "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
+
+
+                    DateTime tempDate = DateFormat("yyyy-MM-dd").parse(items[index].pickupDate);
+                    var inputDate = DateTime.parse(tempDate.toString());
+                    var outputFormat = DateFormat('dd MMMM yyyy');
+                    pickUpIndexDate = outputFormat.format(inputDate);
+
+                    DateTime parseDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                        .parse(items[index].pickupDate);
+                    var inputTime = DateTime.parse(parseDate.toString());
+                    var inputFormat = DateFormat('hh:mm a');
+                    pickUpIndexTime = inputFormat.format(inputTime);
+
                     showCupertinoDialog(
                       context: context,
                       barrierDismissible: true,
@@ -897,10 +925,10 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                             child: LoadMoreInfoDialog(
                               postDetails: items,
                               postIndex: index,
-                              pickupDate: pickUpDate.toString(),
-                              pickupTime: pickUpTime.toString(),
-                              pickupLocation: pickUpLocation.toString(),
-                              finalLocation: finalLocation.toString(),
+                              pickupDate: pickUpIndexDate.toString(),
+                              pickupTime: pickUpIndexTime.toString(),
+                              pickupLocation: passPickIndexAddress.toString(),
+                              finalLocation: passLastIndexAddress.toString(),
                             ));
                       },
                     );

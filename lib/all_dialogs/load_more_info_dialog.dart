@@ -47,7 +47,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
     'Deliverd',
   ];
 
-  final int _processIndex = 0;
+  int _processIndex = 0;
 
   Color getColor(int index) {
     if (index == _processIndex) {
@@ -76,8 +76,25 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
   double ratios = widget.postDetails[widget.postIndex].deliveryPayment.ratio / 100;
   deliveryPay = totalsFare * ratios;
 
-    for(int i = 0; i < widget.postDetails[widget.postIndex].loadDetail.goodsImage.length; i++)
-      print("${ApiConstants().uploadImageUrl}${widget.postDetails[widget.postIndex].loadDetail.goodsImage[i]}");
+  if(widget.postDetails[widget.postIndex].status == "PENDING"){
+    setState(() {
+      _processIndex = 0;
+    });
+  }else if(widget.postDetails[widget.postIndex].status == "ACCEPTED"){
+    setState(() {
+      _processIndex = (_processIndex + 1) % _processes.length ;
+    });
+  }else if(widget.postDetails[widget.postIndex].status == "IN_TRANSIT"){
+    setState(() {
+      _processIndex = (_processIndex + 2) % _processes.length ;
+    });
+  }else if(widget.postDetails[widget.postIndex].status == "COMPLETED"){
+    setState(() {
+      _processIndex = (_processIndex + 3) % _processes.length ;
+    });
+  }
+
+
 
 
   }
@@ -98,7 +115,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
             borderRadius: BorderRadius.circular(15.0),
           ),
           child:  Container(
-            height: SizeConfig.screenHeight*0.94,
+            height: SizeConfig.screenHeight*0.96,
             decoration:  const BoxDecoration(
               borderRadius:  BorderRadius.all(Radius.circular(25.0)),
               //color: CommonColor.RED_COLOR,
@@ -417,7 +434,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
 
-                Text("${widget.postDetails[widget.postIndex].loadDetail.loadType}",
+                Text(widget.postDetails[widget.postIndex].loadDetail.loadType,
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: SizeConfig.blockSizeHorizontal*3.2,
@@ -432,7 +449,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Text("${widget.postDetails[widget.postIndex].loadDetail.load} Ton(s)",
+                        child: Text("${widget.postDetails[widget.postIndex].loadDetail.load} ${widget.postDetails[widget.postIndex].loadDetail.loadUnit}",
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: SizeConfig.blockSizeHorizontal*3.2,
@@ -481,7 +498,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Text("${widget.postDetails[widget.postIndex].loadDetail.description}",
+                        child: Text(widget.postDetails[widget.postIndex].loadDetail.description,
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: SizeConfig.blockSizeHorizontal*3.0,
@@ -543,7 +560,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
 
-                Text("${widget.pickupDate}",
+                Text(widget.pickupDate,
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: SizeConfig.blockSizeHorizontal*3.2,
@@ -558,7 +575,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Text("${widget.pickupTime}",
+                        child: Text(widget.pickupTime,
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: SizeConfig.blockSizeHorizontal*3.2,
@@ -620,7 +637,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
 
-                Text("${widget.postDetails[widget.postIndex].vehicle.vehicleType}",
+                Text(widget.postDetails[widget.postIndex].vehicle.vehicleType,
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: SizeConfig.blockSizeHorizontal*3.2,
@@ -712,7 +729,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Text("L x W - ${widget.postDetails[widget.postIndex].vehicle.length} x ${widget.postDetails[widget.postIndex].vehicle.width} (Fts) ",
+                        child: Text("Length - ${widget.postDetails[widget.postIndex].vehicle.length} (Fts) ",
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: SizeConfig.blockSizeHorizontal*3.2,
@@ -913,28 +930,6 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                     ],
                   ),
                 ),
-               /* Container(
-                  width: SizeConfig.screenWidth*0.3,
-                  height: SizeConfig.screenHeight*0.04,
-                  decoration: BoxDecoration(
-                    color: CommonColor.LOAD_SUBMIT_COLOR,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-
-                      Text("Vehicle",
-                        style: TextStyle(
-                            color: CommonColor.BLACK_COLOR,
-                            fontSize: SizeConfig.blockSizeHorizontal*3.2,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Roboto_Medium'
-                        ),),
-
-                    ],
-                  ),
-                ),*/
               ],
             ),
           ),
@@ -944,39 +939,42 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                 left: parentWidth*0.1,
                 right: parentWidth*0.1),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
 
                 for(int i = 0; i < widget.postDetails[widget.postIndex].loadDetail.goodsImage.length; i++)
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Image(
-                        image: const AssetImage("assets/images/grid_loading.gif"),
-                        height: SizeConfig.screenHeight*.05,
-                        width: SizeConfig.screenWidth*.05,
-                      ),
-                      Container(
-                        height: parentHeight*0.074,
-                        width: parentWidth*0.172,
-                        decoration: BoxDecoration(
-                          // color: CommonColor.LOAD_IMAGE_COLOR,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: Colors.black.withOpacity(0.15),
-                                blurRadius: 7,
-                                spreadRadius: 3,
-                                offset: const Offset(2, 2.0))
-                          ],
+                  Padding(
+                    padding: EdgeInsets.only(left: parentWidth*0.03),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Image(
+                          image: const AssetImage("assets/images/grid_loading.gif"),
+                          height: SizeConfig.screenHeight*.05,
+                          width: SizeConfig.screenWidth*.05,
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network("${ApiConstants().uploadImageUrl}${widget.postDetails[widget.postIndex].loadDetail.goodsImage[i]}",
-                          fit: BoxFit.cover,),
+                        Container(
+                          height: parentHeight*0.074,
+                          width: parentWidth*0.172,
+                          decoration: BoxDecoration(
+                            // color: CommonColor.LOAD_IMAGE_COLOR,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.15),
+                                  blurRadius: 7,
+                                  spreadRadius: 3,
+                                  offset: const Offset(2, 2.0))
+                            ],
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network("${ApiConstants().uploadImageUrl}${widget.postDetails[widget.postIndex].loadDetail.goodsImage[i]}",
+                            fit: BoxFit.cover,),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   )
 
 
@@ -1013,6 +1011,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
               ),
             ),
           ),
+
 
         ],
       ),

@@ -38,6 +38,9 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
   String? pickUpLocation;
   String? finalLocation;
 
+  String? passPickIndexAddress;
+  String? passLastIndexAddress;
+
   @override
   void initState() {
     super.initState();
@@ -691,6 +694,17 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
+
+                    passPickIndexAddress = "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
+
+
+                    print(passPickIndexAddress);
+
+                    passLastIndexAddress =
+                    "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
+
+
+
                     showCupertinoDialog(
                       context: context,
                       barrierDismissible: true,
@@ -703,8 +717,8 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                               postIndex: index,
                               pickupDate: pickUpDate.toString(),
                               pickupTime: pickUpTime.toString(),
-                              pickupLocation: pickUpLocation.toString(),
-                              finalLocation: finalLocation.toString(),
+                              pickupLocation: passPickIndexAddress.toString(),
+                              finalLocation: passLastIndexAddress.toString(),
                             ));
                       },
                     );
