@@ -389,11 +389,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
             padding: EdgeInsets.only(bottom: SizeConfig.screenHeight*0.1),
             child: Visibility(
                 visible: isLoading,
-                child: Image(
-                  image: const AssetImage("assets/images/grid_loading.gif"),
-                  height: SizeConfig.screenHeight*.1,
-                  width: SizeConfig.screenWidth*.1,
-                )
+                child: CircularProgressIndicator()
             ),
           ),
         ],

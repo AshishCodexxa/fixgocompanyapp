@@ -235,8 +235,15 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
                                       height: SizeConfig.screenHeight*0.04,
                                       decoration: BoxDecoration(
                                           color: CommonColor.SIGN_UP_TEXT_COLOR,
-                                          borderRadius: BorderRadius.circular(20),
-                                        border: Border.all(color: Colors.black)
+                                          borderRadius: BorderRadius.circular(7),
+                                        boxShadow: <BoxShadow>[
+                                          BoxShadow(
+                                              color: Colors.black.withOpacity(0.4),
+                                              blurRadius: 5,
+                                              spreadRadius: 1,
+                                              offset: const Offset(1, 1)),
+                                        ],
+                                        // border: Border.all(color: Colors.black)
                                       ),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.center,

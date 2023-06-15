@@ -33,9 +33,15 @@ class _ProfileChildScreenState extends State<ProfileChildScreen> {
 
     if(mounted){
       setState(() {
-        name = GetStorage().read(ConstantData.userName);
-        emailId = GetStorage().read(ConstantData.emailId);
-        phoneNo = GetStorage().read(ConstantData.contactNo);
+
+        if(GetStorage().read(ConstantData.userName) != null && GetStorage().read(ConstantData.emailId) != null &&
+            GetStorage().read(ConstantData.contactNo) != null){
+          name = GetStorage().read(ConstantData.userName);
+          emailId = GetStorage().read(ConstantData.emailId);
+          phoneNo = GetStorage().read(ConstantData.contactNo);
+        }
+
+
       });
     }
 
@@ -78,7 +84,7 @@ class _ProfileChildScreenState extends State<ProfileChildScreen> {
 
                         Padding(
                           padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.01),
-                          child: Text(name == null ? "User Name" : name,
+                          child: Text(name.isEmpty ? "User Name" : name,
                           style: TextStyle(
                             color: Colors.black,
                             fontFamily: 'Roboto_Regular',
@@ -89,7 +95,7 @@ class _ProfileChildScreenState extends State<ProfileChildScreen> {
 
                         Padding(
                           padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.015),
-                          child: Text(emailId == null ? "Email Id" : emailId,
+                          child: Text(emailId.isEmpty ? "Email Id" : emailId,
                             style: TextStyle(
                                 color: Colors.black,
                                 fontFamily: 'Roboto_Regular',
@@ -106,7 +112,7 @@ class _ProfileChildScreenState extends State<ProfileChildScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(phoneNo == null ? "Phone No." : phoneNo,
+                                Text(phoneNo.isEmpty ? "Phone No." : phoneNo,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontFamily: 'Roboto_Regular',

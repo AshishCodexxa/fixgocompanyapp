@@ -154,14 +154,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
   bool isLoading = false;
 
-/*  AlertDialog alert = AlertDialog(
-    title: Text("Please wait a moment"),
-    content: Column(
-      children: [
-        Text("Your Image Will Be Uploaded."),
-      ],
-    ),
-  );*/
+  // int next = 0;
+
 
   @override
   void initState() {
@@ -279,11 +273,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image(
-                  image: const AssetImage("assets/images/grid_loading.gif"),
-                  height: SizeConfig.screenHeight*.1,
-                  width: SizeConfig.screenWidth*.1,
-                ),
+                CircularProgressIndicator(),
                 Padding(
                   padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.03),
                   child: Text("Please wait a moment.\nYour post will be created.",
@@ -1572,11 +1562,11 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               ),
                             ),
                             SizedBox(
-                              height: parentHeight * 0.025,
+                              height: parentHeight * 0.02,
                             )
                           ],
                         ),
-                        GestureDetector(
+                        /*GestureDetector(
                           onTap: () {
                             if (quantityLoadController.text.isEmpty) {
                               loadError =
@@ -1642,7 +1632,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               ),
                             ),
                           ),
-                        )
+                        )*/
                       ],
                     ),
                   ),
@@ -1675,6 +1665,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       showAllGoodsField = !showAllGoodsField;
                                       hideAllGoodsField = !hideAllGoodsField;
                                       submit = 0;
+                                      next = 0;
 
                                       if (vehicleDetails == true) {
                                         vehicleDetails = !vehicleDetails;
@@ -3547,7 +3538,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             )
                           ],
                         ),
-                        GestureDetector(
+                        /*GestureDetector(
                           onTap: () {
                             if (vehicleType == 0) {
                               vehicleError = "Please Select Vehicle Type.";
@@ -3605,7 +3596,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               ),
                             ),
                           ),
-                        )
+                        )*/
                       ],
                     ),
                   ),
@@ -3640,6 +3631,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       showAllVehicleTypes =
                                           !showAllVehicleTypes;
                                       submit = 0;
+                                      next = 1;
                                       if (paymentDetails == true) {
                                         paymentDetails = !paymentDetails;
                                       }
@@ -4633,7 +4625,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               ),
                             ],
                           ),
-                          GestureDetector(
+                         /* GestureDetector(
                             onTap: () {
                               if (mounted) {
                                 setState(() {
@@ -4710,7 +4702,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                 ),
                               ),
                             ),
-                          )
+                          )*/
                         ],
                       ),
                     ),
@@ -4746,6 +4738,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                         paymentFieldHide = !paymentFieldHide;
                                         paymentFieldShow = !paymentFieldShow;
                                         submit = 0;
+                                        next = 3;
                                       });
                                     }
                                   },
@@ -5052,31 +5045,144 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
       child: GestureDetector(
         onDoubleTap: () {},
         onTap: () {
-          /*  showCupertinoDialog(
-            context: context,
-            barrierDismissible: true,
-            builder: (context) {
-              return const AnimatedOpacity(
-                  opacity: 1.0,
-                  duration: Duration(seconds: 2),
-                  child: LoadPostSuccessDialog());
-            },
-          );*/
 
-          // print(DateTime(pickUpDate!.year, pickUpDate!.month, pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute).toIso8601String());
-          // print(DateTime(pickUpDate!.year, pickUpDate!.month, pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute).toUtc());
-          // print(DateTime(pickUpDate!.year, pickUpDate!.month, pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute).toLocal());
-          // print(DateTime(pickUpDate!.year, pickUpDate!.month, pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute).toString());
 
-          // print(pickUpTime);
-          // print(pickUpDate);
-
-          // XFile? image;
-          //
-          // for(int i=0; i<images.length;i++){
-          //   image = images[i];
-          //   print(image);
-          // }
+          if(next == 0){
+            if (quantityLoadController.text.isEmpty) {
+              loadError =
+              "Please Enter Quantity of Loads";
+              if (mounted) {
+                setState(() {
+                  loadErrorShow = true;
+                  hideLoadError();
+                });
+              }
+            } else if(loadUnit == 0){
+              loadError =
+              "Please Select Unit of Weight";
+              if (mounted) {
+                setState(() {
+                  loadErrorShow = true;
+                  hideLoadError();
+                });
+              }
+            }  else if (loadType == 0) {
+              loadError = "Please Select Load Type.";
+              if (mounted) {
+                setState(() {
+                  loadErrorShow = true;
+                  hideLoadError();
+                });
+              }
+            } else if (images.isEmpty) {
+              loadError = "One load image must be required.";
+              if (mounted) {
+                setState(() {
+                  loadErrorShow = true;
+                  hideLoadError();
+                });
+              }
+            } else {
+              if (mounted) {
+                setState(() {
+                  showAllGoodsField = !showAllGoodsField;
+                  hideAllGoodsField = !hideAllGoodsField;
+                  vehicleDetails = !vehicleDetails;
+                  next = 1;
+                });
+              }
+            }
+          }
+          else if(next == 1){
+            if (vehicleType == 0) {
+              vehicleError = "Please Select Vehicle Type.";
+              if (mounted) {
+                setState(() {
+                  vehicleErrorShow = true;
+                  hideVehicleError();
+                });
+              }
+            }else if (vehicleNumberController.text.isEmpty) {
+              vehicleError = "Please add number of Vehicles";
+              if (mounted) {
+                setState(() {
+                  vehicleErrorShow = true;
+                  hideVehicleError();
+                });
+              }
+            }else if (lengthController.text.isEmpty) {
+              vehicleError = "Please Add Length of Vehicle.";
+              if (mounted) {
+                setState(() {
+                  vehicleErrorShow = true;
+                  hideVehicleError();
+                });
+              }
+            } else {
+              if (mounted) {
+                setState(() {
+                  showAllVehicleTypes = !showAllVehicleTypes;
+                  hideAllVehicleTypeField =
+                  !hideAllVehicleTypeField;
+                  paymentDetails = !paymentDetails;
+                  print(paymentDetails);
+                  next = 2;
+                });
+              }
+            }
+          }
+          else if(next == 2){
+            if (totalFareController.text.isEmpty) {
+              paymentError =
+              "Please total fare amount must be required.";
+              if (mounted) {
+                setState(() {
+                  paymentErrorShow = true;
+                  hidePaymentError();
+                });
+              }
+            } else if (advancePay == 0) {
+              paymentError =
+              "Select Who's paid advance payment.";
+              if (mounted) {
+                setState(() {
+                  paymentErrorShow = true;
+                  hidePaymentError();
+                });
+              }
+            } else if (advPay == 0) {
+              paymentError =
+              "Select advance payment method.";
+              if (mounted) {
+                setState(() {
+                  paymentErrorShow = true;
+                  hidePaymentError();
+                });
+              }
+            } else if (deliveryPay == 0) {
+              paymentError =
+              "Select Who's paid deliver payment.";
+              if (mounted) {
+                setState(() {
+                  paymentErrorShow = true;
+                  hidePaymentError();
+                });
+              }
+            } else if (deliverPay == 0) {
+              paymentError =
+              "Select deliver payment method.";
+              if (mounted) {
+                setState(() {
+                  paymentErrorShow = true;
+                  hidePaymentError();
+                });
+              }
+            } else {
+              paymentFieldShow = !paymentFieldShow;
+              paymentFieldHide = !paymentFieldHide;
+              submit = 1;
+            }
+          }
 
 
           if(submit == 1){
@@ -5095,58 +5201,22 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
           }
 
 
-         /* showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return alert;
-            },
-          );*/
-
-          /* createCompanyPost(
-            // widget.reciverName,
-            // widget.reciverPhone,
-            // widget.street,
-            // widget.city,
-            // widget.state,
-            // widget.country,
-            // widget.postalCode,
-            // widget.lat,
-            // widget.long,
-            // "$pickUpDate $pickUpTime",
-            // quantityLoadController.text,
-            // loadUnit == 1 ? "Tone(s)" : loadUnit == 2 ? "Kg(s)" : "",
-            // loadType == 1 ? "Pack Load" : loadType == 2 ? "Loose Load" : loadType == 3 ? "Over Dimensional Load" : "",
-            // lengthController.text,
-            // widthController.text,
-            // heightController.text,
-            // descriptionLoadController.text,
-            // vehicleType == 1 ? "Open Body" : vehicleType == 2 ? "Closed Body" : vehicleType == 3 ? "Trailer" : "",
-            // carringCapacity,
-            // vehicleNumberController.text,
-            // totalFareController.text,
-            // "$count",
-            // advancePay == 1 ? "Company" : advancePay == 2 ? "Receiver" : "",
-            // advPay == 1 ? "Online" : advPay == 2 ? "Cash" : "",
-            // "${100 - count}",
-            // deliveryPay == 1 ? "Company" : deliveryPay == 2 ? "Receiver" : "",
-            // deliverPay == 1 ? "Online" : deliverPay == 2 ? "Cash" : "",
-          );*/
         },
         child: Container(
           height: parentHeight * 0.055,
           width: parentWidth * 0.6,
           decoration: BoxDecoration(
-              color: submit == 0 || deliverPay == 0
+              color: /*submit == 0 || deliverPay == 0
                   ? CommonColor.LOAD_SUBMIT_COLOR
-                  : CommonColor.SIGN_UP_TEXT_COLOR,
+                  : */CommonColor.SIGN_UP_TEXT_COLOR,
               borderRadius: BorderRadius.circular(15)),
           child: Center(
             child: Text(
-              "Submit",
+              next == 0 ? "Next" : next == 1 ? "Next" :"Submit",
               style: TextStyle(
-                  color: submit == 0
+                  color: /*submit == 0
                       ? CommonColor.LOAD_SUBMIT_TEXT_COLOR
-                      : CommonColor.WHITE_COLOR,
+                      : */CommonColor.WHITE_COLOR,
                   fontSize: SizeConfig.blockSizeHorizontal * 5.0,
                   fontFamily: 'Roboto_Bold'),
             ),
