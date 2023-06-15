@@ -77,7 +77,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
       userNameController.text = value['data']['name'];
       companyNameController.text = value['data']['companyName'];
-      emailController.text = value['data']['email'];
+      emailController.text = value['data']['email'] ?? "";
       // companyAddressController.text = value['data']['companyName'];
       landlineNumber = value['data']['landlines'];
       mobileNumber = value['data']['mobiles'];

@@ -424,8 +424,8 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                                                 0.003,
                                                             color:
                                                                 Colors.black12,
-                                                            child: Row(
-                                                              children: const [
+                                                            child: const Row(
+                                                              children: [
                                                                 Text(
                                                                   "hii",
                                                                   style: TextStyle(
@@ -560,7 +560,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
           ),
           Visibility(
               visible: isLoading,
-              child: CircularProgressIndicator()
+              child: const CircularProgressIndicator()
           ),
         ],
       ),
@@ -621,7 +621,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
     pickUpLocation = "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
 
 
-    print(pickUpLocation);
+    // print(pickUpLocation);
 
     finalLocation =
         "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
@@ -882,7 +882,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                       ),
                       children: [
                         TextSpan(
-                            text: '${items[index].loadDetail.load}',
+                            text: '${items[index].loadDetail.load} ${items[index].loadDetail.loadUnit}',
                             style: TextStyle(
                                 fontSize: SizeConfig.blockSizeHorizontal * 3.7,
                                 color: Colors.black,
@@ -896,7 +896,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                     passPickIndexAddress = "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
 
 
-                    print(passPickIndexAddress);
+                    // print(passPickIndexAddress);
 
                     passLastIndexAddress =
                     "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";

@@ -682,7 +682,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                       ),
                       children: [
                         TextSpan(
-                            text: '${items[index].loadDetail.load}',
+                            text: '${items[index].loadDetail.load} ${items[index].loadDetail.loadUnit}',
                             style: TextStyle(
                                 fontSize: SizeConfig.blockSizeHorizontal * 3.7,
                                 color: Colors.black,
