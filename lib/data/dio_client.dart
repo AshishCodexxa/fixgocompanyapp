@@ -250,7 +250,31 @@ class ApiClient {
   }
 
 
+  /*Future<Map<String, dynamic>> getAllBidsAgainstPostLimited(String postId) async {
 
+    String url = "${ApiConstants().baseUrl}post/bid/$postId/?limit=3";
+
+    String? sessionToken = GetStorage().read<String>(
+        ConstantData.userAccessToken);
+
+    try {
+      Response response = await _dio.get(
+        url,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $sessionToken',
+          },
+        ),
+      );
+
+      print("getAllBidsAgainstPostLimitedSC --> ${response.statusCode}");
+      print("getAllBidsAgainstPostLimitedData --> ${response.data}");
+
+      return response.data;
+    } on DioError catch (e) {
+      return e.response!.data;
+    }
+  }*/
 
 
 }

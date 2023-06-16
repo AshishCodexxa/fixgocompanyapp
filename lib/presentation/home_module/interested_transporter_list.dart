@@ -116,7 +116,7 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
                   ),
                   child: GestureDetector(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>TransporterProfile()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>TransporterProfile(transporterName: '', transporterLocation: '', transporterTrip: '', transporterRating: '',)));
                     },
                     child: Container(
                       color: Colors.transparent,

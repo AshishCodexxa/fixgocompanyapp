@@ -165,7 +165,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                                 ),
                                                 child: GestureDetector(
                                                   onTap: (){
-                                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const TransporterProfile()));
+                                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const TransporterProfile(transporterName: '', transporterLocation: '', transporterTrip: '', transporterRating: '',)));
                                                   },
                                                   child: Container(
                                                     color: Colors.transparent,

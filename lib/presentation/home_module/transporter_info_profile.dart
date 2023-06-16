@@ -6,7 +6,13 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 
 class TransporterProfile extends StatefulWidget {
-  const TransporterProfile({Key? key}) : super(key: key);
+
+  final String transporterName;
+  final String transporterLocation;
+  final String transporterTrip;
+  final String transporterRating;
+
+  const TransporterProfile({Key? key, required this.transporterName, required this.transporterLocation, required this.transporterTrip, required this.transporterRating}) : super(key: key);
 
   @override
   State<TransporterProfile> createState() => _TransporterProfileState();
@@ -131,7 +137,7 @@ class _TransporterProfileState extends State<TransporterProfile> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
 
-                    Text("Mahesh Transporter",
+                    Text(widget.transporterName ?? '',
                       style: TextStyle(
                           fontSize: SizeConfig.blockSizeHorizontal*4.0,
                           fontFamily: "Roboto_Medium",
@@ -215,7 +221,7 @@ class _TransporterProfileState extends State<TransporterProfile> {
                     Padding(
                       padding: EdgeInsets.only(top: parentWidth * 0.03),
                       child: RatingBar.builder(
-                        initialRating: 4.5,
+                        initialRating: double.parse(widget.transporterRating),
                         itemSize: 20,
                         glow: false,
                         minRating: 1,
@@ -225,7 +231,7 @@ class _TransporterProfileState extends State<TransporterProfile> {
                         itemCount: 5,
                         itemBuilder: (context, _) => const Icon(
                           Icons.star,
-                          color: Colors.black,
+                          color: CommonColor.SIGN_UP_TEXT_COLOR,
                         ),
                         onRatingUpdate: (rating) {
                           // myraiting = rating;
