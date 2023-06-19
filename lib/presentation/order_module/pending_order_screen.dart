@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:fixgocompanyapp/all_dialogs/load_more_info_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
@@ -35,6 +37,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
 
   bool isLoading = false;
   bool transportList = false;
+  bool transportEmptyDialog = false;
 
   final Dio _dio = Dio();
 
@@ -51,6 +54,20 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
   String? pickUpIndexTime;
 
   var bidData;
+
+
+  startTimer() {
+    var durtaion = new Duration(seconds: 2);
+    return Timer(durtaion, dialogHide);
+  }
+
+  void dialogHide() {
+    if(mounted){
+      setState(() {
+        transportEmptyDialog = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -131,20 +148,29 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                               children: [
                                 GestureDetector(
                                   onTap: (){
-                                    if(selectedIndex != index){
-                                      selectedIndex = index;
+                                    if(bidData.length != 0) {
+                                      if (selectedIndex != index) {
+                                        selectedIndex = index;
 
-                                      // print(selectedIndex);
-                                      if(mounted) {
-                                        setState(() {
+                                        // print(selectedIndex);
+                                        if (mounted) {
+                                          setState(() {
 
-                                        });
+                                          });
+                                        }
+                                      } else {
+                                        selectedIndex = -1;
+                                        if (mounted) {
+                                          setState(() {
+
+                                          });
+                                        }
                                       }
                                     }else{
-                                      selectedIndex = -1;
                                       if(mounted){
                                         setState(() {
-
+                                          transportEmptyDialog = true;
+                                          startTimer();
                                         });
                                       }
                                     }
@@ -558,327 +584,350 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
 
     return Padding(
       padding: EdgeInsets.only(top: parentHeight * 0.015),
-      child: Column(
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          Padding(
-            padding: EdgeInsets.only(right: SizeConfig.screenWidth * 0.05),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  "Time Left  23:59:59 hrs.",
-                  style: TextStyle(
-                      color: CommonColor.TO_AREA_COLOR,
-                      fontSize: SizeConfig.blockSizeHorizontal * 3.0,
-                      fontFamily: "Roboto_Medium",
-                      fontWeight: FontWeight.w400),
-                ),
-              ],
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
             children: [
+              Padding(
+                padding: EdgeInsets.only(right: SizeConfig.screenWidth * 0.05),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "Time Left  23:59:59 hrs.",
+                      style: TextStyle(
+                          color: CommonColor.TO_AREA_COLOR,
+                          fontSize: SizeConfig.blockSizeHorizontal * 3.0,
+                          fontFamily: "Roboto_Medium",
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: parentWidth * 0.05, top: parentHeight * 0.01),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              height: parentHeight * 0.01,
+                              width: parentWidth * 0.021,
+                              decoration: const BoxDecoration(
+                                  color: CommonColor.FROM_AREA_COLOR,
+                                  shape: BoxShape.circle),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: SizeConfig.screenWidth * 0.02),
+                              child: Container(
+                                width: parentWidth * 0.57,
+                                color: Colors.transparent,
+                                child: Text(
+                                  "$pickUpLocation",
+                                  style: TextStyle(
+                                      color: CommonColor.BLACK_COLOR,
+                                      fontSize:
+                                      SizeConfig.blockSizeHorizontal * 3.0,
+                                      fontFamily: "Roboto_Medium",
+                                      fontWeight: FontWeight.w400),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding:
+                          EdgeInsets.only(left: SizeConfig.screenWidth * 0.01),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: parentHeight * 0.013,
+                                width: parentWidth * 0.003,
+                                color: Colors.black,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              height: parentHeight * 0.01,
+                              width: parentWidth * 0.021,
+                              decoration: const BoxDecoration(
+                                  color: CommonColor.TO_AREA_COLOR,
+                                  shape: BoxShape.circle),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: parentWidth * 0.02),
+                              child: Container(
+                                width: parentWidth * 0.6,
+                                color: Colors.transparent,
+                                child: Text(
+                                  "$finalLocation",
+                                  style: TextStyle(
+                                      color: CommonColor.BLACK_COLOR,
+                                      fontSize:
+                                      SizeConfig.blockSizeHorizontal * 3.0,
+                                      fontFamily: "Roboto_Medium",
+                                      fontWeight: FontWeight.w400),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      right: parentWidth * 0.05,
+                    ),
+                    child: Column(
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                              text: '\u{20B9}',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                                fontSize: SizeConfig.blockSizeHorizontal * 3.7,
+                              ),
+                              children: [
+                                TextSpan(
+                                    text: ' ${items[index].fare}/-',
+                                    style: TextStyle(
+                                        fontSize:
+                                        SizeConfig.blockSizeHorizontal * 4.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold))
+                              ]),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
               Padding(
                 padding: EdgeInsets.only(
                     left: parentWidth * 0.05, top: parentHeight * 0.01),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          height: parentHeight * 0.01,
-                          width: parentWidth * 0.021,
-                          decoration: const BoxDecoration(
-                              color: CommonColor.FROM_AREA_COLOR,
-                              shape: BoxShape.circle),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: SizeConfig.screenWidth * 0.02),
-                          child: Container(
-                            width: parentWidth * 0.57,
-                            color: Colors.transparent,
-                            child: Text(
-                              "$pickUpLocation",
-                              style: TextStyle(
-                                  color: CommonColor.BLACK_COLOR,
-                                  fontSize:
-                                  SizeConfig.blockSizeHorizontal * 3.0,
-                                  fontFamily: "Roboto_Medium",
-                                  fontWeight: FontWeight.w400),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding:
-                      EdgeInsets.only(left: SizeConfig.screenWidth * 0.01),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: parentHeight * 0.013,
-                            width: parentWidth * 0.003,
-                            color: Colors.black,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          height: parentHeight * 0.01,
-                          width: parentWidth * 0.021,
-                          decoration: const BoxDecoration(
-                              color: CommonColor.TO_AREA_COLOR,
-                              shape: BoxShape.circle),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: parentWidth * 0.02),
-                          child: Container(
-                            width: parentWidth * 0.6,
-                            color: Colors.transparent,
-                            child: Text(
-                              "$finalLocation",
-                              style: TextStyle(
-                                  color: CommonColor.BLACK_COLOR,
-                                  fontSize:
-                                  SizeConfig.blockSizeHorizontal * 3.0,
-                                  fontFamily: "Roboto_Medium",
-                                  fontWeight: FontWeight.w400),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                      ],
+                    Text(
+                      "Post on  $createPostDate | $createPostTime",
+                      style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: SizeConfig.blockSizeHorizontal * 3.0,
+                          fontFamily: "Roboto_Regular",
+                          fontWeight: FontWeight.w400),
                     ),
                   ],
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(
-                  right: parentWidth * 0.05,
-                ),
-                child: Column(
+                    left: parentWidth * 0.05, top: parentHeight * 0.01),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    RichText(
-                      text: TextSpan(
-                          text: '\u{20B9}',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                            fontSize: SizeConfig.blockSizeHorizontal * 3.7,
+                    Container(
+                      color: Colors.transparent,
+                      width: parentWidth * 0.5,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "Pick-up Date",
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize:
+                                        SizeConfig.blockSizeHorizontal * 3.0,
+                                        fontFamily: "Roboto_Regular",
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: parentHeight * 0.007),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "$pickUpDate",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize:
+                                          SizeConfig.blockSizeHorizontal * 3.5,
+                                          fontFamily: "Roboto_Regular",
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          children: [
-                            TextSpan(
-                                text: ' ${items[index].fare}/-',
-                                style: TextStyle(
-                                    fontSize:
-                                    SizeConfig.blockSizeHorizontal * 4.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold))
-                          ]),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "Pick-up Time",
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize:
+                                        SizeConfig.blockSizeHorizontal * 3.0,
+                                        fontFamily: "Roboto_Regular",
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: parentHeight * 0.007),
+                                child: Container(
+                                  width: parentWidth * 0.18,
+                                  color: Colors.transparent,
+                                  child: Center(
+                                    child: Text(
+                                      "$pickUpTime",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize:
+                                          SizeConfig.blockSizeHorizontal * 3.5,
+                                          fontFamily: "Roboto_Regular",
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
+              Padding(
+                padding: EdgeInsets.only(
+                    left: parentWidth * 0.05,
+                    top: parentHeight * 0.01,
+                    right: parentWidth * 0.05),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                          text: 'Qty Of Load : ',
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontWeight: FontWeight.w400,
+                            fontSize: SizeConfig.blockSizeHorizontal * 3.2,
+                          ),
+                          children: [
+                            TextSpan(
+                                text: '${items[index].loadDetail.load} ${items[index].loadDetail.loadUnit}',
+                                style: TextStyle(
+                                    fontSize: SizeConfig.blockSizeHorizontal * 3.7,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Roboto_Regular'))
+                          ]),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+
+                        passPickIndexAddress = "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
+
+
+                        // print(passPickIndexAddress);
+
+                        passLastIndexAddress =
+                        "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
+
+
+                        DateTime tempDate = DateFormat("yyyy-MM-dd").parse(items[index].pickupDate);
+                        var inputDate = DateTime.parse(tempDate.toString());
+                        var outputFormat = DateFormat('dd MMMM yyyy');
+                        pickUpIndexDate = outputFormat.format(inputDate);
+
+                        DateTime parseDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                            .parse(items[index].pickupDate);
+                        var inputTime = DateTime.parse(parseDate.toString());
+                        var inputFormat = DateFormat('hh:mm a');
+                        pickUpIndexTime = inputFormat.format(inputTime);
+
+                        showCupertinoDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (context) {
+                            return AnimatedOpacity(
+                                opacity: 1.0,
+                                duration: const Duration(seconds: 2),
+                                child: LoadMoreInfoDialog(
+                                  postDetails: items,
+                                  postIndex: index,
+                                  pickupDate: pickUpIndexDate.toString(),
+                                  pickupTime: pickUpIndexTime.toString(),
+                                  pickupLocation: passPickIndexAddress.toString(),
+                                  finalLocation: passLastIndexAddress.toString(),
+                                ));
+                          },
+                        );
+                      },
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Text(
+                          "More",
+                          style: TextStyle(
+                              color: CommonColor.SIGN_UP_TEXT_COLOR,
+                              fontSize: SizeConfig.blockSizeHorizontal * 3.7,
+                              fontFamily: "Roboto_Medium",
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: parentHeight * 0.01,
+              )
             ],
           ),
-          Padding(
-            padding: EdgeInsets.only(
-                left: parentWidth * 0.05, top: parentHeight * 0.01),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Post on  $createPostDate | $createPostTime",
-                  style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: SizeConfig.blockSizeHorizontal * 3.0,
-                      fontFamily: "Roboto_Regular",
-                      fontWeight: FontWeight.w400),
-                ),
-              ],
+          Visibility(
+            visible: transportEmptyDialog,
+            child: Container(
+              height: SizeConfig.screenHeight*0.04,
+              width: SizeConfig.screenWidth*0.6,
+              decoration: BoxDecoration(
+                color: CommonColor.SIGN_UP_TEXT_COLOR.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(child: Text("No any transporter present here.",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: SizeConfig.blockSizeHorizontal*3.7,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Roboto_Medium'
+                ),)),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-                left: parentWidth * 0.05, top: parentHeight * 0.01),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  color: Colors.transparent,
-                  width: parentWidth * 0.5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                "Pick-up Date",
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize:
-                                    SizeConfig.blockSizeHorizontal * 3.0,
-                                    fontFamily: "Roboto_Regular",
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: parentHeight * 0.007),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "$pickUpDate",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize:
-                                      SizeConfig.blockSizeHorizontal * 3.5,
-                                      fontFamily: "Roboto_Regular",
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                "Pick-up Time",
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize:
-                                    SizeConfig.blockSizeHorizontal * 3.0,
-                                    fontFamily: "Roboto_Regular",
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: parentHeight * 0.007),
-                            child: Container(
-                              width: parentWidth * 0.18,
-                              color: Colors.transparent,
-                              child: Center(
-                                child: Text(
-                                  "$pickUpTime",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize:
-                                      SizeConfig.blockSizeHorizontal * 3.5,
-                                      fontFamily: "Roboto_Regular",
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-                left: parentWidth * 0.05,
-                top: parentHeight * 0.01,
-                right: parentWidth * 0.05),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                RichText(
-                  text: TextSpan(
-                      text: 'Qty Of Load : ',
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontWeight: FontWeight.w400,
-                        fontSize: SizeConfig.blockSizeHorizontal * 3.2,
-                      ),
-                      children: [
-                        TextSpan(
-                            text: '${items[index].loadDetail.load} ${items[index].loadDetail.loadUnit}',
-                            style: TextStyle(
-                                fontSize: SizeConfig.blockSizeHorizontal * 3.7,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: 'Roboto_Regular'))
-                      ]),
-                ),
-                GestureDetector(
-                  onTap: () {
-
-                    passPickIndexAddress = "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
-
-
-                    // print(passPickIndexAddress);
-
-                    passLastIndexAddress =
-                    "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
-
-
-                    DateTime tempDate = DateFormat("yyyy-MM-dd").parse(items[index].pickupDate);
-                    var inputDate = DateTime.parse(tempDate.toString());
-                    var outputFormat = DateFormat('dd MMMM yyyy');
-                    pickUpIndexDate = outputFormat.format(inputDate);
-
-                    DateTime parseDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                        .parse(items[index].pickupDate);
-                    var inputTime = DateTime.parse(parseDate.toString());
-                    var inputFormat = DateFormat('hh:mm a');
-                    pickUpIndexTime = inputFormat.format(inputTime);
-
-                    showCupertinoDialog(
-                      context: context,
-                      barrierDismissible: true,
-                      builder: (context) {
-                        return AnimatedOpacity(
-                            opacity: 1.0,
-                            duration: const Duration(seconds: 2),
-                            child: LoadMoreInfoDialog(
-                              postDetails: items,
-                              postIndex: index,
-                              pickupDate: pickUpIndexDate.toString(),
-                              pickupTime: pickUpIndexTime.toString(),
-                              pickupLocation: passPickIndexAddress.toString(),
-                              finalLocation: passLastIndexAddress.toString(),
-                            ));
-                      },
-                    );
-                  },
-                  child: Container(
-                    color: Colors.transparent,
-                    child: Text(
-                      "More",
-                      style: TextStyle(
-                          color: CommonColor.SIGN_UP_TEXT_COLOR,
-                          fontSize: SizeConfig.blockSizeHorizontal * 3.7,
-                          fontFamily: "Roboto_Medium",
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: parentHeight * 0.01,
-          )
         ],
       ),
     );

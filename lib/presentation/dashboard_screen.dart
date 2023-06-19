@@ -338,4 +338,14 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
     return showExitDialog(context);
   }
 
+  @override
+  addOrderPrentScreen() {
+    isShow = false;
+    addNewScreen(
+        OrderChildScreen(
+          mListener: this,
+        ),
+        ScreenConstant.ORDER_FRAGMENT);
+  }
+
 }

@@ -8,7 +8,6 @@ import 'package:fixgocompanyapp/data/api_constant/api_url.dart';
 import 'package:fixgocompanyapp/data/data_constant/constant_data.dart';
 import 'package:fixgocompanyapp/data/dio_client.dart';
 import 'package:fixgocompanyapp/data/model/get_all_pending_post_response_model.dart';
-import 'package:fixgocompanyapp/presentation/home_module/booking_details_screen.dart';
 import 'package:fixgocompanyapp/presentation/home_module/create_new_load_form_layout.dart';
 import 'package:fixgocompanyapp/presentation/home_module/interested_transporter_list.dart';
 import 'package:fixgocompanyapp/presentation/home_module/transporter_info_profile.dart';
@@ -460,11 +459,14 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                                                       ),
                                                                       GestureDetector(
                                                                         onTap: () {
-                                                                          Navigator.push(
-                                                                              context,
-                                                                              MaterialPageRoute(
-                                                                                  builder: (context) =>
-                                                                                      const BookingDetailsScreen()));
+
+                                                                          // Navigator.push(
+                                                                          //     context,
+                                                                          //     MaterialPageRoute(
+                                                                          //         builder: (context) =>
+                                                                          //             const BookingDetailsScreen()));
+
+                                                                          // widget.mListener.addOrderPrentScreen();
                                                                         },
                                                                         child:
                                                                             Container(
@@ -1161,4 +1163,6 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
 
 }
 
-abstract class HomeChildScreenListener {}
+abstract class HomeChildScreenListener {
+  addOrderPrentScreen();
+}
