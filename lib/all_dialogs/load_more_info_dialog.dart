@@ -1,5 +1,4 @@
-
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fixgocompanyapp/all_dialogs/post_delete_confirm_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:fixgocompanyapp/data/api_constant/api_url.dart';
@@ -62,6 +61,8 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
   double advancePay = 0.0;
   double deliveryPay = 0.0;
 
+  String postId = "0";
+
   @override
   void initState() {
     super.initState();
@@ -71,6 +72,8 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
   int totalFare = widget.postDetails[widget.postIndex].fare;
   double ratio = widget.postDetails[widget.postIndex].advancePayment.ratio / 100;
   advancePay = totalFare * ratio;
+
+  postId = widget.postDetails[0].id;
 
   int totalsFare = widget.postDetails[widget.postIndex].fare;
   double ratios = widget.postDetails[widget.postIndex].deliveryPayment.ratio / 100;
@@ -316,7 +319,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                 Container(
                   height: parentHeight*0.01,
                   width: parentWidth*0.021,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: CommonColor.FROM_AREA_COLOR,
                       shape: BoxShape.circle
                   ),
@@ -362,7 +365,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                 Container(
                   height: parentHeight*0.010,
                   width: parentWidth*0.021,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: CommonColor.TO_AREA_COLOR,
                       shape: BoxShape.circle
                   ),
@@ -407,7 +410,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
 
                 Container(
                   width: parentWidth*0.4,
-                  // color: Colors.red,
+                  color: Colors.transparent,
                   child: Row(
                     children: [
                       Expanded(
@@ -445,7 +448,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
 
                 Container(
                   width: parentWidth*0.4,
-                  // color: Colors.red,
+                  color: Colors.transparent,
                   child: Row(
                     children: [
                       Expanded(
@@ -533,7 +536,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
 
                 Container(
                   width: parentWidth*0.4,
-                  // color: Colors.red,
+                  color: Colors.transparent,
                   child: Row(
                     children: [
                       Expanded(
@@ -989,7 +992,32 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
             child: GestureDetector(
               onDoubleTap: (){},
               onTap: (){
-                Navigator.pop(context);
+                // Navigator.pop(context);
+                // ApiClient().getDeleteCompanyPost(widget.postDetails[0].id);
+                showGeneralDialog(
+                    barrierColor: Colors.black.withOpacity(0.5),
+                    transitionBuilder: (context, a1, a2, widget) {
+                      final curvedValue = Curves.easeInOutBack.transform(a1.value) - 1.0;
+                      // return Transform(
+                      //   transform: Matrix4.translationValues(0.0, curvedValue * 200, 0.0),
+                      return Transform.scale(
+                        scale: a1.value,
+                        child: Opacity(
+                          opacity: a1.value,
+                          child: PostDeleteConfirmationDialog(
+                            message: "Are You Sure,\nYou Want To Delete a Post",
+                            postId: postId,
+                          ),
+                        ),
+                      );
+                    },
+                    transitionDuration: const Duration(milliseconds: 200),
+                    barrierDismissible: true,
+                    barrierLabel: '',
+                    context: context,
+                    pageBuilder: (context, animation2, animation1) {
+                      return Container();
+                    });
               },
               child: Container(
                 color: Colors.transparent,

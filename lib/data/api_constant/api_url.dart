@@ -31,6 +31,7 @@ class ApiConstants {
   String companyAllPost = "post/?status=";
   String companyPostImagesUpload = "file";
   String getBidAgainstPostLimited = "post/bid/:postID/?limit=3";
+  String deleteCompanyPost = "post/delete/";
 
 
 

@@ -276,5 +276,34 @@ class ApiClient {
     }
   }
 
+  Future<Map<String, dynamic>> getDeleteCompanyPost(String postId) async {
+
+    print(postId);
+
+    String url = "${ApiConstants().baseUrl}post/delete/$postId";
+
+    String? sessionToken = GetStorage().read<String>(
+        ConstantData.userAccessToken);
+
+    try {
+      Response response = await _dio.delete(
+        url,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $sessionToken',
+          },
+        ),
+      );
+
+      print("getDeleteCompanyPostSC --> ${response.statusCode}");
+      print("getDeleteCompanyPostData --> ${response.data}");
+
+
+      return response.data;
+    } on DioError catch (e) {
+      return e.response!.data;
+    }
+  }
+
 
 }
