@@ -201,7 +201,8 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                                                 TransporterProfile(transporterName: "${bidData[index]['customer']['name']}",
                                                                   transporterLocation: '',
                                                                   transporterTrip: '',
-                                                                  transporterRating: '${bidData[index]['customer']['rating']['rate']}',)));
+                                                                  transporterRating: '${bidData[index]['customer']['rating']['rate']}',
+                                                                  transporterAddress: "${bidData[index]['customer']['companyAddress']}",)));
                                                   },
                                                   child: Container(
                                                     color: Colors.transparent,

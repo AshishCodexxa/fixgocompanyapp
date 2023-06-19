@@ -11,8 +11,9 @@ class TransporterProfile extends StatefulWidget {
   final String transporterLocation;
   final String transporterTrip;
   final String transporterRating;
+  final String transporterAddress;
 
-  const TransporterProfile({Key? key, required this.transporterName, required this.transporterLocation, required this.transporterTrip, required this.transporterRating}) : super(key: key);
+  const TransporterProfile({Key? key, required this.transporterName, required this.transporterLocation, required this.transporterTrip, required this.transporterRating, required this.transporterAddress}) : super(key: key);
 
   @override
   State<TransporterProfile> createState() => _TransporterProfileState();
@@ -160,7 +161,7 @@ class _TransporterProfileState extends State<TransporterProfile> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
 
-                      Text("Pune, Maharashtra",
+                      Text(widget.transporterAddress ?? "",
                         style: TextStyle(
                             fontSize: SizeConfig.blockSizeHorizontal*3.5,
                             fontFamily: "Roboto_Regular",

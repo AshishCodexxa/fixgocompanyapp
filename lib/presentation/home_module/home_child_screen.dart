@@ -272,7 +272,10 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                                                          TransporterProfile(transporterName: "${bidData[index]['customer']['name']}",
                                                                           transporterLocation: '',
                                                                           transporterTrip: '',
-                                                                          transporterRating: '${bidData[index]['customer']['rating']['rate']}',)));
+                                                                          transporterRating: '${bidData[index]['customer']['rating']['rate']}',
+                                                                           transporterAddress: "${bidData[index]['customer']['companyAddress']}",
+
+                                                                         )));
                                                           },
                                                           child: Container(
                                                             color: Colors.transparent,
@@ -331,30 +334,34 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                                                   padding: EdgeInsets.only(
                                                                       top: SizeConfig
                                                                               .screenHeight *
-                                                                          0.003),
+                                                                          0.007),
                                                                   child: Row(
                                                                     mainAxisAlignment:
                                                                         MainAxisAlignment
                                                                             .start,
                                                                     children: [
-                                                                      Text(
-                                                                        "Pune",
-                                                                        style: TextStyle(
-                                                                            color: CommonColor
-                                                                                .BLACK_COLOR,
-                                                                            fontSize:
-                                                                                SizeConfig.blockSizeHorizontal *
-                                                                                    3.0,
-                                                                            fontWeight:
-                                                                                FontWeight
-                                                                                    .w500,
-                                                                            fontFamily:
-                                                                                'Roboto_Regular'),
+                                                                      Container(
+                                                                        width: SizeConfig.screenWidth*0.6,
+                                                                        color: Colors.transparent,
+                                                                        child: Text(
+                                                                          bidData[index]['customer']['companyAddress'],
+                                                                          style: TextStyle(
+                                                                              color: CommonColor
+                                                                                  .BLACK_COLOR,
+                                                                              fontSize:
+                                                                                  SizeConfig.blockSizeHorizontal *
+                                                                                      3.0,
+                                                                              fontWeight:
+                                                                                  FontWeight
+                                                                                      .w500,
+                                                                              fontFamily:
+                                                                                  'Roboto_Regular'),
+                                                                        ),
                                                                       ),
                                                                     ],
                                                                   ),
                                                                 ),
-                                                                Padding(
+                                                                /*Padding(
                                                                   padding: EdgeInsets.only(
                                                                       top: SizeConfig
                                                                               .screenHeight *
@@ -380,12 +387,12 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                ),
+                                                                ),*/
                                                                 Padding(
                                                                   padding: EdgeInsets.only(
                                                                       top: SizeConfig
                                                                               .screenHeight *
-                                                                          0.002),
+                                                                          0.005),
                                                                   child: Row(
                                                                     mainAxisAlignment:
                                                                         MainAxisAlignment
@@ -502,7 +509,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                                                   padding: EdgeInsets.only(
                                                                       top: SizeConfig
                                                                               .screenHeight *
-                                                                          0.01),
+                                                                          0.02),
                                                                   child: Container(
                                                                     height: SizeConfig
                                                                             .screenWidth *
