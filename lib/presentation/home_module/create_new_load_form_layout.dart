@@ -3272,88 +3272,160 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
                             /////////////////////////////////////////////////////////////////////////////////////////
 
-                            Container(
-                              color: Colors.transparent,
-                              height: parentHeight * 0.07,
+                            // Container(
+                            //   color: Colors.transparent,
+                            //   height: parentHeight * 0.07,
+                            //   child: Row(
+                            //     mainAxisAlignment:
+                            //         MainAxisAlignment.spaceBetween,
+                            //     children: [
+                            //       Padding(
+                            //           padding: EdgeInsets.only(
+                            //               left: parentWidth * 0.05),
+                            //           child: /*vehicleType == 1 || vehicleType == 2 ?*/
+                            //               Text(
+                            //             /*tyreTypes == 0 ? "Carrying Capacity" :
+                            //         tyreTypes == 1 ? "18,500" :
+                            //         tyreTypes == 2 ? "28,000" :
+                            //         tyreTypes == 3 ? "35,000" :
+                            //         tyreTypes == 4 ? "42,000" :
+                            //         tyreTypes == 5 ? "47,500" :
+                            //         "50,000"*/
+                            //             carringCapacity,
+                            //             style: TextStyle(
+                            //                 color: carringCapacity.isEmpty
+                            //                     ? Colors.black26
+                            //                     : CommonColor.BLACK_COLOR,
+                            //                 fontWeight: FontWeight.w400,
+                            //                 fontSize:
+                            //                     SizeConfig.blockSizeHorizontal *
+                            //                         4.0,
+                            //                 fontFamily: 'Roboto_Regular'),
+                            //           )
+                            //           /*: Text(trailerTyreTypes == 0 ? "Carrying Capacity" :
+                            //         trailerTyreTypes == 1 ? "28,500" :
+                            //         trailerTyreTypes == 2 ? "42,500" :
+                            //         trailerTyreTypes == 3 ? "45,500" :
+                            //         trailerTyreTypes == 4 ? "55,000" : "55,500",
+                            //           style: TextStyle(
+                            //               color:trailerTyreTypes == 0 ? Colors.black26 : CommonColor.BLACK_COLOR,
+                            //               fontWeight: FontWeight.w400,
+                            //               fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                            //               fontFamily: 'Roboto_Regular'
+                            //           ),),*/
+                            //           ),
+                            //       Padding(
+                            //         padding: EdgeInsets.only(
+                            //             right: parentWidth * 0.0),
+                            //         child: Container(
+                            //           width: parentWidth * 0.31,
+                            //           color: Colors.transparent,
+                            //           child: Row(
+                            //             mainAxisAlignment:
+                            //                 MainAxisAlignment.center,
+                            //             children: [
+                            //               Container(
+                            //                 height: parentHeight * 0.025,
+                            //                 width: parentWidth * 0.15,
+                            //                 decoration: BoxDecoration(
+                            //                     color: CommonColor
+                            //                         .SIGN_UP_TEXT_COLOR,
+                            //                     borderRadius:
+                            //                         BorderRadius.circular(10)),
+                            //                 child: Center(
+                            //                   child: Text(
+                            //                     "RLW (kg)",
+                            //                     style: TextStyle(
+                            //                         color:
+                            //                             CommonColor.WHITE_COLOR,
+                            //                         fontWeight: FontWeight.w400,
+                            //                         fontSize: SizeConfig
+                            //                                 .blockSizeHorizontal *
+                            //                             3.0,
+                            //                         fontFamily:
+                            //                             'Roboto_Regular'),
+                            //                   ),
+                            //                 ),
+                            //               ),
+                            //             ],
+                            //           ),
+                            //         ),
+                            //       )
+                            //     ],
+                            //   ),
+                            // ),
+
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: SizeConfig.screenHeight * 0.01),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                          left: parentWidth * 0.05),
-                                      child: /*vehicleType == 1 || vehicleType == 2 ?*/
-                                          Text(
-                                        /*tyreTypes == 0 ? "Carrying Capacity" :
-                                    tyreTypes == 1 ? "18,500" :
-                                    tyreTypes == 2 ? "28,000" :
-                                    tyreTypes == 3 ? "35,000" :
-                                    tyreTypes == 4 ? "42,000" :
-                                    tyreTypes == 5 ? "47,500" :
-                                    "50,000"*/
-                                        carringCapacity,
-                                        style: TextStyle(
-                                            color: carringCapacity.isEmpty
-                                                ? Colors.black26
-                                                : CommonColor.BLACK_COLOR,
+                                  Expanded(
+                                    child: TextFormField(
+                                      controller: carryingCapacityController,
+                                      // focusNode: _userNameFocus,
+                                      textInputAction: TextInputAction.done,
+                                      decoration: InputDecoration(
+                                        label: Text(
+                                          "RLW (kg)",
+                                          style: TextStyle(
+                                            color: CommonColor.UNSELECT_TYPE_COLOR
+                                                .withOpacity(1.0),
                                             fontWeight: FontWeight.w400,
                                             fontSize:
-                                                SizeConfig.blockSizeHorizontal *
-                                                    4.0,
-                                            fontFamily: 'Roboto_Regular'),
-                                      )
-                                      /*: Text(trailerTyreTypes == 0 ? "Carrying Capacity" :
-                                    trailerTyreTypes == 1 ? "28,500" :
-                                    trailerTyreTypes == 2 ? "42,500" :
-                                    trailerTyreTypes == 3 ? "45,500" :
-                                    trailerTyreTypes == 4 ? "55,000" : "55,500",
-                                      style: TextStyle(
-                                          color:trailerTyreTypes == 0 ? Colors.black26 : CommonColor.BLACK_COLOR,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: SizeConfig.blockSizeHorizontal*4.0,
-                                          fontFamily: 'Roboto_Regular'
-                                      ),),*/
-                                      ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        right: parentWidth * 0.0),
-                                    child: Container(
-                                      width: parentWidth * 0.31,
-                                      color: Colors.transparent,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            height: parentHeight * 0.025,
-                                            width: parentWidth * 0.15,
-                                            decoration: BoxDecoration(
-                                                color: CommonColor
-                                                    .SIGN_UP_TEXT_COLOR,
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            child: Center(
-                                              child: Text(
-                                                "RLW (kg)",
-                                                style: TextStyle(
-                                                    color:
-                                                        CommonColor.WHITE_COLOR,
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: SizeConfig
-                                                            .blockSizeHorizontal *
-                                                        3.0,
-                                                    fontFamily:
-                                                        'Roboto_Regular'),
-                                              ),
-                                            ),
+                                            SizeConfig.blockSizeHorizontal * 3.5,
                                           ),
-                                        ],
+                                        ),
+                                        contentPadding: EdgeInsets.only(
+                                            left: parentWidth * 0.05,
+                                            right: parentWidth * 0.05),
+                                        enabledBorder: const UnderlineInputBorder(
+                                            borderSide:
+                                            BorderSide(color: Colors.black12)),
+                                        focusedBorder: const UnderlineInputBorder(
+                                            borderSide:
+                                            BorderSide(color: Colors.black12)),
+                                      ),
+                                      onFieldSubmitted: (val) {
+                                        /*if(mounted){
+                                          setState(() {
+                                            hideAllVehicleTypeField = !hideAllVehicleTypeField;
+                                            showAllVehicleTypes = !showAllVehicleTypes;
+                                          });
+                                        }*/
+                                      },
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(right: parentWidth*0.05),
+                                    child: Container(
+                                      height: parentHeight * 0.025,
+                                      width: parentWidth * 0.15,
+                                      decoration: BoxDecoration(
+                                          color: CommonColor
+                                              .SIGN_UP_TEXT_COLOR,
+                                          borderRadius:
+                                          BorderRadius.circular(10)),
+                                      child: Center(
+                                        child: Text(
+                                          "RLW (kg)",
+                                          style: TextStyle(
+                                              color:
+                                              CommonColor.WHITE_COLOR,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: SizeConfig
+                                                  .blockSizeHorizontal *
+                                                  3.0,
+                                              fontFamily:
+                                              'Roboto_Regular'),
+                                        ),
                                       ),
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
+
 
                             Padding(
                               padding: EdgeInsets.only(
@@ -3685,15 +3757,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                   padding:
                                       EdgeInsets.only(left: parentWidth * 0.0),
                                   child: /*vehicleType == 1 || vehicleType == 2 ?*/
-                                      Text(
-                                    /*tyreTypes == 0 ? "Carrying Capacity" :
-                                tyreTypes == 1 ? "18,500 RLW(kg)" :
-                                tyreTypes == 2 ? "28,000 RLW(kg)" :
-                                tyreTypes == 3 ? "35,000 RLW(kg)" :
-                                tyreTypes == 4 ? "42,000 RLW(kg)" :
-                                tyreTypes == 5 ? "47,500 RLW(kg)" :
-                                "50,000 RLW(kg)"*/
-                                    "$carringCapacity RLW(kg)",
+                                      Text("${carryingCapacityController.text} RLW(kg)",
                                     style: TextStyle(
                                         color: tyreTypes == 0
                                             ? Colors.black26
@@ -3703,18 +3767,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                             SizeConfig.blockSizeHorizontal *
                                                 3.5,
                                         fontFamily: 'Roboto_Regular'),
-                                  ) /*
-                                    : Text(trailerTyreTypes == 0 ? "Carrying Capacity" :
-                                trailerTyreTypes == 1 ? "28,500 RLW(kg)" :
-                                trailerTyreTypes == 2 ? "42,500 RLW(kg)" :
-                                trailerTyreTypes == 3 ? "45,500 RLW(kg)" :
-                                trailerTyreTypes == 4 ? "55,000 RLW(kg)" : "55,500 RLW(kg)",
-                                  style: TextStyle(
-                                      color:trailerTyreTypes == 0 ? Colors.black26 : CommonColor.BLACK_COLOR,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                                      fontFamily: 'Roboto_Regular'
-                                  ),),*/
+                                  )
                                   ),
                               Container(
                                 height: parentHeight * 0.035,
@@ -5402,7 +5455,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                   : vehicleType == 3
                       ? "Trailor"
                       : "",
-          "capacity": "${int.parse(carringCapacity)} RLW, KG",
+          "capacity": "${int.parse(carryingCapacityController.text)} RLW, KG",
           "quantity": int.parse(vehicleNumberController.text),
           "tyreType": vehicleType == 1 || vehicleType == 2
               ? tyreName

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:fixgocompanyapp/all_dialogs/load_more_info_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
@@ -33,6 +35,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
 
   bool isLoading = false;
   bool transportList = false;
+  bool transportEmptyDialog = false;
 
   final items = <Docs>[];
   String? pickUpDate;
@@ -48,6 +51,20 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
   String? pickUpIndexTime;
 
   var bidData;
+
+  startTimer() {
+    var durtaion = new Duration(seconds: 2);
+    return Timer(durtaion, dialogHide);
+  }
+
+  void dialogHide() {
+    if(mounted){
+      setState(() {
+        transportEmptyDialog = false;
+      });
+    }
+  }
+
 
   @override
   void initState() {
@@ -124,437 +141,471 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                             left: SizeConfig.screenWidth * 0.03,
                             right: SizeConfig.screenWidth * 0.03,
                           ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: selectedIndex == index
-                                    ? Colors.white
-                                    : Colors.transparent,
-                                boxShadow: <BoxShadow>[
-                                  selectedIndex == index
-                                      ? BoxShadow(
-                                          color: Colors.black.withOpacity(0.1),
-                                          blurRadius: 5,
-                                          spreadRadius: 1,
-                                          offset: const Offset(2, 6))
-                                      : const BoxShadow(
-                                          color: Colors.transparent),
-                                ],
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Column(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: selectedIndex == index
+                                        ? Colors.white
+                                        : Colors.transparent,
+                                    boxShadow: <BoxShadow>[
+                                      selectedIndex == index
+                                          ? BoxShadow(
+                                              color: Colors.black.withOpacity(0.1),
+                                              blurRadius: 5,
+                                              spreadRadius: 1,
+                                              offset: const Offset(2, 6))
+                                          : const BoxShadow(
+                                              color: Colors.transparent),
+                                    ],
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
 
-                                    if (selectedIndex != index) {
-                                      selectedIndex = index;
+                                        if(bidData.length != 0){
+                                          if (selectedIndex != index) {
+                                            selectedIndex = index;
 
 
-                                      print("hhhhhhh $selectedIndex");
-                                      if (mounted) {
-                                        setState(() {
-                                          if (mounted) {
-                                            setState(() {
-                                              print(items[index].id);
-                                              getAllBidsAgainstPostLimited(items[index].id).then((value){
-                                                if(mounted){
+                                            print("hhhhhhh $selectedIndex");
+                                            if (mounted) {
+                                              setState(() {
+                                                if (mounted) {
                                                   setState(() {
-                                                    transportList = false;
+                                                    print(items[index].id);
+                                                    getAllBidsAgainstPostLimited(items[index].id).then((value){
+                                                      if(mounted){
+                                                        setState(() {
+                                                          transportList = false;
+                                                        });
+                                                      }
+                                                    });
                                                   });
                                                 }
                                               });
+                                            }
+                                          } else {
+                                            selectedIndex = -1;
+                                            if (mounted) {
+                                              setState(() {});
+                                            }
+                                          }
+                                        }else{
+                                          if(mounted){
+                                            setState(() {
+                                              transportEmptyDialog = true;
+                                              startTimer();
                                             });
                                           }
-                                        });
-                                      }
-                                    } else {
-                                      selectedIndex = -1;
-                                      if (mounted) {
-                                        setState(() {});
-                                      }
-                                    }
+
+                                        }
 
 
-                                    print(bidData.length);
 
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(15),
-                                      boxShadow: <BoxShadow>[
-                                        index != selectedIndex
-                                            ? BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.1),
-                                                blurRadius: 5,
-                                                spreadRadius: 1,
-                                                offset: const Offset(2, 6))
-                                            : const BoxShadow(
-                                                color: Colors.transparent),
-                                      ],
+                                        print(bidData.length);
+
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(15),
+                                          boxShadow: <BoxShadow>[
+                                            index != selectedIndex
+                                                ? BoxShadow(
+                                                    color: Colors.black
+                                                        .withOpacity(0.1),
+                                                    blurRadius: 5,
+                                                    spreadRadius: 1,
+                                                    offset: const Offset(2, 6))
+                                                : const BoxShadow(
+                                                    color: Colors.transparent),
+                                          ],
+                                        ),
+                                        child: getInfoCardLayout(
+                                            SizeConfig.screenHeight,
+                                            SizeConfig.screenWidth,
+                                            index),
+                                      ),
                                     ),
-                                    child: getInfoCardLayout(
-                                        SizeConfig.screenHeight,
-                                        SizeConfig.screenWidth,
-                                        index),
-                                  ),
-                                ),
-                                Visibility(
-                                  visible: index == selectedIndex,
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Column(
+                                    Visibility(
+                                      visible: index == selectedIndex,
+                                      child: Stack(
+                                        alignment: Alignment.center,
                                         children: [
-                                          getTransporterListHeading(
-                                              SizeConfig.screenHeight,
-                                              SizeConfig.screenWidth),
-                                          Container(
-                                            height:bidData.length == 1 ? SizeConfig.screenHeight * 0.14 : bidData.length == 2 ? SizeConfig.screenHeight * 0.26 : bidData.length == 3 ? SizeConfig.screenHeight * 0.38 : 0.0,
-                                            color: Colors.transparent,
-                                            child: ListView.builder(
-                                                itemCount: bidData == null ? 0 : bidData.length,
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                padding: EdgeInsets.only(
-                                                    bottom:
-                                                        SizeConfig.screenHeight *
-                                                            0.0),
-                                                itemBuilder: (BuildContext context,
-                                                    int index) {
-                                                  return Padding(
+                                          Column(
+                                            children: [
+                                              getTransporterListHeading(
+                                                  SizeConfig.screenHeight,
+                                                  SizeConfig.screenWidth),
+                                              Container(
+                                                height:bidData.length == 1 ? SizeConfig.screenHeight * 0.14 : bidData.length == 2 ? SizeConfig.screenHeight * 0.26 : bidData.length == 3 ? SizeConfig.screenHeight * 0.38 : 0.0,
+                                                color: Colors.transparent,
+                                                child: ListView.builder(
+                                                    itemCount: bidData == null ? 0 : bidData.length,
+                                                    physics:
+                                                        const NeverScrollableScrollPhysics(),
                                                     padding: EdgeInsets.only(
-                                                      top: SizeConfig.screenHeight *
-                                                          0.02,
-                                                      left: SizeConfig.screenWidth *
-                                                          0.05,
-                                                      right:
-                                                          SizeConfig.screenWidth *
+                                                        bottom:
+                                                            SizeConfig.screenHeight *
+                                                                0.0),
+                                                    itemBuilder: (BuildContext context,
+                                                        int index) {
+                                                      return Padding(
+                                                        padding: EdgeInsets.only(
+                                                          top: SizeConfig.screenHeight *
+                                                              0.02,
+                                                          left: SizeConfig.screenWidth *
                                                               0.05,
-                                                    ),
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                     TransporterProfile(transporterName: "${bidData[index]['customer']['name']}",
-                                                                      transporterLocation: '',
-                                                                      transporterTrip: '',
-                                                                      transporterRating: '${bidData[index]['customer']['rating']['rate']}',)));
-                                                      },
-                                                      child: Container(
-                                                        color: Colors.transparent,
-                                                        child: Column(
-                                                          children: [
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
+                                                          right:
+                                                              SizeConfig.screenWidth *
+                                                                  0.05,
+                                                        ),
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (context) =>
+                                                                         TransporterProfile(transporterName: "${bidData[index]['customer']['name']}",
+                                                                          transporterLocation: '',
+                                                                          transporterTrip: '',
+                                                                          transporterRating: '${bidData[index]['customer']['rating']['rate']}',)));
+                                                          },
+                                                          child: Container(
+                                                            color: Colors.transparent,
+                                                            child: Column(
                                                               children: [
-                                                                Text(
-                                                                  bidData[index]['customer']['name'],
-                                                                  style: TextStyle(
-                                                                      color: CommonColor
-                                                                          .BLACK_COLOR,
-                                                                      fontSize:
-                                                                          SizeConfig
-                                                                                  .blockSizeHorizontal *
-                                                                              4.0,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                      fontFamily:
-                                                                          'Roboto_Regular'),
-                                                                ),
-                                                                RichText(
-                                                                  text: TextSpan(
-                                                                      text:
-                                                                          '\u{20B9}',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w400,
-                                                                        fontSize:
-                                                                            SizeConfig.blockSizeHorizontal *
-                                                                                4.0,
-                                                                      ),
-                                                                      children: [
-                                                                        TextSpan(
-                                                                            text:
-                                                                                ' ${bidData[index]['bidAmount']}/-',
-                                                                            style: TextStyle(
-                                                                                fontSize: SizeConfig.blockSizeHorizontal *
-                                                                                    3.7,
-                                                                                color:
-                                                                                    Colors.black,
-                                                                                fontWeight: FontWeight.w400))
-                                                                      ]),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            Padding(
-                                                              padding: EdgeInsets.only(
-                                                                  top: SizeConfig
-                                                                          .screenHeight *
-                                                                      0.003),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Text(
-                                                                    "Pune",
-                                                                    style: TextStyle(
-                                                                        color: CommonColor
-                                                                            .BLACK_COLOR,
-                                                                        fontSize:
-                                                                            SizeConfig.blockSizeHorizontal *
-                                                                                3.0,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w500,
-                                                                        fontFamily:
-                                                                            'Roboto_Regular'),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding: EdgeInsets.only(
-                                                                  top: SizeConfig
-                                                                          .screenHeight *
-                                                                      0.003),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Text(
-                                                                    "Vehicle Available on : 1 Feb 23",
-                                                                    style: TextStyle(
-                                                                        color: CommonColor
-                                                                            .BLACK_COLOR,
-                                                                        fontSize:
-                                                                            SizeConfig.blockSizeHorizontal *
-                                                                                3.5,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w500,
-                                                                        fontFamily:
-                                                                            'Roboto_Regular'),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding: EdgeInsets.only(
-                                                                  top: SizeConfig
-                                                                          .screenHeight *
-                                                                      0.002),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Container(
-                                                                    width: SizeConfig
-                                                                            .screenWidth *
-                                                                        0.1,
-                                                                    height: SizeConfig
-                                                                            .screenHeight *
-                                                                        0.023,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: CommonColor
-                                                                          .SELECT_TYPE_COLOR,
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .circular(
-                                                                                  5),
-                                                                    ),
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        Padding(
-                                                                          padding: EdgeInsets.only(
-                                                                              left: SizeConfig.screenWidth *
-                                                                                  0.02),
-                                                                          child:
-                                                                              Padding(
-                                                                                padding: EdgeInsets.only(
-                                                                                  right:
-                                                                                  SizeConfig.screenWidth * 0.005),
-                                                                                child: Text(
-                                                                            "${bidData[index]['customer']['rating']['rate']}",
-                                                                            style: TextStyle(
-                                                                                  color: CommonColor
-                                                                                      .WHITE_COLOR,
-                                                                                  fontSize: SizeConfig.blockSizeHorizontal *
-                                                                                      2.7,
-                                                                                  fontWeight:
-                                                                                      FontWeight.w500,
-                                                                                  fontFamily: 'Roboto_Medium'),
-                                                                          ),
-                                                                              ),
-                                                                        ),
-                                                                        Padding(
-                                                                          padding: EdgeInsets.only(
-                                                                              right:
-                                                                                  SizeConfig.screenWidth * 0.017),
-                                                                          child:
-                                                                              Icon(
-                                                                            Icons
-                                                                                .star,
-                                                                            size: SizeConfig.blockSizeHorizontal *
-                                                                                2.5,
-                                                                            color: Colors
-                                                                                .white,
-                                                                          ),
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                  GestureDetector(
-                                                                    onTap: () {
-                                                                      Navigator.push(
-                                                                          context,
-                                                                          MaterialPageRoute(
-                                                                              builder: (context) =>
-                                                                                  const BookingDetailsScreen()));
-                                                                    },
-                                                                    child:
-                                                                        Container(
-                                                                      width: SizeConfig
-                                                                              .screenWidth *
-                                                                          0.18,
-                                                                      height: SizeConfig
-                                                                              .screenHeight *
-                                                                          0.03,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        color: CommonColor
-                                                                            .SIGN_UP_TEXT_COLOR,
-                                                                        borderRadius:
-                                                                            BorderRadius
-                                                                                .circular(7),
-                                                                      ),
-                                                                      child: Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment
-                                                                                .center,
-                                                                        children: [
-                                                                          Text(
-                                                                            "Book Now",
-                                                                            style: TextStyle(
-                                                                                color: CommonColor
-                                                                                    .WHITE_COLOR,
-                                                                                fontSize: SizeConfig.blockSizeHorizontal *
-                                                                                    3.0,
-                                                                                fontWeight:
-                                                                                    FontWeight.w500,
-                                                                                fontFamily: 'Roboto_Medium'),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding: EdgeInsets.only(
-                                                                  top: SizeConfig
-                                                                          .screenHeight *
-                                                                      0.01),
-                                                              child: Container(
-                                                                height: SizeConfig
-                                                                        .screenWidth *
-                                                                    0.003,
-                                                                color:
-                                                                    Colors.black12,
-                                                                child: const Row(
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
                                                                   children: [
                                                                     Text(
-                                                                      "hii",
+                                                                      bidData[index]['customer']['name'],
                                                                       style: TextStyle(
-                                                                          color: Colors
-                                                                              .transparent),
+                                                                          color: CommonColor
+                                                                              .BLACK_COLOR,
+                                                                          fontSize:
+                                                                              SizeConfig
+                                                                                      .blockSizeHorizontal *
+                                                                                  4.0,
+                                                                          fontWeight:
+                                                                              FontWeight
+                                                                                  .w500,
+                                                                          fontFamily:
+                                                                              'Roboto_Regular'),
+                                                                    ),
+                                                                    RichText(
+                                                                      text: TextSpan(
+                                                                          text:
+                                                                              '\u{20B9}',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color: Colors
+                                                                                .black,
+                                                                            fontWeight:
+                                                                                FontWeight
+                                                                                    .w400,
+                                                                            fontSize:
+                                                                                SizeConfig.blockSizeHorizontal *
+                                                                                    4.0,
+                                                                          ),
+                                                                          children: [
+                                                                            TextSpan(
+                                                                                text:
+                                                                                    ' ${bidData[index]['bidAmount']}/-',
+                                                                                style: TextStyle(
+                                                                                    fontSize: SizeConfig.blockSizeHorizontal *
+                                                                                        3.7,
+                                                                                    color:
+                                                                                        Colors.black,
+                                                                                    fontWeight: FontWeight.w400))
+                                                                          ]),
                                                                     ),
                                                                   ],
                                                                 ),
-                                                              ),
+                                                                Padding(
+                                                                  padding: EdgeInsets.only(
+                                                                      top: SizeConfig
+                                                                              .screenHeight *
+                                                                          0.003),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Text(
+                                                                        "Pune",
+                                                                        style: TextStyle(
+                                                                            color: CommonColor
+                                                                                .BLACK_COLOR,
+                                                                            fontSize:
+                                                                                SizeConfig.blockSizeHorizontal *
+                                                                                    3.0,
+                                                                            fontWeight:
+                                                                                FontWeight
+                                                                                    .w500,
+                                                                            fontFamily:
+                                                                                'Roboto_Regular'),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding: EdgeInsets.only(
+                                                                      top: SizeConfig
+                                                                              .screenHeight *
+                                                                          0.003),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Text(
+                                                                        "Vehicle Available on : 1 Feb 23",
+                                                                        style: TextStyle(
+                                                                            color: CommonColor
+                                                                                .BLACK_COLOR,
+                                                                            fontSize:
+                                                                                SizeConfig.blockSizeHorizontal *
+                                                                                    3.5,
+                                                                            fontWeight:
+                                                                                FontWeight
+                                                                                    .w500,
+                                                                            fontFamily:
+                                                                                'Roboto_Regular'),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding: EdgeInsets.only(
+                                                                      top: SizeConfig
+                                                                              .screenHeight *
+                                                                          0.002),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: [
+                                                                      Container(
+                                                                        width: SizeConfig
+                                                                                .screenWidth *
+                                                                            0.1,
+                                                                        height: SizeConfig
+                                                                                .screenHeight *
+                                                                            0.023,
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color: CommonColor
+                                                                              .SELECT_TYPE_COLOR,
+                                                                          borderRadius:
+                                                                              BorderRadius
+                                                                                  .circular(
+                                                                                      5),
+                                                                        ),
+                                                                        child: Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment
+                                                                                  .center,
+                                                                          children: [
+                                                                            Padding(
+                                                                              padding: EdgeInsets.only(
+                                                                                  left: SizeConfig.screenWidth *
+                                                                                      0.02),
+                                                                              child:
+                                                                                  Padding(
+                                                                                    padding: EdgeInsets.only(
+                                                                                      right:
+                                                                                      SizeConfig.screenWidth * 0.005),
+                                                                                    child: Text(
+                                                                                "${bidData[index]['customer']['rating']['rate']}",
+                                                                                style: TextStyle(
+                                                                                      color: CommonColor
+                                                                                          .WHITE_COLOR,
+                                                                                      fontSize: SizeConfig.blockSizeHorizontal *
+                                                                                          2.7,
+                                                                                      fontWeight:
+                                                                                          FontWeight.w500,
+                                                                                      fontFamily: 'Roboto_Medium'),
+                                                                              ),
+                                                                                  ),
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: EdgeInsets.only(
+                                                                                  right:
+                                                                                      SizeConfig.screenWidth * 0.017),
+                                                                              child:
+                                                                                  Icon(
+                                                                                Icons
+                                                                                    .star,
+                                                                                size: SizeConfig.blockSizeHorizontal *
+                                                                                    2.5,
+                                                                                color: Colors
+                                                                                    .white,
+                                                                              ),
+                                                                            )
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                      GestureDetector(
+                                                                        onTap: () {
+                                                                          Navigator.push(
+                                                                              context,
+                                                                              MaterialPageRoute(
+                                                                                  builder: (context) =>
+                                                                                      const BookingDetailsScreen()));
+                                                                        },
+                                                                        child:
+                                                                            Container(
+                                                                          width: SizeConfig
+                                                                                  .screenWidth *
+                                                                              0.18,
+                                                                          height: SizeConfig
+                                                                                  .screenHeight *
+                                                                              0.03,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color: CommonColor
+                                                                                .SIGN_UP_TEXT_COLOR,
+                                                                            borderRadius:
+                                                                                BorderRadius
+                                                                                    .circular(7),
+                                                                          ),
+                                                                          child: Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment
+                                                                                    .center,
+                                                                            children: [
+                                                                              Text(
+                                                                                "Book Now",
+                                                                                style: TextStyle(
+                                                                                    color: CommonColor
+                                                                                        .WHITE_COLOR,
+                                                                                    fontSize: SizeConfig.blockSizeHorizontal *
+                                                                                        3.0,
+                                                                                    fontWeight:
+                                                                                        FontWeight.w500,
+                                                                                    fontFamily: 'Roboto_Medium'),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding: EdgeInsets.only(
+                                                                      top: SizeConfig
+                                                                              .screenHeight *
+                                                                          0.01),
+                                                                  child: Container(
+                                                                    height: SizeConfig
+                                                                            .screenWidth *
+                                                                        0.003,
+                                                                    color:
+                                                                        Colors.black12,
+                                                                    child: const Row(
+                                                                      children: [
+                                                                        Text(
+                                                                          "hii",
+                                                                          style: TextStyle(
+                                                                              color: Colors
+                                                                                  .transparent),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
-                                                          ],
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                }),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                              top: SizeConfig.screenHeight * 0.02,
-                                            ),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            InterestedTransporterList(postId: items[index].id,)));
-                                              },
-                                              child: Container(
-                                                width:
-                                                    SizeConfig.screenWidth * 0.21,
-                                                height:
-                                                    SizeConfig.screenHeight * 0.04,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.transparent,
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
+                                                      );
+                                                    }),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                  top: SizeConfig.screenHeight * 0.02,
                                                 ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "View All",
-                                                      style: TextStyle(
-                                                          color: CommonColor
-                                                              .BLACK_COLOR,
-                                                          fontSize: SizeConfig
-                                                                  .blockSizeHorizontal *
-                                                              4.0,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontFamily:
-                                                              'Roboto_Medium'),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                InterestedTransporterList(postId: items[index].id,)));
+                                                  },
+                                                  child: Container(
+                                                    width:
+                                                        SizeConfig.screenWidth * 0.21,
+                                                    height:
+                                                        SizeConfig.screenHeight * 0.04,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.transparent,
+                                                      borderRadius:
+                                                          BorderRadius.circular(10),
                                                     ),
-                                                  ],
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.center,
+                                                      children: [
+                                                        Text(
+                                                          "View All",
+                                                          style: TextStyle(
+                                                              color: CommonColor
+                                                                  .BLACK_COLOR,
+                                                              fontSize: SizeConfig
+                                                                      .blockSizeHorizontal *
+                                                                  4.0,
+                                                              fontWeight:
+                                                                  FontWeight.w500,
+                                                              fontFamily:
+                                                                  'Roboto_Medium'),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
+                                            ],
                                           ),
+                                          Visibility(
+                                            visible: transportList,
+                                              child: CircularProgressIndicator()
+                                          )
                                         ],
                                       ),
-                                      Visibility(
-                                        visible: transportList,
-                                          child: CircularProgressIndicator()
-                                      )
-                                    ],
-                                  ),
+                                    ),
+                                    SizedBox(
+                                      height: SizeConfig.screenHeight * 0.02,
+                                    )
+                                  ],
                                 ),
-                                SizedBox(
-                                  height: SizeConfig.screenHeight * 0.02,
-                                )
-                              ],
-                            ),
+                              ),
+                              Visibility(
+                                visible: transportEmptyDialog,
+                                child: Container(
+                                  height: SizeConfig.screenHeight*0.04,
+                                  width: SizeConfig.screenWidth*0.6,
+                                  decoration: BoxDecoration(
+                                    color: CommonColor.SIGN_UP_TEXT_COLOR.withOpacity(0.9),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(child: Text("No any transporter present here.",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: SizeConfig.blockSizeHorizontal*3.7,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Roboto_Medium'
+                                  ),)),
+                                ),
+                              ),
+                            ],
                           ),
                         );
                       },

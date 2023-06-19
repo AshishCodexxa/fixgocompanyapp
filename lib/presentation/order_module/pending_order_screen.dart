@@ -79,6 +79,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
           for(int i = 0 ; i < items.length; i++){
             print(items[i].id);
             getAllBidsAgainstPostLimited(items[i].id).then((value){
+              if(mounted)
               setState(() {
 
               });

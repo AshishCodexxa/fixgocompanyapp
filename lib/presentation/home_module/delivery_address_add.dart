@@ -450,7 +450,14 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                   width: parentWidth*0.3,
                   decoration: BoxDecoration(
                       color: CommonColor.SIGN_UP_TEXT_COLOR,
-                      borderRadius: BorderRadius.circular(20)
+                      borderRadius: BorderRadius.circular(5),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.27),
+                          blurRadius: 5,
+                          spreadRadius: 1,
+                          offset: const Offset(1, 2)),
+                    ],
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
