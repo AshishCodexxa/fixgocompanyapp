@@ -507,7 +507,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            const InterestedTransporterList()));
+                                                            InterestedTransporterList(postId: items[index].id,)));
                                               },
                                               child: Container(
                                                 width:

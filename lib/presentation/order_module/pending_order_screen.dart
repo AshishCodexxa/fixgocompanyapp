@@ -1,6 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:fixgocompanyapp/all_dialogs/load_more_info_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/data/api_constant/api_url.dart';
+import 'package:fixgocompanyapp/data/data_constant/constant_data.dart';
 import 'package:fixgocompanyapp/data/dio_client.dart';
 import 'package:fixgocompanyapp/data/model/get_all_pending_post_response_model.dart';
 import 'package:fixgocompanyapp/presentation/home_module/booking_details_screen.dart';
@@ -8,6 +11,7 @@ import 'package:fixgocompanyapp/presentation/home_module/interested_transporter_
 import 'package:fixgocompanyapp/presentation/home_module/transporter_info_profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 
 
@@ -30,6 +34,9 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
   final items = <Docs>[];
 
   bool isLoading = false;
+  bool transportList = false;
+
+  final Dio _dio = Dio();
 
   String? pickUpDate;
   String? pickUpTime;
@@ -42,6 +49,8 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
   String? passLastIndexAddress;
   String? pickUpIndexDate;
   String? pickUpIndexTime;
+
+  var bidData;
 
   @override
   void initState() {
@@ -66,7 +75,16 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
       items.addAll(jsonList.data.docs);
 
       if(mounted){
-        setState(() {});
+        setState(() {
+          for(int i = 0 ; i < items.length; i++){
+            print(items[i].id);
+            getAllBidsAgainstPostLimited(items[i].id).then((value){
+              setState(() {
+
+              });
+            });
+          }
+        });
       }
     });
 
@@ -89,7 +107,9 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                     delegate: SliverChildBuilderDelegate(
                       childCount: items.length,
                           (context, index) {
-                        return Padding(
+                        return bidData == null ?
+                        Container():
+                        Padding(
                           padding: EdgeInsets.only(
                             bottom:selectedIndex == index ? SizeConfig.screenHeight*0.02 : SizeConfig.screenHeight*0.0,
                               left: SizeConfig.screenWidth*0.03,
@@ -149,155 +169,256 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                     children: [
                                       getTransporterListHeading(SizeConfig.screenHeight, SizeConfig.screenWidth),
                                       Container(
-                                        height: SizeConfig.screenHeight*0.38,
+                                        height:bidData.length == 1 ? SizeConfig.screenHeight * 0.14 : bidData.length == 2 ? SizeConfig.screenHeight * 0.26 : bidData.length == 3 ? SizeConfig.screenHeight * 0.38 : 0.0,
                                         color: Colors.transparent,
                                         child: ListView.builder(
-                                            itemCount: 3,
-                                            physics: const NeverScrollableScrollPhysics(),
+                                            itemCount: bidData == null ? 0 : bidData.length,
+                                            physics:
+                                            const NeverScrollableScrollPhysics(),
                                             padding: EdgeInsets.only(
-                                                bottom: SizeConfig.screenHeight * 0.0),
-                                            itemBuilder: (BuildContext context, int index) {
+                                                bottom:
+                                                SizeConfig.screenHeight *
+                                                    0.0),
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
                                               return Padding(
                                                 padding: EdgeInsets.only(
-                                                  top: SizeConfig.screenHeight*0.02,
-                                                  left: SizeConfig.screenWidth*0.05,
-                                                  right: SizeConfig.screenWidth*0.05,
+                                                  top: SizeConfig.screenHeight *
+                                                      0.02,
+                                                  left: SizeConfig.screenWidth *
+                                                      0.05,
+                                                  right:
+                                                  SizeConfig.screenWidth *
+                                                      0.05,
                                                 ),
                                                 child: GestureDetector(
-                                                  onTap: (){
-                                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const TransporterProfile(transporterName: '', transporterLocation: '', transporterTrip: '', transporterRating: '',)));
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                TransporterProfile(transporterName: "${bidData[index]['customer']['name']}",
+                                                                  transporterLocation: '',
+                                                                  transporterTrip: '',
+                                                                  transporterRating: '${bidData[index]['customer']['rating']['rate']}',)));
                                                   },
                                                   child: Container(
                                                     color: Colors.transparent,
                                                     child: Column(
                                                       children: [
-
                                                         Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                           children: [
-
-                                                            Text("Mahesh Transporter",
+                                                            Text(
+                                                              bidData[index]['customer']['name'],
                                                               style: TextStyle(
-                                                                  color: CommonColor.BLACK_COLOR,
-                                                                  fontSize: SizeConfig.blockSizeHorizontal*4.0,
-                                                                  fontWeight: FontWeight.w500,
-                                                                  fontFamily: 'Roboto_Regular'
-                                                              ),),
-
+                                                                  color: CommonColor
+                                                                      .BLACK_COLOR,
+                                                                  fontSize:
+                                                                  SizeConfig
+                                                                      .blockSizeHorizontal *
+                                                                      4.0,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                                  fontFamily:
+                                                                  'Roboto_Regular'),
+                                                            ),
                                                             RichText(
                                                               text: TextSpan(
-                                                                  text: '\u{20B9}',
-                                                                  style: TextStyle(
-                                                                    color: Colors.black,
-                                                                    fontWeight: FontWeight.w400,
-                                                                    fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                                                  text:
+                                                                  '\u{20B9}',
+                                                                  style:
+                                                                  TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                    fontSize:
+                                                                    SizeConfig.blockSizeHorizontal *
+                                                                        4.0,
                                                                   ),
                                                                   children: [
                                                                     TextSpan(
-                                                                        text: ' 2000/-',
+                                                                        text:
+                                                                        ' ${bidData[index]['bidAmount']}/-',
                                                                         style: TextStyle(
-                                                                            fontSize: SizeConfig.blockSizeHorizontal*3.7,
-                                                                            color: Colors.black,
+                                                                            fontSize: SizeConfig.blockSizeHorizontal *
+                                                                                3.7,
+                                                                            color:
+                                                                            Colors.black,
                                                                             fontWeight: FontWeight.w400))
                                                                   ]),
                                                             ),
-
                                                           ],
                                                         ),
-
                                                         Padding(
-                                                          padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.003),
+                                                          padding: EdgeInsets.only(
+                                                              top: SizeConfig
+                                                                  .screenHeight *
+                                                                  0.003),
                                                           child: Row(
-                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
                                                             children: [
-                                                              Text("Pune",
+                                                              Text(
+                                                                "Pune",
                                                                 style: TextStyle(
-                                                                    color: CommonColor.BLACK_COLOR,
-                                                                    fontSize: SizeConfig.blockSizeHorizontal*3.0,
-                                                                    fontWeight: FontWeight.w500,
-                                                                    fontFamily: 'Roboto_Regular'
-                                                                ),),
+                                                                    color: CommonColor
+                                                                        .BLACK_COLOR,
+                                                                    fontSize:
+                                                                    SizeConfig.blockSizeHorizontal *
+                                                                        3.0,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                    fontFamily:
+                                                                    'Roboto_Regular'),
+                                                              ),
                                                             ],
                                                           ),
                                                         ),
-
                                                         Padding(
-                                                          padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.003),
+                                                          padding: EdgeInsets.only(
+                                                              top: SizeConfig
+                                                                  .screenHeight *
+                                                                  0.003),
                                                           child: Row(
-                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
                                                             children: [
-                                                              Text("Vehicle Available on : 1 Feb 23",
+                                                              Text(
+                                                                "Vehicle Available on : 1 Feb 23",
                                                                 style: TextStyle(
-                                                                    color: CommonColor.BLACK_COLOR,
-                                                                    fontSize: SizeConfig.blockSizeHorizontal*3.5,
-                                                                    fontWeight: FontWeight.w500,
-                                                                    fontFamily: 'Roboto_Regular'
-                                                                ),),
+                                                                    color: CommonColor
+                                                                        .BLACK_COLOR,
+                                                                    fontSize:
+                                                                    SizeConfig.blockSizeHorizontal *
+                                                                        3.5,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                    fontFamily:
+                                                                    'Roboto_Regular'),
+                                                              ),
                                                             ],
                                                           ),
                                                         ),
-
                                                         Padding(
-                                                          padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.002),
+                                                          padding: EdgeInsets.only(
+                                                              top: SizeConfig
+                                                                  .screenHeight *
+                                                                  0.002),
                                                           child: Row(
-                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
                                                             children: [
                                                               Container(
-                                                                width: SizeConfig.screenWidth*0.11,
-                                                                height: SizeConfig.screenHeight*0.023,
-                                                                decoration: BoxDecoration(
-                                                                  color: CommonColor.SELECT_TYPE_COLOR,
-                                                                  borderRadius: BorderRadius.circular(5),
+                                                                width: SizeConfig
+                                                                    .screenWidth *
+                                                                    0.1,
+                                                                height: SizeConfig
+                                                                    .screenHeight *
+                                                                    0.023,
+                                                                decoration:
+                                                                BoxDecoration(
+                                                                  color: CommonColor
+                                                                      .SELECT_TYPE_COLOR,
+                                                                  borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                      5),
                                                                 ),
                                                                 child: Row(
-                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                  mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
                                                                   children: [
-
                                                                     Padding(
-                                                                      padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.02),
-                                                                      child: Text("4.5",
-                                                                        style: TextStyle(
-                                                                            color: CommonColor.WHITE_COLOR,
-                                                                            fontSize: SizeConfig.blockSizeHorizontal*2.7,
-                                                                            fontWeight: FontWeight.w500,
-                                                                            fontFamily: 'Roboto_Medium'
-                                                                        ),),
+                                                                      padding: EdgeInsets.only(
+                                                                          left: SizeConfig.screenWidth *
+                                                                              0.02),
+                                                                      child:
+                                                                      Padding(
+                                                                        padding: EdgeInsets.only(
+                                                                            right:
+                                                                            SizeConfig.screenWidth * 0.005),
+                                                                        child: Text(
+                                                                          "${bidData[index]['customer']['rating']['rate']}",
+                                                                          style: TextStyle(
+                                                                              color: CommonColor
+                                                                                  .WHITE_COLOR,
+                                                                              fontSize: SizeConfig.blockSizeHorizontal *
+                                                                                  2.7,
+                                                                              fontWeight:
+                                                                              FontWeight.w500,
+                                                                              fontFamily: 'Roboto_Medium'),
+                                                                        ),
+                                                                      ),
                                                                     ),
-
                                                                     Padding(
-                                                                      padding: EdgeInsets.only(right: SizeConfig.screenWidth*0.017),
-                                                                      child: Icon(Icons.star,
-                                                                        size: SizeConfig.blockSizeHorizontal*2.5,
-                                                                        color: Colors.white,),
+                                                                      padding: EdgeInsets.only(
+                                                                          right:
+                                                                          SizeConfig.screenWidth * 0.017),
+                                                                      child:
+                                                                      Icon(
+                                                                        Icons
+                                                                            .star,
+                                                                        size: SizeConfig.blockSizeHorizontal *
+                                                                            2.5,
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
                                                                     )
-
                                                                   ],
                                                                 ),
                                                               ),
-
                                                               GestureDetector(
-                                                                onTap: (){
-                                                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookingDetailsScreen()));
+                                                                onTap: () {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                          const BookingDetailsScreen()));
                                                                 },
-                                                                child: Container(
-                                                                  width: SizeConfig.screenWidth*0.18,
-                                                                  height: SizeConfig.screenHeight*0.03,
-                                                                  decoration: BoxDecoration(
-                                                                    color: CommonColor.SIGN_UP_TEXT_COLOR,
-                                                                    borderRadius: BorderRadius.circular(7),
+                                                                child:
+                                                                Container(
+                                                                  width: SizeConfig
+                                                                      .screenWidth *
+                                                                      0.18,
+                                                                  height: SizeConfig
+                                                                      .screenHeight *
+                                                                      0.03,
+                                                                  decoration:
+                                                                  BoxDecoration(
+                                                                    color: CommonColor
+                                                                        .SIGN_UP_TEXT_COLOR,
+                                                                    borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(7),
                                                                   ),
                                                                   child: Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                    mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
                                                                     children: [
-
-                                                                      Text("Book Now",
+                                                                      Text(
+                                                                        "Book Now",
                                                                         style: TextStyle(
-                                                                            color: CommonColor.WHITE_COLOR,
-                                                                            fontSize: SizeConfig.blockSizeHorizontal*3.0,
-                                                                            fontWeight: FontWeight.w500,
-                                                                            fontFamily: 'Roboto_Medium'
-                                                                        ),),
-
+                                                                            color: CommonColor
+                                                                                .WHITE_COLOR,
+                                                                            fontSize: SizeConfig.blockSizeHorizontal *
+                                                                                3.0,
+                                                                            fontWeight:
+                                                                            FontWeight.w500,
+                                                                            fontFamily: 'Roboto_Medium'),
+                                                                      ),
                                                                     ],
                                                                   ),
                                                                 ),
@@ -305,36 +426,41 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                                             ],
                                                           ),
                                                         ),
-
                                                         Padding(
-                                                          padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.01),
+                                                          padding: EdgeInsets.only(
+                                                              top: SizeConfig
+                                                                  .screenHeight *
+                                                                  0.01),
                                                           child: Container(
-                                                            height: SizeConfig.screenWidth*0.003,
-                                                            color: Colors.black12,
-                                                            child: Row(
-                                                              children: const [
-                                                                Text("hii",
+                                                            height: SizeConfig
+                                                                .screenWidth *
+                                                                0.003,
+                                                            color:
+                                                            Colors.black12,
+                                                            child: const Row(
+                                                              children: [
+                                                                Text(
+                                                                  "hii",
                                                                   style: TextStyle(
-                                                                      color: Colors.transparent
-                                                                  ),),
+                                                                      color: Colors
+                                                                          .transparent),
+                                                                ),
                                                               ],
                                                             ),
                                                           ),
                                                         ),
-
                                                       ],
                                                     ),
                                                   ),
                                                 ),
                                               );
-                                            }
-                                        ),
+                                            }),
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.02,),
                                         child: GestureDetector(
                                           onTap: (){
-                                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const InterestedTransporterList()));
+                                            Navigator.push(context, MaterialPageRoute(builder: (context)=> InterestedTransporterList(postId: items[index].id,)));
                                           },
                                           child: Container(
                                             width: SizeConfig.screenWidth*0.21,
@@ -420,11 +546,13 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
     var inputCreateFormat = DateFormat('hh:mm a');
     createPostTime = inputCreateFormat.format(inputCreateTime);
 
-    pickUpLocation =
-    "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
+    pickUpLocation = "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
+
+
+    // print(pickUpLocation);
 
     finalLocation =
-    "${items[index].receiver.address.street},   ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
+    "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
 
     return Padding(
       padding: EdgeInsets.only(top: parentHeight * 0.015),
@@ -696,10 +824,11 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                     passPickIndexAddress = "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
 
 
-                    print(passPickIndexAddress);
+                    // print(passPickIndexAddress);
 
                     passLastIndexAddress =
                     "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
+
 
                     DateTime tempDate = DateFormat("yyyy-MM-dd").parse(items[index].pickupDate);
                     var inputDate = DateTime.parse(tempDate.toString());
@@ -711,8 +840,6 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                     var inputTime = DateTime.parse(parseDate.toString());
                     var inputFormat = DateFormat('hh:mm a');
                     pickUpIndexTime = inputFormat.format(inputTime);
-
-
 
                     showCupertinoDialog(
                       context: context,
@@ -755,27 +882,27 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
     );
   }
 
-
-  Widget getTransporterListHeading(double parentHeight, double parentWidth){
+  Widget getTransporterListHeading(double parentHeight, double parentWidth) {
     return Padding(
       padding: EdgeInsets.only(
-        top: parentHeight*0.025,
-        left: parentWidth*0.05,
-        right: parentWidth*0.05,
+        top: parentHeight * 0.025,
+        left: parentWidth * 0.05,
+        right: parentWidth * 0.05,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-
-          Text("Interested Transporter List",
+          Text(
+            "Interested Transporter List",
             style: TextStyle(
                 color: CommonColor.BLACK_COLOR,
-                fontSize: SizeConfig.blockSizeHorizontal*5.0,
+                fontSize: SizeConfig.blockSizeHorizontal * 5.0,
                 fontWeight: FontWeight.w500,
-                fontFamily: 'Roboto_Medium'
-            ),),
+                fontFamily: 'Roboto_Medium'),
+          ),
 
-         /* GestureDetector(
+          /*GestureDetector(
+            onDoubleTap: (){},
             onTap: (){
               showModalBottomSheet(
                   context: context,
@@ -789,17 +916,56 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                   });
             },
             child: Container(
-                color: Colors.transparent,
+              color: Colors.transparent,
                 child: Padding(
                   padding: EdgeInsets.all(3.0),
                   child: Image(image: AssetImage("assets/images/filter_icon.png")),
                 )
             ),
           )*/
-
         ],
       ),
     );
+  }
+
+
+  Future<Map<String, dynamic>> getAllBidsAgainstPostLimited(String postId) async {
+
+    String url = "${ApiConstants().baseUrl}post/bid/$postId/?limit=3";
+
+    String? sessionToken = GetStorage().read<String>(
+        ConstantData.userAccessToken);
+
+    if(mounted){
+      setState(() {
+        transportList = true;
+      });
+    }
+
+    try {
+      Response response = await _dio.get(
+        url,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $sessionToken',
+          },
+        ),
+      );
+
+      print("getAllBidsAgainstPostLimitedSC --> ${response.statusCode}");
+      print("getAllBidsAgainstPostLimitedData --> ${response.data}");
+
+
+
+      if(response.statusCode == 200){
+        bidData = response.data['data'] as List;
+        print("jsonList $bidData");
+      }
+
+      return response.data;
+    } on DioError catch (e) {
+      return e.response!.data;
+    }
   }
 }
 

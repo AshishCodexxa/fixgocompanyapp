@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:fixgocompanyapp/all_dialogs/filter_transporter_list_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/data/dio_client.dart';
+import 'package:fixgocompanyapp/data/model/get_transport_bid_response_model.dart';
 import 'package:fixgocompanyapp/presentation/home_module/booking_details_screen.dart';
 import 'package:fixgocompanyapp/presentation/home_module/transporter_info_profile.dart';
 import 'package:flutter/material.dart';
@@ -9,13 +13,37 @@ import 'package:flutter/material.dart';
 
 
 class InterestedTransporterList extends StatefulWidget {
-  const InterestedTransporterList({Key? key}) : super(key: key);
+
+  final String postId;
+
+  const InterestedTransporterList({Key? key, required this.postId}) : super(key: key);
 
   @override
   State<InterestedTransporterList> createState() => _InterestedTransporterListState();
 }
 
 class _InterestedTransporterListState extends State<InterestedTransporterList> {
+
+
+  var bidData;
+
+  @override
+  void initState() {
+    super.initState();
+
+    ApiClient().getAllBidsAgainstPostUnLimited(widget.postId).then((value){
+
+      bidData = value['data'] as List;
+
+      print(bidData);
+
+    });
+
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -103,7 +131,7 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
     return Container(
       height: SizeConfig.safeUsedHeight * .88,
       child: ListView.builder(
-          itemCount: 10,
+          itemCount: bidData == null ? 0 : bidData.length,
           padding: EdgeInsets.zero,
           itemBuilder: (BuildContext context, int index) {
             return Column(
@@ -127,7 +155,7 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
 
-                              Text("Mahesh Transporter",
+                              Text(bidData[index]['customer']['name'] ?? '',
                                 style: TextStyle(
                                     color: CommonColor.BLACK_COLOR,
                                     fontSize: SizeConfig.blockSizeHorizontal*4.0,
@@ -145,7 +173,7 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
                                     ),
                                     children: [
                                       TextSpan(
-                                          text: ' 2000/-',
+                                          text: ' ${bidData[index]['bidAmount']}/-',
                                           style: TextStyle(
                                               fontSize: SizeConfig.blockSizeHorizontal*3.7,
                                               color: Colors.black,
@@ -206,7 +234,7 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
 
                                       Padding(
                                         padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.02),
-                                        child: Text("4.5",
+                                        child: Text("${bidData[index]['customer']['rating']['rate']}",
                                           style: TextStyle(
                                               color: CommonColor.WHITE_COLOR,
                                               fontSize: SizeConfig.blockSizeHorizontal*2.7,

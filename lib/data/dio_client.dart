@@ -250,9 +250,9 @@ class ApiClient {
   }
 
 
-  /*Future<Map<String, dynamic>> getAllBidsAgainstPostLimited(String postId) async {
+  Future<Map<String, dynamic>> getAllBidsAgainstPostUnLimited(String postId) async {
 
-    String url = "${ApiConstants().baseUrl}post/bid/$postId/?limit=3";
+    String url = "${ApiConstants().baseUrl}post/bid/$postId/?limit=0";
 
     String? sessionToken = GetStorage().read<String>(
         ConstantData.userAccessToken);
@@ -274,7 +274,7 @@ class ApiClient {
     } on DioError catch (e) {
       return e.response!.data;
     }
-  }*/
+  }
 
 
 }
