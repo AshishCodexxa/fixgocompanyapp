@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:fixgocompanyapp/all_dialogs/load_more_info_dialog.dart';
+import 'package:fixgocompanyapp/all_dialogs/transporter_amount_pay_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:fixgocompanyapp/data/api_constant/api_url.dart';
 import 'package:fixgocompanyapp/data/data_constant/constant_data.dart';
 import 'package:fixgocompanyapp/data/dio_client.dart';
 import 'package:fixgocompanyapp/data/model/get_all_pending_post_response_model.dart';
+import 'package:fixgocompanyapp/presentation/home_module/booking_details_screen.dart';
 import 'package:fixgocompanyapp/presentation/home_module/create_new_load_form_layout.dart';
 import 'package:fixgocompanyapp/presentation/home_module/interested_transporter_list.dart';
 import 'package:fixgocompanyapp/presentation/home_module/transporter_info_profile.dart';
@@ -35,6 +37,8 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
   bool isLoading = false;
   bool transportList = false;
   bool transportEmptyDialog = false;
+
+  double advancePay = 0.0;
 
   final items = <Docs>[];
   String? pickUpDate;
@@ -86,6 +90,8 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
 
       items.addAll(jsonList.data.docs);
 
+
+
       if(mounted){
         setState(() {
           for(int i = 0 ; i < items.length; i++){
@@ -95,6 +101,12 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
 
               });
             });
+
+            int totalFare = items[i].fare;
+            double ratio = items[i].advancePayment.ratio / 100;
+            advancePay = totalFare * ratio;
+
+            print(advancePay);
           }
         });
       }
@@ -467,6 +479,31 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                                                           //             const BookingDetailsScreen()));
 
                                                                           // widget.mListener.addOrderPrentScreen();
+
+
+
+
+                                                                          items[index].advancePayment.mode == "CASH" ? showCupertinoDialog(
+                                                                            context: context,
+                                                                            barrierDismissible: true,
+                                                                            builder: (context) {
+                                                                              return AnimatedOpacity(
+                                                                                  opacity: 1.0,
+                                                                                  duration: Duration(seconds: 2),
+                                                                                  child: TransporterAmountPayDialog(
+                                                                                    isComeFrom: '3',
+                                                                                    advanceCashPayAmonut: advancePay.toString(),
+                                                                                    bidId: bidData[index]['_id'] ?? '',
+                                                                                  ));
+                                                                            },
+                                                                          )
+                                                                              :  items[index].advancePayment.mode == "ONLINE" ?
+                                                                          Navigator.push(
+                                                                              context,
+                                                                              MaterialPageRoute(
+                                                                                  builder: (context) =>
+                                                                                  const BookingDetailsScreen())) : Container();
+
                                                                         },
                                                                         child:
                                                                             Container(
@@ -904,7 +941,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
               children: [
                 Container(
                   color: Colors.transparent,
-                  width: parentWidth * 0.5,
+                  width: parentWidth * 0.83,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -977,7 +1014,31 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                             ),
                           ),
                         ],
-                      )
+                      ),
+                      Visibility(
+                         visible: items[index].advancePayment.mode == "CASH" ? true : false,
+                        child: Container(
+                          width: SizeConfig.screenWidth * 0.18,
+                          height: SizeConfig.screenHeight * 0.028,
+                          decoration: BoxDecoration(
+                            color: CommonColor.PAY_IN_CASH_COLOR,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Pay in Cash",
+                                style: TextStyle(
+                                    color: CommonColor.WHITE_COLOR,
+                                    fontSize: SizeConfig.blockSizeHorizontal * 2.7,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Roboto_Medium'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

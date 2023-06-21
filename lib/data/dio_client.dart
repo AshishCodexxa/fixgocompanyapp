@@ -305,5 +305,39 @@ class ApiClient {
     }
   }
 
+  Future<Map<String, dynamic>> getAcceptTransporterBid(String bidId) async {
+
+
+    String url = "${ApiConstants().baseUrl}post/bid/$bidId/";
+    print([bidId, url]);
+
+    String? sessionToken = GetStorage().read<String>(
+        ConstantData.userAccessToken);
+
+    try {
+      Response response = await _dio.put(
+        url,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $sessionToken',
+          },
+        ),
+        /*data: {
+            "bidID": bidId
+          }*/
+
+      );
+
+      print("getAcceptTransporterBidSC --> ${response.statusCode}");
+      print("getAcceptTransporterBidData --> ${response.data}");
+
+      return response.data;
+    } on DioException catch (e) {
+      print(e);
+      return <String, dynamic>{'response': false};
+    }
+  }
+
+
 
 }

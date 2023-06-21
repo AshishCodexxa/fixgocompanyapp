@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:fixgocompanyapp/all_dialogs/load_more_info_dialog.dart';
+import 'package:fixgocompanyapp/all_dialogs/transporter_amount_pay_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:fixgocompanyapp/data/api_constant/api_url.dart';
@@ -40,6 +41,8 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
   bool transportEmptyDialog = false;
 
   final Dio _dio = Dio();
+
+  double advancePay = 0.0;
 
   String? pickUpDate;
   String? pickUpTime;
@@ -101,6 +104,12 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
 
               });
             });
+
+            int totalFare = items[i].fare;
+            double ratio = items[i].advancePayment.ratio / 100;
+            advancePay = totalFare * ratio;
+
+            print(advancePay);
           }
         });
       }
@@ -220,6 +229,8 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                                 ),
                                                 child: GestureDetector(
                                                   onTap: () {
+                                                    print(bidData[index]['_id']);
+
                                                     Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
@@ -228,7 +239,9 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                                                   transporterLocation: '',
                                                                   transporterTrip: '',
                                                                   transporterRating: '${bidData[index]['customer']['rating']['rate']}',
-                                                                  transporterAddress: "${bidData[index]['customer']['companyAddress']}",)));
+                                                                  transporterAddress: "${bidData[index]['customer']['companyAddress']}",
+
+                                                                )));
                                                   },
                                                   child: Container(
                                                     color: Colors.transparent,
@@ -287,61 +300,65 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                                           padding: EdgeInsets.only(
                                                               top: SizeConfig
                                                                   .screenHeight *
-                                                                  0.003),
+                                                                  0.007),
                                                           child: Row(
                                                             mainAxisAlignment:
                                                             MainAxisAlignment
                                                                 .start,
                                                             children: [
-                                                              Text(
-                                                                "Pune",
-                                                                style: TextStyle(
-                                                                    color: CommonColor
-                                                                        .BLACK_COLOR,
-                                                                    fontSize:
-                                                                    SizeConfig.blockSizeHorizontal *
-                                                                        3.0,
-                                                                    fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                                    fontFamily:
-                                                                    'Roboto_Regular'),
+                                                              Container(
+                                                                width: SizeConfig.screenWidth*0.6,
+                                                                color: Colors.transparent,
+                                                                child: Text(
+                                                                  bidData[index]['customer']['companyAddress'],
+                                                                  style: TextStyle(
+                                                                      color: CommonColor
+                                                                          .BLACK_COLOR,
+                                                                      fontSize:
+                                                                      SizeConfig.blockSizeHorizontal *
+                                                                          3.0,
+                                                                      fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                      fontFamily:
+                                                                      'Roboto_Regular'),
+                                                                ),
                                                               ),
                                                             ],
                                                           ),
                                                         ),
+                                                        /*Padding(
+                                                                  padding: EdgeInsets.only(
+                                                                      top: SizeConfig
+                                                                              .screenHeight *
+                                                                          0.003),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Text(
+                                                                        "Vehicle Available on : 1 Feb 23",
+                                                                        style: TextStyle(
+                                                                            color: CommonColor
+                                                                                .BLACK_COLOR,
+                                                                            fontSize:
+                                                                                SizeConfig.blockSizeHorizontal *
+                                                                                    3.5,
+                                                                            fontWeight:
+                                                                                FontWeight
+                                                                                    .w500,
+                                                                            fontFamily:
+                                                                                'Roboto_Regular'),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),*/
                                                         Padding(
                                                           padding: EdgeInsets.only(
                                                               top: SizeConfig
                                                                   .screenHeight *
-                                                                  0.003),
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                            children: [
-                                                              Text(
-                                                                "Vehicle Available on : 1 Feb 23",
-                                                                style: TextStyle(
-                                                                    color: CommonColor
-                                                                        .BLACK_COLOR,
-                                                                    fontSize:
-                                                                    SizeConfig.blockSizeHorizontal *
-                                                                        3.5,
-                                                                    fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                                    fontFamily:
-                                                                    'Roboto_Regular'),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        Padding(
-                                                          padding: EdgeInsets.only(
-                                                              top: SizeConfig
-                                                                  .screenHeight *
-                                                                  0.002),
+                                                                  0.005),
                                                           child: Row(
                                                             mainAxisAlignment:
                                                             MainAxisAlignment
@@ -409,11 +426,37 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                                               ),
                                                               GestureDetector(
                                                                 onTap: () {
+
+                                                                  // Navigator.push(
+                                                                  //     context,
+                                                                  //     MaterialPageRoute(
+                                                                  //         builder: (context) =>
+                                                                  //             const BookingDetailsScreen()));
+
+                                                                  // widget.mListener.addOrderPrentScreen();
+
+                                                                  print(bidData[index]['_id']);
+
+                                                                  items[index].advancePayment.mode == "CASH" ? showCupertinoDialog(
+                                                                    context: context,
+                                                                    barrierDismissible: true,
+                                                                    builder: (context) {
+                                                                      return AnimatedOpacity(
+                                                                          opacity: 1.0,
+                                                                          duration: Duration(seconds: 2),
+                                                                          child: TransporterAmountPayDialog(
+                                                                            isComeFrom: '3',
+                                                                            advanceCashPayAmonut: advancePay.toString(),
+                                                                            bidId: bidData[index]['_id'] ?? '',
+                                                                          ));
+                                                                    },
+                                                                  )
+                                                                      :  items[index].advancePayment.mode == "ONLINE" ?
                                                                   Navigator.push(
                                                                       context,
                                                                       MaterialPageRoute(
                                                                           builder: (context) =>
-                                                                          const BookingDetailsScreen()));
+                                                                          const BookingDetailsScreen())) : Container();
                                                                 },
                                                                 child:
                                                                 Container(
@@ -458,7 +501,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                                           padding: EdgeInsets.only(
                                                               top: SizeConfig
                                                                   .screenHeight *
-                                                                  0.01),
+                                                                  0.02),
                                                           child: Container(
                                                             height: SizeConfig
                                                                 .screenWidth *
@@ -743,7 +786,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                   children: [
                     Container(
                       color: Colors.transparent,
-                      width: parentWidth * 0.5,
+                      width: parentWidth * 0.83,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -816,7 +859,31 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                 ),
                               ),
                             ],
-                          )
+                          ),
+                          Visibility(
+                            visible: items[index].advancePayment.mode == "CASH" ? true : false,
+                            child: Container(
+                              width: SizeConfig.screenWidth * 0.18,
+                              height: SizeConfig.screenHeight * 0.028,
+                              decoration: BoxDecoration(
+                                color: CommonColor.PAY_IN_CASH_COLOR,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Pay in Cash",
+                                    style: TextStyle(
+                                        color: CommonColor.WHITE_COLOR,
+                                        fontSize: SizeConfig.blockSizeHorizontal * 2.7,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'Roboto_Medium'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

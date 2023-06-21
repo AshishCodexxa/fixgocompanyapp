@@ -1,6 +1,7 @@
 import 'package:fixgocompanyapp/all_dialogs/get_transporter_review_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/data/dio_client.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,14 +11,25 @@ import 'package:flutter/material.dart';
 class TransporterAmountPayDialog extends StatefulWidget {
 
   final String isComeFrom;
+  final String advanceCashPayAmonut;
+  final String bidId;
 
-  const TransporterAmountPayDialog({Key? key, required this.isComeFrom}) : super(key: key);
+  const TransporterAmountPayDialog({Key? key, required this.isComeFrom, this.advanceCashPayAmonut = '', this.bidId = ''}) : super(key: key);
 
   @override
   State<TransporterAmountPayDialog> createState() => _TransporterAmountPayDialogState();
 }
 
 class _TransporterAmountPayDialogState extends State<TransporterAmountPayDialog> {
+
+  @override
+  void initState() {
+    super.initState();
+    print(widget.bidId);
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -83,7 +95,7 @@ class _TransporterAmountPayDialogState extends State<TransporterAmountPayDialog>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                      "Rs.5000/-",
+                                      "Rs.${widget.advanceCashPayAmonut}/-",
                                       style: TextStyle(
                                           fontSize:
                                           SizeConfig.blockSizeHorizontal * 7.0,
@@ -131,18 +143,28 @@ class _TransporterAmountPayDialogState extends State<TransporterAmountPayDialog>
                           GestureDetector(
                             onTap: (){
 
-                              Navigator.pop(context);
+                              print(widget.bidId);
 
-                              showCupertinoDialog(
-                                context: context,
-                                barrierDismissible: true,
-                                builder: (context) {
-                                  return const AnimatedOpacity(
-                                      opacity: 1.0,
-                                      duration: Duration(seconds: 2),
-                                      child: GetTransporterReview());
-                                },
-                              );
+                              ApiClient().getAcceptTransporterBid(widget.bidId).then((value){
+                                if(mounted){
+                                  setState(() {
+                                    Navigator.pop(context);
+                                    showCupertinoDialog(
+                                      context: context,
+                                      barrierDismissible: true,
+                                      builder: (context) {
+                                        return const AnimatedOpacity(
+                                            opacity: 1.0,
+                                            duration: Duration(seconds: 2),
+                                            child: GetTransporterReview());
+                                      },
+                                    );
+                                  });
+                                }
+                              });
+
+
+
 
                             },
                             child: Container(
