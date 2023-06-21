@@ -444,7 +444,7 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Adv. - $advancePay/- ${postModel[postIndex].advancePayment.mode == "ONLINE" ? "(Online)" :
+                                  "Adv. - ${advancePay.toStringAsFixed(1)}/- ${postModel[postIndex].advancePayment.mode == "ONLINE" ? "(Online)" :
                                   postModel[postIndex].advancePayment.mode == "CASH" ? "(Cash)" : ""}",
                                   style: TextStyle(
                                     color: CommonColor.FROM_AREA_COLOR,
@@ -456,8 +456,8 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                                 Padding(
                                   padding: EdgeInsets.only(left: parentWidth*0.02),
                                   child: Text(
-                                    "Due. - $deliveryPay/- ${postModel[postIndex].advancePayment.mode == "ONLINE" ? "(Online)" :
-                                    postModel[postIndex].advancePayment.mode == "CASH" ? "(Cash)" : ""} ",
+                                    "Due. - ${deliveryPay.toStringAsFixed(1)}/- ${postModel[postIndex].deliveryPayment.mode == "ONLINE" ? "(Online)" :
+                                    postModel[postIndex].deliveryPayment.mode == "CASH" ? "(Cash)" : ""} ",
                                     style: TextStyle(
                                       color: CommonColor.TO_AREA_COLOR,
                                       fontWeight: FontWeight.w400,
@@ -664,41 +664,44 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                     )
                   ],
                 ),
-                GestureDetector(
-                  onDoubleTap: () {},
-                  onTap: () {
-                    showCupertinoDialog(
-                      context: context,
-                      barrierDismissible: true,
-                      builder: (context) {
-                        return const AnimatedOpacity(
-                            opacity: 1.0,
-                            duration: Duration(seconds: 2),
-                            child: TransporterAmountPayDialog(
-                              isComeFrom: '3',
-                            ));
-                      },
-                    );
-                  },
-                  child: Container(
-                    width: SizeConfig.screenWidth * 0.18,
-                    height: SizeConfig.screenHeight * 0.028,
-                    decoration: BoxDecoration(
-                      color: CommonColor.PAY_IN_CASH_COLOR,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Pay in Cash",
-                          style: TextStyle(
-                              color: CommonColor.WHITE_COLOR,
-                              fontSize: SizeConfig.blockSizeHorizontal * 2.7,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'Roboto_Medium'),
-                        ),
-                      ],
+                Visibility(
+                  visible: postModel[postIndex].deliveryPayment.mode == "CASH" ? true : false,
+                  child: GestureDetector(
+                    onDoubleTap: () {},
+                    onTap: () {
+                      showCupertinoDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (context) {
+                          return const AnimatedOpacity(
+                              opacity: 1.0,
+                              duration: Duration(seconds: 2),
+                              child: TransporterAmountPayDialog(
+                                isComeFrom: '3',
+                              ));
+                        },
+                      );
+                    },
+                    child: Container(
+                      width: SizeConfig.screenWidth * 0.18,
+                      height: SizeConfig.screenHeight * 0.028,
+                      decoration: BoxDecoration(
+                        color: CommonColor.PAY_IN_CASH_COLOR,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Pay in Cash",
+                            style: TextStyle(
+                                color: CommonColor.WHITE_COLOR,
+                                fontSize: SizeConfig.blockSizeHorizontal * 2.7,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Roboto_Medium'),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
