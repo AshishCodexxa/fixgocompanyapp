@@ -5,8 +5,11 @@ import 'package:fixgocompanyapp/all_dialogs/transporter_verify_details_dialog.da
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/draw_dash_border_class.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/data/dio_client.dart';
+import 'package:fixgocompanyapp/data/model/get_all_pending_post_response_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class OnGoingOrderScreen extends StatefulWidget {
   const OnGoingOrderScreen({Key? key}) : super(key: key);
@@ -16,8 +19,47 @@ class OnGoingOrderScreen extends StatefulWidget {
 }
 
 class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
+
   bool vehicleDetailsHide = true;
   bool arrowShow = true;
+  bool isLoading = false;
+
+  final items = <Docs>[];
+
+  double advancePay = 0.0;
+  double deliveryPay = 0.0;
+
+  String? passPickIndexAddress;
+  String? passLastIndexAddress;
+  String? pickUpIndexDate;
+  String? pickUpIndexTime;
+  String customerIndexId = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
+
+    ApiClient().getCompanyOnGoingPost().then((value){
+
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+
+      var jsonList = GetAllPendingPostResponseModel.fromJson(value);
+
+      items.addAll(jsonList.data.docs);
+
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +73,19 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
             height: SizeConfig.screenHeight * 0.8,
             color: Colors.transparent,
             child: ListView.builder(
-                itemCount: 1,
+                itemCount: items.length ?? 0,
                 padding:
                     EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.02),
                 itemBuilder: (BuildContext context, int index) {
+
+                  int totalFare = items[index].fare;
+                  double ratio = items[index].advancePayment.ratio / 100;
+                  advancePay = totalFare * ratio;
+
+                  int totalsFare = items[index].fare;
+                  double ratios = items[index].deliveryPayment.ratio / 100;
+                  deliveryPay = totalsFare * ratios;
+
                   return Padding(
                     padding: EdgeInsets.only(
                         top: SizeConfig.screenHeight * 0.02,
@@ -53,7 +104,7 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                         ],
                       ),
                       child: getInfoCardLayout(
-                          SizeConfig.screenHeight, SizeConfig.screenWidth),
+                          SizeConfig.screenHeight, SizeConfig.screenWidth, items, index),
                     ),
                   );
                 }),
@@ -63,7 +114,7 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
     );
   }
 
-  Widget getInfoCardLayout(double parentHeight, double parentWidth) {
+  Widget getInfoCardLayout(double parentHeight, double parentWidth, List<Docs> postModel, int postIndex) {
     return Padding(
       padding: EdgeInsets.only(
         top: parentHeight * 0.012,
@@ -96,7 +147,7 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                             width: parentWidth * 0.57,
                             color: Colors.transparent,
                             child: Text(
-                              "City Avenue, Wakad",
+                              postModel[postIndex].pickup.address.street,
                               style: TextStyle(
                                   color: CommonColor.BLACK_COLOR,
                                   fontSize:
@@ -138,7 +189,7 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                             width: parentWidth * 0.57,
                             color: Colors.transparent,
                             child: Text(
-                              "Pune Station",
+                              postModel[postIndex].receiver.address.street,
                               style: TextStyle(
                                   color: CommonColor.BLACK_COLOR,
                                   fontSize:
@@ -169,7 +220,7 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                           ),
                           children: [
                             TextSpan(
-                                text: ' 99999/-',
+                                text: ' ${postModel[postIndex].fare}/-',
                                 style: TextStyle(
                                     fontSize:
                                         SizeConfig.blockSizeHorizontal * 4.5,
@@ -260,6 +311,11 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                 GestureDetector(
                   onDoubleTap: () {},
                   onTap: () {
+
+                    customerIndexId = postModel[postIndex].receiver.customer;
+
+                    print(customerIndexId);
+
                     showModalBottomSheet(
                         context: context,
                         backgroundColor: Colors.transparent,
@@ -271,7 +327,9 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                             padding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom,
                             ),
-                            child: ReceiverVerifyDialog(),
+                            child: ReceiverVerifyDialog(
+                              customerId: customerIndexId,
+                            ),
                           );
                         });
                   },
@@ -295,7 +353,7 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                         child: Row(
                           children: [
                             Text(
-                              "Nikita Mahindrakar",
+                              postModel[postIndex].receiver.name,
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize:
@@ -380,13 +438,14 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                       child: Row(
                         children: [
                           Container(
-                            width: parentWidth * 0.45,
-                            color: Colors.transparent,
+                            width: parentWidth * 0.7,
+                            // color: Colors.red,
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Adv. - 1000/- (Online)",
+                                  "Adv. - $advancePay/- ${postModel[postIndex].advancePayment.mode == "ONLINE" ? "(Online)" :
+                                  postModel[postIndex].advancePayment.mode == "CASH" ? "(Cash)" : ""}",
                                   style: TextStyle(
                                     color: CommonColor.FROM_AREA_COLOR,
                                     fontWeight: FontWeight.w400,
@@ -394,13 +453,17 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                                         SizeConfig.blockSizeHorizontal * 2.5,
                                   ),
                                 ),
-                                Text(
-                                  "Due. - 1000/- ",
-                                  style: TextStyle(
-                                    color: CommonColor.TO_AREA_COLOR,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize:
-                                        SizeConfig.blockSizeHorizontal * 2.5,
+                                Padding(
+                                  padding: EdgeInsets.only(left: parentWidth*0.02),
+                                  child: Text(
+                                    "Due. - $deliveryPay/- ${postModel[postIndex].advancePayment.mode == "ONLINE" ? "(Online)" :
+                                    postModel[postIndex].advancePayment.mode == "CASH" ? "(Cash)" : ""} ",
+                                    style: TextStyle(
+                                      color: CommonColor.TO_AREA_COLOR,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize:
+                                          SizeConfig.blockSizeHorizontal * 2.5,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -471,14 +534,39 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                           top: parentHeight * 0.007, right: parentWidth * 0.05),
                       child: GestureDetector(
                         onTap: () {
+
+                          passPickIndexAddress = "${postModel[postIndex].pickup.address.street}, ${postModel[postIndex].pickup.address.city}, ${postModel[postIndex].pickup.address.state}, ${postModel[postIndex].pickup.address.country}, ${postModel[postIndex].pickup.address.postalCode}";
+
+                          passLastIndexAddress =
+                          "${postModel[postIndex].receiver.address.street}, ${postModel[postIndex].receiver.address.city}, ${postModel[postIndex].receiver.address.state}, ${postModel[postIndex].receiver.address.country}, ${postModel[postIndex].receiver.address.postalCode}";
+
+                          DateTime tempDate = DateFormat("yyyy-MM-dd").parse(postModel[postIndex].pickupDate);
+                          var inputDate = DateTime.parse(tempDate.toString());
+                          var outputFormat = DateFormat('dd MMMM yyyy');
+                          pickUpIndexDate = outputFormat.format(inputDate);
+
+                          DateTime parseDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                              .parse(postModel[postIndex].pickupDate);
+                          var inputTime = DateTime.parse(parseDate.toString());
+                          var inputFormat = DateFormat('hh:mm a');
+                          pickUpIndexTime = inputFormat.format(inputTime);
+
+
                           showCupertinoDialog(
                             context: context,
                             barrierDismissible: true,
                             builder: (context) {
-                              return const AnimatedOpacity(
+                              return AnimatedOpacity(
                                   opacity: 1.0,
                                   duration: Duration(seconds: 2),
-                                  child: LoadMoreInfoDialog(postDetails: [], postIndex: 0,));
+                                  child: LoadMoreInfoDialog(
+                                    postDetails: postModel,
+                                    postIndex: postIndex,
+                                    pickupDate: pickUpIndexDate.toString(),
+                                    pickupTime: pickUpIndexTime.toString(),
+                                    pickupLocation: passPickIndexAddress.toString(),
+                                    finalLocation: passLastIndexAddress.toString(),
+                                  ));
                             },
                           );
                           // Navigator.push(context, MaterialPageRoute(builder: (context)=>ProcessTimelinePage()));

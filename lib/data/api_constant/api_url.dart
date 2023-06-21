@@ -33,6 +33,7 @@ class ApiConstants {
   String getBidAgainstPostLimited = "post/bid/:postID/?limit=3";
   String deleteCompanyPost = "post/delete/";
   String companyAcceptTransporterBid = "post/bid/";
+  String userVerifyDetails = "user/detail/";
 
 
 

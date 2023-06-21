@@ -338,6 +338,56 @@ class ApiClient {
     }
   }
 
+  Future<Map<String, dynamic>> getCompanyOnGoingPost() async {
 
+    String url = "${ApiConstants().baseUrl}${ApiConstants().companyAllPost}${ConstantData.ONGOING_POST}";
+
+    String? sessionToken = GetStorage().read<String>(
+        ConstantData.userAccessToken);
+
+    try {
+      Response response = await _dio.get(
+        url,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $sessionToken',
+          },
+        ),
+      );
+
+      print("getCompanyOnGoingPostSC --> ${response.statusCode}");
+      print("getCompanyOnGoingPostData --> ${response.data}");
+
+      return response.data;
+    } on DioError catch (e) {
+      return e.response!.data;
+    }
+  }
+
+  Future<Map<String, dynamic>> getVerifyDetailingApi(String customerId) async {
+
+    String url = "${ApiConstants().baseUrl}${ApiConstants().userVerifyDetails}$customerId";
+
+    String? sessionToken = GetStorage().read<String>(
+        ConstantData.userAccessToken);
+
+    try {
+      Response response = await _dio.get(
+        url,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $sessionToken',
+          },
+        ),
+      );
+
+      print("getVerifyDetailingApiSC --> ${response.statusCode}");
+      print("getVerifyDetailingApiData --> ${response.data}");
+
+      return response.data;
+    } on DioError catch (e) {
+      return e.response!.data;
+    }
+  }
 
 }
