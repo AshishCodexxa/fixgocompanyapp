@@ -1031,7 +1031,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                 color: CommonColor.SIGN_UP_TEXT_COLOR.withOpacity(0.9),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Center(child: Text("No any transporter present here.",
+              child: Center(child: Text("No Bid Available.",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: SizeConfig.blockSizeHorizontal*3.7,
