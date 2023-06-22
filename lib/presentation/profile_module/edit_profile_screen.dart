@@ -24,7 +24,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   List<TextEditingController> mobileNumberController = [];
 
 
-  // TextEditingController mobileNumberController = TextEditingController();
+  TextEditingController mobileNumberControllers = TextEditingController();
+  TextEditingController phoneNumberControllers = TextEditingController();
   TextEditingController gstNumberController = TextEditingController();
   TextEditingController tinNumberController = TextEditingController();
   TextEditingController aadhaarNumberController = TextEditingController();
@@ -89,11 +90,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           for(int index = 0; index < landlineNumber.length ; index++){
 
 
-            phoneNumberController.add(TextEditingController());
-
-            phoneNumberController[index].text = landlineNumber[index].toString();
-
+            // phoneNumberController.add(TextEditingController());
+            //
+            // phoneNumberController[index].text = landlineNumber[index].toString();
+            //
             // print(phoneNumberController[index].text);
+
+            phoneNumberControllers.text = landlineNumber[index].toString();
 
 
           }
@@ -104,11 +107,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         setState(() {
 
           for(int index = 0; index < mobileNumber.length ; index++) {
-            mobileNumberController.add(TextEditingController());
+            /*mobileNumberController.add(TextEditingController());
 
             mobileNumberController[index].text = mobileNumber[index].toString();
 
-            // print(mobileNumberController[index].text);
+            print(mobileNumberController[index].text);*/
+            mobileNumberControllers.text = mobileNumber[index].toString();
           }
         });
       }
@@ -148,11 +152,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
           Visibility(
             visible: isLoading,
-              child: Image(
-                image: const AssetImage("assets/images/grid_loading.gif"),
-                height: SizeConfig.screenHeight*.1,
-                width: SizeConfig.screenWidth*.1,
-              )
+              child: CircularProgressIndicator()
           ),
         ],
       ),
@@ -475,7 +475,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
 
 
-        for(int i = 0; i < phoneNumberController.length; i++)
+        // for(int i = 0; i < phoneNumberController.length; i++)
           Padding(
             padding: EdgeInsets.only(
               top: parentHeight * 0.02,
@@ -506,7 +506,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             left: parentWidth * 0.03,
                           ),
                           child: TextFormField(
-                            controller: phoneNumberController[i],
+                            controller: phoneNumberControllers/*[i]*/,
                             textInputAction: TextInputAction.next,
                             decoration: InputDecoration(
                               enabledBorder: const UnderlineInputBorder(
@@ -519,7 +519,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ),
                               label: RichText(
                                 text: TextSpan(
-                                    text: 'LandLine No. ${i+1}',
+                                    text: 'LandLine No.',
                                     style: TextStyle(
                                       color: Colors.black54,
                                       fontWeight: FontWeight.w400,
@@ -546,7 +546,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                         ),
                       ),
-                      Padding(
+                     /* Padding(
                         padding: EdgeInsets.only(right: parentWidth * 0.03),
                         child: Container(
                           width: parentWidth * 0.16,
@@ -619,7 +619,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ],
                           ),
                         ),
-                      )
+                      )*/
                     ],
                   ),
                   Padding(
@@ -647,9 +647,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
 
 
-        for (int i = 0;
-        i < mobileNumberController.length;
-        i++)
+        // for (int i = 0;
+        // i < mobileNumberController.length;
+        // i++)
           Padding(
             padding: EdgeInsets.only(
               top: parentHeight * 0.02,
@@ -680,7 +680,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             left: parentWidth * 0.03,
                           ),
                           child: TextFormField(
-                            controller: mobileNumberController[i],
+                            controller: mobileNumberControllers,
                             textInputAction: TextInputAction.next,
                             decoration: InputDecoration(
                               enabledBorder: const UnderlineInputBorder(
@@ -693,7 +693,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ),
                               label: RichText(
                                 text: TextSpan(
-                                    text: 'Mobile No. ${i+1}',
+                                    text: 'Mobile No.',
                                     style: TextStyle(
                                       color: Colors.black54,
                                       fontWeight: FontWeight.w400,
@@ -720,7 +720,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                         ),
                       ),
-                      Padding(
+                      /*Padding(
                         padding: EdgeInsets.only(right: parentWidth * 0.03),
                         child: Container(
                           width: parentWidth * 0.16,
@@ -784,7 +784,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ],
                           ),
                         ),
-                      )
+                      )*/
                     ],
                   ),
                   Padding(
@@ -1042,13 +1042,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     });
                   }
 
+                  landlineNumber.add(phoneNumberControllers.text);
+                  mobileNumber.add(mobileNumberControllers.text);
+
                   ApiClient().editUserProfileData(
                     userNameController.text,
                     companyNameController.text,
                     emailController.text,
                     companyAddressController.text,
-                    /*[],
-                    [],*/
+                    landlineNumber,
+                    mobileNumber,
                     gstNumberController.text,
                     tinNumberController.text,
                     aadhaarNumberController.text,
@@ -1073,7 +1076,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       GetStorage().write(ConstantData.emailId, value['data']['email']);
                       GetStorage().write(ConstantData.contactNo, value['data']['phone']);
 
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const Dashboard(isComeFrom: "1",)));
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const Dashboard(isComeFrom: "1",)));
 
 
                     });

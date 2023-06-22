@@ -94,8 +94,8 @@ class ApiClient {
       String companyName,
       String emailId,
       String companyAddress,
-      /*List landLineNo,
-      List mobileNo,*/
+      List landLineNo,
+      List mobileNo,
       String gstNo,
       String tinNo,
       String aadhaarNo,
@@ -125,8 +125,8 @@ class ApiClient {
             "tinNumber": tinNo,
             "panNumber": panNo,
             "aadharIDNumber": aadhaarNo,
-            "landlines": ["1234", "5678"],
-            "mobiles": ["4321", "8765"]
+            "landlines": landLineNo,
+            "mobiles": mobileNo
           }
 
       );
