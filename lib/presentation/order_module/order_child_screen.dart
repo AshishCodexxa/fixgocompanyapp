@@ -31,7 +31,6 @@ class _OrderChildScreenState extends State<OrderChildScreen> with SingleTickerPr
     if(widget.comeFrom == "1"){
       _tabController.animateTo(1);
     }
-    // Jump to the second tab (index 1)
   }
 
 
@@ -128,7 +127,7 @@ class _OrderChildScreenState extends State<OrderChildScreen> with SingleTickerPr
               height: SizeConfig.screenHeight*0.9,
               child: TabBarView(
                 controller: _tabController,
-                children: <Widget>[
+                children: const <Widget>[
                   PendingOrderScreen(),
                   OnGoingOrderScreen(),
                   CompleteOrderScreen(),
