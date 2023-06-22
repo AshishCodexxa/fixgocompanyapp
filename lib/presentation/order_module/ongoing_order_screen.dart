@@ -26,6 +26,8 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
 
   final items = <Docs>[];
 
+  int? selectedIndex;
+
   double advancePay = 0.0;
   double deliveryPay = 0.0;
 
@@ -601,26 +603,37 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        if (mounted) {
-                          setState(() {
-                            vehicleDetailsHide = !vehicleDetailsHide;
-                            arrowShow = !arrowShow;
-                          });
+                        if (selectedIndex != postIndex) {
+                          if(mounted){
+                            setState(() {
+                              selectedIndex = postIndex;
+                            });
+                          }
+                          print(selectedIndex);
+                        }else {
+                          if (mounted) {
+                            setState(() {
+                              selectedIndex = -1;
+                            });
+                          }
                         }
                       },
-                      child: Text(
-                        "Vehicle Details",
-                        style: TextStyle(
-                            color: CommonColor.BLACK_COLOR,
-                            fontSize: SizeConfig.blockSizeHorizontal * 3.7,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Roboto_Medium'),
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Text(
+                          "Vehicle Details",
+                          style: TextStyle(
+                              color: CommonColor.BLACK_COLOR,
+                              fontSize: SizeConfig.blockSizeHorizontal * 3.7,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Roboto_Medium'),
+                        ),
                       ),
                     ),
                     Stack(
                       children: [
                         Visibility(
-                          visible: arrowShow,
+                          visible: postIndex != selectedIndex,
                           child: GestureDetector(
                             onDoubleTap: () {},
                             onTap: () {
@@ -641,7 +654,7 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                           ),
                         ),
                         Visibility(
-                          visible: !arrowShow,
+                          visible: postIndex == selectedIndex,
                           child: GestureDetector(
                             onTap: () {
                               if (mounted) {
@@ -710,7 +723,7 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
           ),
           for (int i = 0; i < 3; i++)
             Visibility(
-              visible: !vehicleDetailsHide,
+              visible: postIndex == selectedIndex,
               child: Padding(
                 padding: EdgeInsets.only(
                     left: parentWidth * 0.05,

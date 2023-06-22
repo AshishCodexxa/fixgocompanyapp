@@ -68,6 +68,11 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
     }
   }
 
+  Timer? _timer;
+  DateTime? endTime;
+  String formattedTime = '';
+
+
 
   @override
   void initState() {
@@ -95,6 +100,13 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
       if(mounted){
         setState(() {
           for(int i = 0 ; i < items.length; i++){
+
+            DateTime dt = DateTime.parse(items[i].createdAt);
+
+            endTime = dt.add(Duration(days: 2));
+
+            print("endTime $endTime");
+
             print(items[i].id);
             getAllBidsAgainstPostLimited(items[i].id).then((value){
               setState(() {
@@ -111,13 +123,47 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
         });
       }
 
+
+
     });
 
 
   }
 
   @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  String _printDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if(endTime != null){
+
+      Duration remainingTime = endTime!.difference(DateTime.now());
+
+        formattedTime = _printDuration(remainingTime);
+
+
+      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        if (DateTime.now().isAfter(endTime!)) {
+          _timer?.cancel();
+          // Timer has finished, you can handle the desired action here.
+        } else {
+          if(mounted) {
+            setState(() {});
+          }
+        }
+      });
+
+    }
     return Scaffold(
       body: Stack(
         alignment: Alignment.center,
@@ -637,12 +683,12 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                 visible: transportEmptyDialog,
                                 child: Container(
                                   height: SizeConfig.screenHeight*0.04,
-                                  width: SizeConfig.screenWidth*0.6,
+                                  width: SizeConfig.screenWidth*0.4,
                                   decoration: BoxDecoration(
                                     color: CommonColor.SIGN_UP_TEXT_COLOR.withOpacity(0.9),
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(6),
                                   ),
-                                  child: Center(child: Text("No any transporter present here.",
+                                  child: Center(child: Text("No Bid Available.",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: SizeConfig.blockSizeHorizontal*3.7,
@@ -783,6 +829,10 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
     finalLocation =
         "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
 
+
+
+
+
     return Padding(
       padding: EdgeInsets.only(top: parentHeight * 0.015),
       child: Column(
@@ -793,7 +843,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  "Time Left  23:59:59 hrs.",
+                  "Time Left  $formattedTime",
                   style: TextStyle(
                       color: CommonColor.TO_AREA_COLOR,
                       fontSize: SizeConfig.blockSizeHorizontal * 3.0,

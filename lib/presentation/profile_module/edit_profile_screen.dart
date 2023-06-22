@@ -152,7 +152,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
           Visibility(
             visible: isLoading,
-              child: CircularProgressIndicator()
+              child: const CircularProgressIndicator()
           ),
         ],
       ),
@@ -459,8 +459,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   child: Container(
                     height: SizeConfig.screenWidth * 0.003,
                     color: Colors.black38,
-                    child: Row(
-                      children: const [
+                    child: const Row(
+                      children: [
                         Text(
                           "hii",
                           style: TextStyle(color: Colors.transparent),
@@ -630,8 +630,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     child: Container(
                       height: SizeConfig.screenWidth * 0.003,
                       color: Colors.black38,
-                      child: Row(
-                        children: const [
+                      child: const Row(
+                        children: [
                           Text(
                             "hii",
                             style: TextStyle(color: Colors.transparent),
@@ -795,8 +795,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     child: Container(
                       height: SizeConfig.screenWidth * 0.003,
                       color: Colors.black38,
-                      child: Row(
-                        children: const [
+                      child: const Row(
+                        children: [
                           Text(
                             "hii",
                             style: TextStyle(color: Colors.transparent),

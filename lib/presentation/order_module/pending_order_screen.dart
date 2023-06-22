@@ -58,6 +58,9 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
 
   var bidData;
 
+  Timer? _timer;
+  DateTime? endTime;
+  String formattedTime = '';
 
   startTimer() {
     var durtaion = new Duration(seconds: 2);
@@ -97,6 +100,14 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
       if(mounted){
         setState(() {
           for(int i = 0 ; i < items.length; i++){
+
+            DateTime dt = DateTime.parse(items[i].createdAt);
+
+            endTime = dt.add(Duration(days: 2));
+
+            print("endTime $endTime");
+
+
             print(items[i].id);
             getAllBidsAgainstPostLimited(items[i].id).then((value){
               if(mounted)
@@ -118,8 +129,42 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
   }
 
   @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+
+  String _printDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    if(endTime != null){
+
+      Duration remainingTime = endTime!.difference(DateTime.now());
+
+      formattedTime = _printDuration(remainingTime);
+
+
+      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        if (DateTime.now().isAfter(endTime!)) {
+          _timer?.cancel();
+          // Timer has finished, you can handle the desired action here.
+        } else {
+          if(mounted) {
+            setState(() {});
+          }
+        }
+      });
+
+    }
     return Scaffold(
       body:  Stack(
         alignment: Alignment.center,
@@ -638,7 +683,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      "Time Left  23:59:59 hrs.",
+                      "Time Left  $formattedTime",
                       style: TextStyle(
                           color: CommonColor.TO_AREA_COLOR,
                           fontSize: SizeConfig.blockSizeHorizontal * 3.0,
