@@ -322,10 +322,6 @@ class ApiClient {
             'Authorization': 'Bearer $sessionToken',
           },
         ),
-        /*data: {
-            "bidID": bidId
-          }*/
-
       );
 
       print("getAcceptTransporterBidSC --> ${response.statusCode}");

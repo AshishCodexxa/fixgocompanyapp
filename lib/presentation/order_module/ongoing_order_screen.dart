@@ -71,45 +71,65 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
         shrinkWrap: true,
         padding: EdgeInsets.zero,
         children: [
-          Container(
-            height: SizeConfig.screenHeight * 0.8,
-            color: Colors.transparent,
-            child: ListView.builder(
-                itemCount: items.length ?? 0,
-                padding:
-                    EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.02),
-                itemBuilder: (BuildContext context, int index) {
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                height: SizeConfig.screenHeight * 0.8,
+                color: Colors.transparent,
+                child: ListView.builder(
+                    itemCount: items.length ?? 0,
+                    padding:
+                        EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.02),
+                    itemBuilder: (BuildContext context, int index) {
 
-                  int totalFare = items[index].fare;
-                  double ratio = items[index].advancePayment.ratio / 100;
-                  advancePay = totalFare * ratio;
+                      int totalFare = items[index].fare;
+                      double ratio = items[index].advancePayment.ratio / 100;
+                      advancePay = totalFare * ratio;
 
-                  int totalsFare = items[index].fare;
-                  double ratios = items[index].deliveryPayment.ratio / 100;
-                  deliveryPay = totalsFare * ratios;
+                      int totalsFare = items[index].fare;
+                      double ratios = items[index].deliveryPayment.ratio / 100;
+                      deliveryPay = totalsFare * ratios;
 
-                  return Padding(
-                    padding: EdgeInsets.only(
-                        top: SizeConfig.screenHeight * 0.02,
-                        left: SizeConfig.screenWidth * 0.03,
-                        right: SizeConfig.screenWidth * 0.03),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 5,
-                              spreadRadius: 1,
-                              offset: const Offset(2, 6)),
-                        ],
-                      ),
-                      child: getInfoCardLayout(
-                          SizeConfig.screenHeight, SizeConfig.screenWidth, items, index),
-                    ),
-                  );
-                }),
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            top: SizeConfig.screenHeight * 0.02,
+                            left: SizeConfig.screenWidth * 0.03,
+                            right: SizeConfig.screenWidth * 0.03),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 5,
+                                  spreadRadius: 1,
+                                  offset: const Offset(2, 6)),
+                            ],
+                          ),
+                          child: getInfoCardLayout(
+                              SizeConfig.screenHeight, SizeConfig.screenWidth, items, index),
+                        ),
+                      );
+                    }),
+              ),
+              Visibility(
+                visible: items.isNotEmpty ? false : true,
+                child: Center(child: Text("No OnGoing Post Available.",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: SizeConfig.blockSizeHorizontal*4.0
+                  ),)),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: SizeConfig.screenHeight*0.1),
+                child: Visibility(
+                  visible: isLoading,
+                    child: CircularProgressIndicator()
+                ),
+              )
+            ],
           ),
         ],
       ),
@@ -630,6 +650,7 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                         ),
                       ),
                     ),
+
                     Stack(
                       children: [
                         Visibility(
@@ -678,19 +699,26 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                   ],
                 ),
                 Visibility(
-                  visible: postModel[postIndex].deliveryPayment.mode == "CASH" ? true : false,
+                  visible: postModel[postIndex].advancePayment.mode == "CASH" ? true : false,
                   child: GestureDetector(
                     onDoubleTap: () {},
                     onTap: () {
+
+                      int totalFare = items[postIndex].fare;
+                      double ratio = items[postIndex].advancePayment.ratio / 100;
+                      advancePay = totalFare * ratio;
+
+
                       showCupertinoDialog(
                         context: context,
                         barrierDismissible: true,
                         builder: (context) {
-                          return const AnimatedOpacity(
+                          return AnimatedOpacity(
                               opacity: 1.0,
                               duration: Duration(seconds: 2),
                               child: TransporterAmountPayDialog(
                                 isComeFrom: '3',
+                                advanceCashPayAmonut: advancePay.toStringAsFixed(1),
                               ));
                         },
                       );

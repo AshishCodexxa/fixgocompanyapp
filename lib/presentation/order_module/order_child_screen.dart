@@ -10,8 +10,9 @@ import 'package:flutter/material.dart';
 class OrderChildScreen extends StatefulWidget {
 
   final OrderChildScreenListener mListener;
+  final String comeFrom;
 
-  const OrderChildScreen({Key? key, required this.mListener}) : super(key: key);
+  const OrderChildScreen({Key? key, required this.mListener, this.comeFrom = ""}) : super(key: key);
 
   @override
   State<OrderChildScreen> createState() => _OrderChildScreenState();

@@ -482,26 +482,18 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
 
                                                                   print(bidData[index]['_id']);
 
-                                                                  items[index].advancePayment.mode == "CASH" ? showCupertinoDialog(
-                                                                    context: context,
-                                                                    barrierDismissible: true,
-                                                                    builder: (context) {
-                                                                      return AnimatedOpacity(
-                                                                          opacity: 1.0,
-                                                                          duration: Duration(seconds: 2),
-                                                                          child: TransporterAmountPayDialog(
-                                                                            isComeFrom: '3',
-                                                                            advanceCashPayAmonut: advancePay.toString(),
-                                                                            bidId: bidData[index]['_id'] ?? '',
-                                                                          ));
-                                                                    },
-                                                                  )
-                                                                      :  items[index].advancePayment.mode == "ONLINE" ?
-                                                                  Navigator.push(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                          const BookingDetailsScreen())) : Container();
+                                                                  if(items[index].advancePayment.mode == "CASH"){
+                                                                    ApiClient().getAcceptTransporterBid(bidData[index]['_id']);
+                                                                  }else if(items[index].advancePayment.mode == "ONLINE"){
+                                                                    Navigator.push(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                            builder: (context) =>
+                                                                            const BookingDetailsScreen()));
+                                                                  }else{
+                                                                    Container();
+                                                                  }
+
                                                                 },
                                                                 child:
                                                                 Container(
@@ -621,7 +613,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
           ),
           Visibility(
             visible: items.isNotEmpty ? false : true,
-            child: Center(child: Text("No Any Pending Post Available.",
+            child: Center(child: Text("No Pending Post Available.",
               style: TextStyle(
                   color: Colors.black,
                   fontSize: SizeConfig.blockSizeHorizontal*4.0
@@ -831,7 +823,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                   children: [
                     Container(
                       color: Colors.transparent,
-                      width: parentWidth * 0.83,
+                      width: parentWidth * 0.53,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -904,30 +896,6 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                 ),
                               ),
                             ],
-                          ),
-                          Visibility(
-                            visible: items[index].advancePayment.mode == "CASH" ? true : false,
-                            child: Container(
-                              width: SizeConfig.screenWidth * 0.18,
-                              height: SizeConfig.screenHeight * 0.028,
-                              decoration: BoxDecoration(
-                                color: CommonColor.PAY_IN_CASH_COLOR,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Pay in Cash",
-                                    style: TextStyle(
-                                        color: CommonColor.WHITE_COLOR,
-                                        fontSize: SizeConfig.blockSizeHorizontal * 2.7,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: 'Roboto_Medium'),
-                                  ),
-                                ],
-                              ),
-                            ),
                           ),
                         ],
                       ),

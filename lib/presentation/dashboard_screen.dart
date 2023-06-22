@@ -339,11 +339,12 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
   }
 
   @override
-  addOrderPrentScreen() {
+  addOrderPrentScreen(String comefrom) {
     isShow = false;
     addNewScreen(
         OrderChildScreen(
           mListener: this,
+          comeFrom: comefrom,
         ),
         ScreenConstant.ORDER_FRAGMENT);
   }
