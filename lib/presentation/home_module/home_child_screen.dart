@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:fixgocompanyapp/all_dialogs/load_more_info_dialog.dart';
-import 'package:fixgocompanyapp/all_dialogs/transporter_amount_pay_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:fixgocompanyapp/data/api_constant/api_url.dart';
@@ -72,9 +71,9 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
   DateTime? endTime;
   String formattedTime = '';
 
-  AlertDialog alert = AlertDialog(
+  AlertDialog alert = const AlertDialog(
     title: Text("Bid Book"),
-    content: Text("Bid Book Successfully"),
+    content: Text("Bid Book Successful."),
   );
 
 
@@ -107,7 +106,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
 
             DateTime dt = DateTime.parse(items[i].createdAt);
 
-            endTime = dt.add(Duration(days: 2));
+            endTime = dt.add(const Duration(days: 2));
 
             print("endTime $endTime");
 
@@ -156,7 +155,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
         formattedTime = _printDuration(remainingTime);
 
 
-      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         if (DateTime.now().isAfter(endTime!)) {
           _timer?.cancel();
           // Timer has finished, you can handle the desired action here.
@@ -662,7 +661,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                           ),
                                           Visibility(
                                             visible: transportList,
-                                              child: CircularProgressIndicator()
+                                              child: const CircularProgressIndicator()
                                           )
                                         ],
                                       ),

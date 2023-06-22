@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:fixgocompanyapp/all_dialogs/load_more_info_dialog.dart';
-import 'package:fixgocompanyapp/all_dialogs/transporter_amount_pay_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:fixgocompanyapp/data/api_constant/api_url.dart';
@@ -61,6 +60,11 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
   Timer? _timer;
   DateTime? endTime;
   String formattedTime = '';
+
+  AlertDialog alert = const AlertDialog(
+    title: Text("Bid Book"),
+    content: Text("Bid Book Successful."),
+  );
 
   startTimer() {
     var durtaion = new Duration(seconds: 2);
@@ -483,7 +487,14 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                                                   print(bidData[index]['_id']);
 
                                                                   if(items[index].advancePayment.mode == "CASH"){
-                                                                    ApiClient().getAcceptTransporterBid(bidData[index]['_id']);
+                                                                    ApiClient().getAcceptTransporterBid(bidData[index]['_id']).then((value){
+                                                                      showDialog(
+                                                                        context: context,
+                                                                        builder: (BuildContext context) {
+                                                                          return alert;
+                                                                        },
+                                                                      );
+                                                                    });
                                                                   }else if(items[index].advancePayment.mode == "ONLINE"){
                                                                     Navigator.push(
                                                                         context,

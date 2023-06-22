@@ -18,7 +18,29 @@ class OrderChildScreen extends StatefulWidget {
   State<OrderChildScreen> createState() => _OrderChildScreenState();
 }
 
-class _OrderChildScreenState extends State<OrderChildScreen> {
+class _OrderChildScreenState extends State<OrderChildScreen> with SingleTickerProviderStateMixin{
+
+
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+
+    if(widget.comeFrom == "1"){
+      _tabController.animateTo(1);
+    }
+    // Jump to the second tab (index 1)
+  }
+
+
+  @override
+  void dispose() {
+    _tabController.dispose(); // Dispose the TabController
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -37,6 +59,7 @@ class _OrderChildScreenState extends State<OrderChildScreen> {
                     color: CommonColor.APP_BAR_COLOR,
                     height: SizeConfig.screenHeight*0.12,
                     child: TabBar(
+                      controller: _tabController,
                         isScrollable: true,
                         padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.05,
                             right: SizeConfig.screenWidth*0.05,
@@ -103,7 +126,8 @@ class _OrderChildScreenState extends State<OrderChildScreen> {
             body: Container(
               color: Colors.red,
               height: SizeConfig.screenHeight*0.9,
-              child:  const TabBarView(
+              child: TabBarView(
+                controller: _tabController,
                 children: <Widget>[
                   PendingOrderScreen(),
                   OnGoingOrderScreen(),
