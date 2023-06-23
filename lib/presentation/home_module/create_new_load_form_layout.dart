@@ -167,6 +167,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
   hideLoadError() {
     Future.delayed(const Duration(seconds: 3), () {
+      if(mounted)
       setState(() {
         loadErrorShow = false;
       });
@@ -175,6 +176,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
   hideVehicleError() {
     Future.delayed(const Duration(seconds: 3), () {
+      if(mounted)
       setState(() {
         vehicleErrorShow = false;
       });
@@ -183,6 +185,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
   hidePaymentError() {
     Future.delayed(const Duration(seconds: 3), () {
+      if(mounted)
       setState(() {
         paymentErrorShow = false;
       });
@@ -2728,7 +2731,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                       BorderRadius.circular(7)),
                                               child: Center(
                                                 child: Text(
-                                                  "Semi",
+                                                  "Flat Body",
                                                   style: TextStyle(
                                                       color: trailerType == 1
                                                           ? CommonColor
@@ -2822,6 +2825,96 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               )),
                                         )
                                       ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: parentHeight * 0.02,
+                                        left: parentWidth * 0.03,
+                                        right: parentWidth * 0.05),
+                                    child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children:[
+                                          GestureDetector(
+                                            onTap: () {
+                                              trailerType = 4;
+                                              if (mounted) {
+                                                setState(() {});
+                                              }
+                                            },
+                                            child: Container(
+                                                height: parentHeight * 0.04,
+                                                width: parentWidth * 0.22,
+                                                decoration: BoxDecoration(
+                                                    color: trailerType == 4
+                                                        ? CommonColor
+                                                        .SIGN_UP_TEXT_COLOR
+                                                        : Colors.white,
+                                                    border: Border.all(
+                                                        color: Colors.black54),
+                                                    borderRadius:
+                                                    BorderRadius.circular(7)),
+                                                child: Center(
+                                                  child: Text(
+                                                    "Multi-Axle",
+                                                    style: TextStyle(
+                                                        color: trailerType == 4
+                                                            ? CommonColor
+                                                            .WHITE_COLOR
+                                                            : CommonColor
+                                                            .BLACK_COLOR,
+                                                        fontWeight:
+                                                        FontWeight.w400,
+                                                        fontSize: SizeConfig
+                                                            .blockSizeHorizontal *
+                                                            3.5,
+                                                        fontFamily:
+                                                        'Roboto_Medium'),
+                                                  ),
+                                                )),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: parentWidth * 0.05),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                trailerType = 5;
+                                                if (mounted) {
+                                                  setState(() {});
+                                                }
+                                              },
+                                              child: Container(
+                                                  height: parentHeight * 0.04,
+                                                  width: parentWidth * 0.22,
+                                                  decoration: BoxDecoration(
+                                                      color: trailerType == 5
+                                                          ? CommonColor
+                                                          .SIGN_UP_TEXT_COLOR
+                                                          : Colors.white,
+                                                      border: Border.all(
+                                                          color: Colors.black54),
+                                                      borderRadius:
+                                                      BorderRadius.circular(7)),
+                                                  child: Center(
+                                                    child: Text(
+                                                      "Low-Bed",
+                                                      style: TextStyle(
+                                                          color: trailerType == 5
+                                                              ? CommonColor
+                                                              .WHITE_COLOR
+                                                              : CommonColor
+                                                              .BLACK_COLOR,
+                                                          fontWeight:
+                                                          FontWeight.w400,
+                                                          fontSize: SizeConfig
+                                                              .blockSizeHorizontal *
+                                                              3.5,
+                                                          fontFamily:
+                                                          'Roboto_Medium'),
+                                                    ),
+                                                  )),
+                                            ),
+                                          ),
+                                        ]
                                     ),
                                   ),
                                   Visibility(

@@ -30,7 +30,6 @@ class _ProfileChildScreenState extends State<ProfileChildScreen> {
   @override
   void initState() {
     super.initState();
-
     if(mounted){
       setState(() {
 
@@ -41,10 +40,8 @@ class _ProfileChildScreenState extends State<ProfileChildScreen> {
           phoneNo = GetStorage().read(ConstantData.contactNo);
         }
 
-
       });
     }
-
   }
 
 
