@@ -1,12 +1,14 @@
 import 'package:fixgocompanyapp/all_dialogs/load_more_info_dialog.dart';
 import 'package:fixgocompanyapp/all_dialogs/receiver_details_dialog.dart';
-import 'package:fixgocompanyapp/all_dialogs/transporter_amount_pay_dialog.dart';
 import 'package:fixgocompanyapp/all_dialogs/transporter_verify_details_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/draw_dash_border_class.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/data/dio_client.dart';
+import 'package:fixgocompanyapp/data/model/get_all_pending_post_response_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 
 class CancelledOrderScreen extends StatefulWidget {
@@ -22,6 +24,47 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
   bool vehicleDetailsHide = true;
   bool arrowShow = true;
 
+  final items = <Docs>[];
+  bool isLoading = false;
+
+  double advancePay = 0.0;
+  double deliveryPay = 0.0;
+
+  String? passPickIndexAddress;
+  String? passLastIndexAddress;
+  String? pickUpIndexDate;
+  String? pickUpIndexTime;
+  String customerIndexId = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    if(mounted){
+      setState(() {
+        isLoading = true;
+      });
+    }
+
+
+    ApiClient().getCompanyAllCancelledPost().then((value){
+
+      if(mounted){
+        setState(() {
+          isLoading = false;
+        });
+      }
+
+      var jsonList = GetAllPendingPostResponseModel.fromJson(value);
+
+      items.addAll(jsonList.data.docs);
+
+      print("items $items");
+
+    });
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,37 +76,66 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
         children: [
 
 
-          Container(
-            height: SizeConfig.screenHeight * 0.8,
-            color: Colors.transparent,
-            child: ListView.builder(
-                itemCount: 1,
-                padding: EdgeInsets.only(
-                    bottom: SizeConfig.screenHeight * 0.02),
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                height: SizeConfig.screenHeight * 0.8,
+                color: Colors.transparent,
+                child: ListView.builder(
+                    itemCount: items.length ?? 0,
                     padding: EdgeInsets.only(
-                        top: SizeConfig.screenHeight * 0.02,
-                        left: SizeConfig.screenWidth * 0.03,
-                        right: SizeConfig.screenWidth * 0.03),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 5,
-                              spreadRadius: 1,
-                              offset: const Offset(2, 6)),
-                        ],
-                      ),
-                      child: getInfoCardLayout(
-                          SizeConfig.screenHeight, SizeConfig.screenWidth),
-                    ),
-                  );
-                }
-            ),
+                        bottom: SizeConfig.screenHeight * 0.02),
+                    itemBuilder: (BuildContext context, int index) {
+
+                      int totalFare = items[index].fare;
+                      double ratio = items[index].advancePayment.ratio / 100;
+                      advancePay = totalFare * ratio;
+
+                      int totalsFare = items[index].fare;
+                      double ratios = items[index].deliveryPayment.ratio / 100;
+                      deliveryPay = totalsFare * ratios;
+
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            top: SizeConfig.screenHeight * 0.02,
+                            left: SizeConfig.screenWidth * 0.03,
+                            right: SizeConfig.screenWidth * 0.03),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 5,
+                                  spreadRadius: 1,
+                                  offset: const Offset(2, 6)),
+                            ],
+                          ),
+                          child: getInfoCardLayout(
+                              SizeConfig.screenHeight, SizeConfig.screenWidth, items, index),
+                        ),
+                      );
+                    }
+                ),
+              ),
+              Visibility(
+                visible: items.isNotEmpty ? false : true,
+                child: Center(child: Text("No Cancelled Post Available.",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: SizeConfig.blockSizeHorizontal*4.0
+                  ),)),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: SizeConfig.screenHeight*0.1),
+                child: Visibility(
+                    visible: isLoading,
+                    child: CircularProgressIndicator()
+                ),
+              )
+            ],
           ),
 
         ],
@@ -71,7 +143,7 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
     );
   }
 
-  Widget getInfoCardLayout(double parentHeight, double parentWidth) {
+  Widget getInfoCardLayout(double parentHeight, double parentWidth, List<Docs> postModel, int postIndex) {
     return Padding(
       padding: EdgeInsets.only(top: parentHeight * 0.012,),
       child: Column(
@@ -91,7 +163,7 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                         Container(
                           height: parentHeight * 0.01,
                           width: parentWidth * 0.021,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               color: CommonColor.FROM_AREA_COLOR,
                               shape: BoxShape.circle
                           ),
@@ -104,7 +176,7 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                             width: parentWidth * 0.5,
                             color: Colors.transparent,
                             child: Text(
-                              "City Avenue, Wakad",
+                              postModel[postIndex].pickup.address.street,
                               style: TextStyle(
                                   color: CommonColor.BLACK_COLOR,
                                   fontSize: SizeConfig.blockSizeHorizontal *
@@ -138,7 +210,7 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                         Container(
                           height: parentHeight * 0.01,
                           width: parentWidth * 0.021,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               color: CommonColor.TO_AREA_COLOR,
                               shape: BoxShape.circle
                           ),
@@ -150,7 +222,7 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                             width: parentWidth * 0.5,
                             color: Colors.transparent,
                             child: Text(
-                              "Pune Station",
+                              postModel[postIndex].receiver.address.street,
                               style: TextStyle(
                                   color: CommonColor.BLACK_COLOR,
                                   fontSize: SizeConfig.blockSizeHorizontal *
@@ -184,7 +256,7 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                           ),
                           children: [
                             TextSpan(
-                                text: ' 99999/-',
+                                text: ' ${postModel[postIndex].fare}/-',
                                 style: TextStyle(
                                     fontSize:
                                     SizeConfig.blockSizeHorizontal * 4.5,
@@ -231,7 +303,7 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                             padding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom,
                             ),
-                            child: TransporterVerifyDialog(),
+                            child: const TransporterVerifyDialog(),
                           );
                         });
                   },
@@ -276,6 +348,10 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                 GestureDetector(
                   onDoubleTap: () {},
                   onTap: () {
+                    customerIndexId = postModel[postIndex].receiver.customer;
+
+                    print(customerIndexId);
+
                     showModalBottomSheet(
                         context: context,
                         backgroundColor: Colors.transparent,
@@ -287,7 +363,9 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                             padding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom,
                             ),
-                            child: ReceiverVerifyDialog(),
+                            child: ReceiverVerifyDialog(
+                              customerId: customerIndexId,
+                            ),
                           );
                         });
                   },
@@ -311,7 +389,7 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                         child: Row(
                           children: [
                             Text(
-                              "Nikita Mahindrakar",
+                              postModel[postIndex].receiver.name,
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize:
@@ -399,13 +477,14 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                       child: Row(
                         children: [
                           Container(
-                            width: parentWidth * 0.45,
+                            width: parentWidth * 0.6,
                             color: Colors.transparent,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Adv. - 1000/- (Online)",
+                                  "Adv. - ${advancePay.toStringAsFixed(1)}/- ${postModel[postIndex].advancePayment.mode == "ONLINE" ? "(Online)" :
+                                  postModel[postIndex].advancePayment.mode == "CASH" ? "(Cash)" : ""}",
                                   style: TextStyle(
                                     color: CommonColor.TO_AREA_COLOR,
                                     fontWeight: FontWeight.w400,
@@ -414,7 +493,8 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                                   ),
                                 ),
                                 Text(
-                                  "Due. - 1000/- ",
+                                  "Due. - ${deliveryPay.toStringAsFixed(1)}/- ${postModel[postIndex].deliveryPayment.mode == "ONLINE" ? "(Online)" :
+                                  postModel[postIndex].deliveryPayment.mode == "CASH" ? "(Cash)" : ""} ",
                                   style: TextStyle(
                                     color: CommonColor.TO_AREA_COLOR,
                                     fontWeight: FontWeight.w400,
@@ -490,14 +570,39 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                           top: parentHeight * 0.007, right: parentWidth * 0.05),
                       child: GestureDetector(
                         onTap: () {
+
+                          passPickIndexAddress = "${postModel[postIndex].pickup.address.street}, ${postModel[postIndex].pickup.address.city}, ${postModel[postIndex].pickup.address.state}, ${postModel[postIndex].pickup.address.country}, ${postModel[postIndex].pickup.address.postalCode}";
+
+                          passLastIndexAddress =
+                          "${postModel[postIndex].receiver.address.street}, ${postModel[postIndex].receiver.address.city}, ${postModel[postIndex].receiver.address.state}, ${postModel[postIndex].receiver.address.country}, ${postModel[postIndex].receiver.address.postalCode}";
+
+                          DateTime tempDate = DateFormat("yyyy-MM-dd").parse(postModel[postIndex].pickupDate);
+                          var inputDate = DateTime.parse(tempDate.toString());
+                          var outputFormat = DateFormat('dd MMMM yyyy');
+                          pickUpIndexDate = outputFormat.format(inputDate);
+
+                          DateTime parseDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                              .parse(postModel[postIndex].pickupDate);
+                          var inputTime = DateTime.parse(parseDate.toString());
+                          var inputFormat = DateFormat('hh:mm a');
+                          pickUpIndexTime = inputFormat.format(inputTime);
+
+
                           showCupertinoDialog(
                             context: context,
                             barrierDismissible: true,
                             builder: (context) {
-                              return const AnimatedOpacity(
+                              return AnimatedOpacity(
                                   opacity: 1.0,
                                   duration: Duration(seconds: 2),
-                                  child: LoadMoreInfoDialog(postDetails: [], postIndex: 0,));
+                                  child: LoadMoreInfoDialog(
+                                    postDetails: postModel,
+                                    postIndex: postIndex,
+                                    pickupDate: pickUpIndexDate.toString(),
+                                    pickupTime: pickUpIndexTime.toString(),
+                                    pickupLocation: passPickIndexAddress.toString(),
+                                    finalLocation: passLastIndexAddress.toString(),
+                                  ));
                             },
                           );
                           // Navigator.push(context, MaterialPageRoute(builder: (context)=>ProcessTimelinePage()));
@@ -562,7 +667,7 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                             },
                             child: Container(
                               color: Colors.transparent,
-                              child: Icon(Icons.keyboard_arrow_down_outlined,
+                              child: const Icon(Icons.keyboard_arrow_down_outlined,
                                 color: Colors.black,),
                             ),
                           ),
@@ -580,7 +685,7 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                             },
                             child: Container(
                               color: Colors.transparent,
-                              child: Icon(Icons.keyboard_arrow_up_outlined,
+                              child: const Icon(Icons.keyboard_arrow_up_outlined,
                                 color: Colors.black,),
                             ),
                           ),

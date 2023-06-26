@@ -1,6 +1,6 @@
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
-import 'package:fixgocompanyapp/presentation/order_module/canceled_order_screen.dart';
+import 'package:fixgocompanyapp/presentation/order_module/cancelled_order_screen.dart';
 import 'package:fixgocompanyapp/presentation/order_module/complete_order_screen.dart';
 import 'package:fixgocompanyapp/presentation/order_module/ongoing_order_screen.dart';
 import 'package:fixgocompanyapp/presentation/order_module/pending_order_screen.dart';

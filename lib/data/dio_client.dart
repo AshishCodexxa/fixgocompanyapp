@@ -384,6 +384,32 @@ class ApiClient {
     }
   }
 
+  Future<Map<String, dynamic>> getCompanyAllCancelledPost() async {
+
+    String url = "${ApiConstants().baseUrl}${ApiConstants().companyAllPost}${ConstantData.CANCELLED_POST}";
+
+    String? sessionToken = GetStorage().read<String>(
+        ConstantData.userAccessToken);
+
+    try {
+      Response response = await _dio.get(
+        url,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $sessionToken',
+          },
+        ),
+      );
+
+      print("getCompanyAllCancelledPostSC --> ${response.statusCode}");
+      print("getCompanyAllCancelledPostPost --> ${response.data}");
+
+      return response.data;
+    } on DioError catch (e) {
+      return e.response!.data;
+    }
+  }
+
 
   // Future<Map<String, dynamic>> postDeleteById(String postId) async {
   //
