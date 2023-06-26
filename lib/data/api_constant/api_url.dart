@@ -35,6 +35,7 @@ class ApiConstants {
   String companyAcceptTransporterBid = "post/bid/";
   String userVerifyDetails = "user/detail/";
   String getPostInfoById = "post/detail/";
+  String postDeleteById = "post/delete/";
 
 
 

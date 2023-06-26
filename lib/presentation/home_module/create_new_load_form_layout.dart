@@ -549,38 +549,26 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
               child: GestureDetector(
                 onDoubleTap: () {},
                 onTap: () async {
-                  pickedDates = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now().add(const Duration(days: 3)),
-                    firstDate: DateTime.now().add(const Duration(days: 3)),
-                    lastDate: DateTime(2100),
-                  );
 
-                  pickUpDate = pickedDates;
+                  if(widget.deliveryAddress.isEmpty){
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(content: Text("Please add delivery address.")));
+                  }else {
+                    pickedDates = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now().add(const Duration(days: 3)),
+                      firstDate: DateTime.now().add(const Duration(days: 3)),
+                      lastDate: DateTime(2100),
+                    );
 
-                  print(pickUpDate);
-                  setState(() {
-                    dateInput.text = pickUpDate.toString();
-                  });
-
-                  /*  if(pickedDates!.isBefore(DateTime.now())){
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(const SnackBar(
-                          content: Text(
-                              "Please Select After 2 Days Date of Current Date")));
-                    }else if(pickedDates!.isBefore(DateTime.now().add(Duration(days: 2)))){
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(const SnackBar(
-                          content: Text(
-                              "Please Select After")));
-                    }else{
-                      pickUpDate = pickedDates;
+                    pickUpDate = pickedDates;
 
                     print(pickUpDate);
                     setState(() {
                       dateInput.text = pickUpDate.toString();
                     });
-                    }*/
+                  }
+
                 },
                 child: Container(
                   width: parentWidth * 0.3,
@@ -623,78 +611,89 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
               child: GestureDetector(
                 onDoubleTap: () {},
                 onTap: () async {
-                  Future<DateTime?> result = showModalBottomSheet<DateTime>(
-                      context: context,
-                      isScrollControlled: true,
-                      // backgroundColor: CommonColor.APP_BAR_COLOR.w,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                        ),
-                      ),
-                      builder: (context) {
-                        DateTime? _time;
 
-                        return Padding(
-                          padding: MediaQuery.of(context).viewInsets,
-                          child:
-                              Column(mainAxisSize: MainAxisSize.min, children: [
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * .3,
-                              child: CupertinoDatePicker(
-                                mode: CupertinoDatePickerMode.time,
-                                onDateTimeChanged: (DateTime newTime) {
-                                  _time = newTime;
-                                },
+                  if(pickUpDate == null){
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(content: Text("Please add PickUp Date.")));
+                  }else {
+                    Future<DateTime?> result = showModalBottomSheet<DateTime>(
+                        context: context,
+                        isScrollControlled: true,
+                        // backgroundColor: CommonColor.APP_BAR_COLOR.w,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20),
+                          ),
+                        ),
+                        builder: (context) {
+                          DateTime? _time;
+
+                          return Padding(
+                            padding: MediaQuery
+                                .of(context)
+                                .viewInsets,
+                            child:
+                            Column(mainAxisSize: MainAxisSize.min, children: [
+                              SizedBox(
+                                height: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .height * .3,
+                                child: CupertinoDatePicker(
+                                  mode: CupertinoDatePickerMode.time,
+                                  onDateTimeChanged: (DateTime newTime) {
+                                    _time = newTime;
+                                  },
+                                ),
                               ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pop(_time);
-                              },
-                              child: Container(
-                                height: parentHeight * 0.05,
-                                width: parentWidth * 0.4,
-                                decoration: BoxDecoration(
-                                    color: CommonColor.SIGN_UP_TEXT_COLOR,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Center(
-                                  child: Text(
-                                    "Save",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize:
-                                            SizeConfig.blockSizeHorizontal *
-                                                5.0,
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: 'Roboto_Medium'),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pop(_time);
+                                },
+                                child: Container(
+                                  height: parentHeight * 0.05,
+                                  width: parentWidth * 0.4,
+                                  decoration: BoxDecoration(
+                                      color: CommonColor.SIGN_UP_TEXT_COLOR,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Center(
+                                    child: Text(
+                                      "Save",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize:
+                                          SizeConfig.blockSizeHorizontal *
+                                              5.0,
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: 'Roboto_Medium'),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: parentHeight * 0.03,
-                            )
-                          ]),
-                        );
-                      });
+                              SizedBox(
+                                height: parentHeight * 0.03,
+                              )
+                            ]),
+                          );
+                        });
 
-                  result.then((value) {
-                    if (mounted) {
-                      setState(() {
-                        pickUpTime = value;
-                        if (value == null) {
-                          if (mounted) {
-                            setState(() {
-                              vehicleDetailsUI = false;
-                              vehicleDetails = false;
-                              paymentDetails = false;
-                            });
+                    result.then((value) {
+                      if (mounted) {
+                        setState(() {
+                          pickUpTime = value;
+                          if (value == null) {
+                            if (mounted) {
+                              setState(() {
+                                vehicleDetailsUI = false;
+                                vehicleDetails = false;
+                                paymentDetails = false;
+                              });
+                            }
                           }
-                        }
-                      });
-                    }
-                  });
+                        });
+                      }
+                    });
+                  }
                 },
                 child: Container(
                   color: Colors.transparent,
@@ -4899,7 +4898,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                         paymentFieldHide = !paymentFieldHide;
                                         paymentFieldShow = !paymentFieldShow;
                                         submit = 0;
-                                        next = 3;
+                                        next = 2;
                                       });
                                     }
                                   },
@@ -5203,186 +5202,212 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
           top: parentHeight * 0.05,
           left: parentWidth * 0.1,
           right: parentWidth * 0.1),
-      child: GestureDetector(
-        onDoubleTap: () {},
-        onTap: () {
+      child: Stack(
+        children: [
+          GestureDetector(
+            onTap: () {
 
 
-          if(next == 0){
-            if (quantityLoadController.text.isEmpty) {
-              loadError =
-              "Please Enter Quantity of Loads";
-              if (mounted) {
-                setState(() {
-                  loadErrorShow = true;
-                  hideLoadError();
-                });
+              if(next == 0){
+                if (quantityLoadController.text.isEmpty) {
+                  loadError =
+                  "Please Enter Quantity of Loads";
+                  if (mounted) {
+                    setState(() {
+                      loadErrorShow = true;
+                      hideLoadError();
+                    });
+                  }
+                } else if(loadUnit == 0){
+                  loadError =
+                  "Please Select Unit of Weight";
+                  if (mounted) {
+                    setState(() {
+                      loadErrorShow = true;
+                      hideLoadError();
+                    });
+                  }
+                }  else if (loadType == 0) {
+                  loadError = "Please Select Load Type.";
+                  if (mounted) {
+                    setState(() {
+                      loadErrorShow = true;
+                      hideLoadError();
+                    });
+                  }
+                } else if (images.isEmpty) {
+                  loadError = "One load image must be required.";
+                  if (mounted) {
+                    setState(() {
+                      loadErrorShow = true;
+                      hideLoadError();
+                    });
+                  }
+                } else {
+                  if (mounted) {
+                    setState(() {
+                      showAllGoodsField = !showAllGoodsField;
+                      hideAllGoodsField = !hideAllGoodsField;
+                      vehicleDetails = !vehicleDetails;
+                      next = 1;
+                    });
+                  }
+                }
               }
-            } else if(loadUnit == 0){
-              loadError =
-              "Please Select Unit of Weight";
-              if (mounted) {
-                setState(() {
-                  loadErrorShow = true;
-                  hideLoadError();
-                });
+              else if(next == 1){
+                if (vehicleType == 0) {
+                  vehicleError = "Please Select Vehicle Type.";
+                  if (mounted) {
+                    setState(() {
+                      vehicleErrorShow = true;
+                      hideVehicleError();
+                    });
+                  }
+                }else if (vehicleNumberController.text.isEmpty) {
+                  vehicleError = "Please add number of Vehicles";
+                  if (mounted) {
+                    setState(() {
+                      vehicleErrorShow = true;
+                      hideVehicleError();
+                    });
+                  }
+                }else if (lengthController.text.isEmpty) {
+                  vehicleError = "Please Add Length of Vehicle.";
+                  if (mounted) {
+                    setState(() {
+                      vehicleErrorShow = true;
+                      hideVehicleError();
+                    });
+                  }
+                } else {
+                  if (mounted) {
+                    setState(() {
+                      showAllVehicleTypes = !showAllVehicleTypes;
+                      hideAllVehicleTypeField =
+                      !hideAllVehicleTypeField;
+                      paymentDetails = !paymentDetails;
+                      print(paymentDetails);
+                      next = 2;
+                    });
+                  }
+                }
               }
-            }  else if (loadType == 0) {
-              loadError = "Please Select Load Type.";
-              if (mounted) {
-                setState(() {
-                  loadErrorShow = true;
-                  hideLoadError();
-                });
+              else if(next == 2){
+                if (totalFareController.text.isEmpty) {
+                  paymentError =
+                  "Please total fare amount must be required.";
+                  if (mounted) {
+                    setState(() {
+                      paymentErrorShow = true;
+                      hidePaymentError();
+                    });
+                  }
+                } else if (advancePay == 0) {
+                  paymentError =
+                  "Select Who's paid advance payment.";
+                  if (mounted) {
+                    setState(() {
+                      paymentErrorShow = true;
+                      hidePaymentError();
+                    });
+                  }
+                } else if (advPay == 0) {
+                  paymentError =
+                  "Select advance payment method.";
+                  if (mounted) {
+                    setState(() {
+                      paymentErrorShow = true;
+                      hidePaymentError();
+                    });
+                  }
+                } else if (deliveryPay == 0) {
+                  paymentError =
+                  "Select Who's paid deliver payment.";
+                  if (mounted) {
+                    setState(() {
+                      paymentErrorShow = true;
+                      hidePaymentError();
+                    });
+                  }
+                } else if (deliverPay == 0) {
+                  paymentError =
+                  "Select deliver payment method.";
+                  if (mounted) {
+                    setState(() {
+                      paymentErrorShow = true;
+                      hidePaymentError();
+                    });
+                  }
+                } else {
+                  paymentFieldShow = !paymentFieldShow;
+                  paymentFieldHide = !paymentFieldHide;
+                  if(mounted){
+                    setState(() {
+                      next = 3;
+                      print(next);
+                    });
+                  }
+                }
               }
-            } else if (images.isEmpty) {
-              loadError = "One load image must be required.";
-              if (mounted) {
-                setState(() {
-                  loadErrorShow = true;
-                  hideLoadError();
-                });
+              else{
+
               }
-            } else {
-              if (mounted) {
-                setState(() {
-                  showAllGoodsField = !showAllGoodsField;
-                  hideAllGoodsField = !hideAllGoodsField;
-                  vehicleDetails = !vehicleDetails;
-                  next = 1;
-                });
-              }
-            }
-          }
-          else if(next == 1){
-            if (vehicleType == 0) {
-              vehicleError = "Please Select Vehicle Type.";
-              if (mounted) {
-                setState(() {
-                  vehicleErrorShow = true;
-                  hideVehicleError();
-                });
-              }
-            }else if (vehicleNumberController.text.isEmpty) {
-              vehicleError = "Please add number of Vehicles";
-              if (mounted) {
-                setState(() {
-                  vehicleErrorShow = true;
-                  hideVehicleError();
-                });
-              }
-            }else if (lengthController.text.isEmpty) {
-              vehicleError = "Please Add Length of Vehicle.";
-              if (mounted) {
-                setState(() {
-                  vehicleErrorShow = true;
-                  hideVehicleError();
-                });
-              }
-            } else {
-              if (mounted) {
-                setState(() {
-                  showAllVehicleTypes = !showAllVehicleTypes;
-                  hideAllVehicleTypeField =
-                  !hideAllVehicleTypeField;
-                  paymentDetails = !paymentDetails;
-                  print(paymentDetails);
-                  next = 2;
-                });
-              }
-            }
-          }
-          else if(next == 2){
-            if (totalFareController.text.isEmpty) {
-              paymentError =
-              "Please total fare amount must be required.";
-              if (mounted) {
-                setState(() {
-                  paymentErrorShow = true;
-                  hidePaymentError();
-                });
-              }
-            } else if (advancePay == 0) {
-              paymentError =
-              "Select Who's paid advance payment.";
-              if (mounted) {
-                setState(() {
-                  paymentErrorShow = true;
-                  hidePaymentError();
-                });
-              }
-            } else if (advPay == 0) {
-              paymentError =
-              "Select advance payment method.";
-              if (mounted) {
-                setState(() {
-                  paymentErrorShow = true;
-                  hidePaymentError();
-                });
-              }
-            } else if (deliveryPay == 0) {
-              paymentError =
-              "Select Who's paid deliver payment.";
-              if (mounted) {
-                setState(() {
-                  paymentErrorShow = true;
-                  hidePaymentError();
-                });
-              }
-            } else if (deliverPay == 0) {
-              paymentError =
-              "Select deliver payment method.";
-              if (mounted) {
-                setState(() {
-                  paymentErrorShow = true;
-                  hidePaymentError();
-                });
-              }
-            } else {
-              paymentFieldShow = !paymentFieldShow;
-              paymentFieldHide = !paymentFieldHide;
-              submit = 1;
-            }
-          }
 
 
-          if(submit == 1){
-            if (isLoading == false) {
-              print("One Time");
-
-              if(mounted){
-                setState(() {
-                  isLoading = true;
-                  uploadImages().then((value) {
-                    createCompanyPost();
-                  });
-                });
-              }
-            }
-          }
-
-
-        },
-        child: Container(
-          height: parentHeight * 0.055,
-          width: parentWidth * 0.6,
-          decoration: BoxDecoration(
-              color: /*submit == 0 || deliverPay == 0
-                  ? CommonColor.LOAD_SUBMIT_COLOR
-                  : */CommonColor.SIGN_UP_TEXT_COLOR,
-              borderRadius: BorderRadius.circular(15)),
-          child: Center(
-            child: Text(
-              next == 0 ? "Next" : next == 1 ? "Next" :"Submit",
-              style: TextStyle(
-                  color: /*submit == 0
-                      ? CommonColor.LOAD_SUBMIT_TEXT_COLOR
-                      : */CommonColor.WHITE_COLOR,
-                  fontSize: SizeConfig.blockSizeHorizontal * 5.0,
-                  fontFamily: 'Roboto_Bold'),
+            },
+            child: Container(
+              height: parentHeight * 0.055,
+              width: parentWidth * 0.6,
+              decoration: BoxDecoration(
+                  color: CommonColor.SIGN_UP_TEXT_COLOR,
+                  borderRadius: BorderRadius.circular(15)),
+              child: Center(
+                child: Text(
+                  next == 0 ? "Next" : next == 1 ? "Next" : next == 2 ? "Done" : "",
+                  style: TextStyle(
+                      color: CommonColor.WHITE_COLOR,
+                      fontSize: SizeConfig.blockSizeHorizontal * 5.0,
+                      fontFamily: 'Roboto_Bold'),
+                ),
+              ),
             ),
           ),
-        ),
+          Visibility(
+            visible: next == 3 ? true : false,
+            child: GestureDetector(
+              onTap: (){
+                if (isLoading == false) {
+                  print("One Time");
+
+                  if(mounted){
+                    setState(() {
+                      isLoading = true;
+                      uploadImages().then((value) {
+                        createCompanyPost();
+                      });
+                    });
+                  }
+                }
+              },
+              child: Container(
+                height: parentHeight * 0.055,
+                width: parentWidth * 0.6,
+                decoration: BoxDecoration(
+                    color: CommonColor.SIGN_UP_TEXT_COLOR,
+                    borderRadius: BorderRadius.circular(15)),
+                child: Center(
+                  child: Text(
+                    "Submit",
+                    style: TextStyle(
+                        color: CommonColor.WHITE_COLOR,
+                        fontSize: SizeConfig.blockSizeHorizontal * 5.0,
+                        fontFamily: 'Roboto_Bold'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

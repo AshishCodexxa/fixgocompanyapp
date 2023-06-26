@@ -977,6 +977,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                   pickupTime: pickUpIndexTime.toString(),
                                   pickupLocation: passPickIndexAddress.toString(),
                                   finalLocation: passLastIndexAddress.toString(),
+                                  openFrom: '3',
                                 ));
                           },
                         );

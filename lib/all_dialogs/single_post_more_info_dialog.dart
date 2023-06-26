@@ -995,30 +995,30 @@ class _SingleLoadMoreInfoDialogState extends State<SingleLoadMoreInfoDialog> {
               onTap: (){
                 // Navigator.pop(context);
                 // ApiClient().getDeleteCompanyPost(widget.postDetails[0].id);
-                showGeneralDialog(
-                    barrierColor: Colors.black.withOpacity(0.5),
-                    transitionBuilder: (context, a1, a2, widget) {
-                      final curvedValue = Curves.easeInOutBack.transform(a1.value) - 1.0;
-                      // return Transform(
-                      //   transform: Matrix4.translationValues(0.0, curvedValue * 200, 0.0),
-                      return Transform.scale(
-                        scale: a1.value,
-                        child: Opacity(
-                          opacity: a1.value,
-                          child: PostDeleteConfirmationDialog(
-                            message: "Are You Sure,\nYou Want To Delete a Post",
-                            postId: postId,
-                          ),
-                        ),
-                      );
-                    },
-                    transitionDuration: const Duration(milliseconds: 200),
-                    barrierDismissible: true,
-                    barrierLabel: '',
-                    context: context,
-                    pageBuilder: (context, animation2, animation1) {
-                      return Container();
-                    });
+                // showGeneralDialog(
+                //     barrierColor: Colors.black.withOpacity(0.5),
+                //     transitionBuilder: (context, a1, a2, widget) {
+                //       final curvedValue = Curves.easeInOutBack.transform(a1.value) - 1.0;
+                //       // return Transform(
+                //       //   transform: Matrix4.translationValues(0.0, curvedValue * 200, 0.0),
+                //       return Transform.scale(
+                //         scale: a1.value,
+                //         child: Opacity(
+                //           opacity: a1.value,
+                //           child: PostDeleteConfirmationDialog(
+                //             message: "Are You Sure,\nYou Want To Delete a Post",
+                //             postId: postId, openFrom: '',
+                //           ),
+                //         ),
+                //       );
+                //     },
+                //     transitionDuration: const Duration(milliseconds: 200),
+                //     barrierDismissible: true,
+                //     barrierLabel: '',
+                //     context: context,
+                //     pageBuilder: (context, animation2, animation1) {
+                //       return Container();
+                //     });
               },
               child: Container(
                 color: Colors.transparent,

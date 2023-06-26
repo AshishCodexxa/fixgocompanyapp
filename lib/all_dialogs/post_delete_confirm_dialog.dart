@@ -1,7 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
+import 'package:fixgocompanyapp/data/api_constant/api_url.dart';
+import 'package:fixgocompanyapp/data/data_constant/constant_data.dart';
 import 'package:fixgocompanyapp/data/dio_client.dart';
 import 'package:fixgocompanyapp/presentation/dashboard_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
 
 
@@ -9,14 +13,27 @@ class PostDeleteConfirmationDialog extends StatefulWidget {
 
   final String message;
   final String postId;
+  final String openFrom;
 
-  const PostDeleteConfirmationDialog({super.key, required this.message, required this.postId});
+  const PostDeleteConfirmationDialog({super.key, required this.message, required this.postId, required this.openFrom});
 
   @override
   State<PostDeleteConfirmationDialog> createState() => _PostDeleteConfirmationDialogState();
 }
 
 class _PostDeleteConfirmationDialogState extends State<PostDeleteConfirmationDialog> {
+
+
+  final Dio _dio = Dio();
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.postId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -96,15 +113,16 @@ class _PostDeleteConfirmationDialogState extends State<PostDeleteConfirmationDia
       children: [
         GestureDetector(
           onTap: () {
-            ApiClient().getDeleteCompanyPost(widget.postId).then((value){
+            print("Yesss");
+            postDeleteById(postId: widget.postId).then((value){
               if(mounted){
                 setState(() {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+
+                  // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Dashboard()));
                 });
               }
             });
           },
-          onDoubleTap: () {},
           child: Container(
             height: 50,
             width: 150,
@@ -134,7 +152,6 @@ class _PostDeleteConfirmationDialogState extends State<PostDeleteConfirmationDia
           onTap: () {
             Navigator.pop(context);
           },
-          onDoubleTap: () {},
           child: Container(
             height: 50,
             width: 150,
@@ -162,5 +179,45 @@ class _PostDeleteConfirmationDialogState extends State<PostDeleteConfirmationDia
         ),
       ],
     );
+  }
+
+
+
+  Future<void> postDeleteById({required String postId}) async {
+    String url = "${ApiConstants().baseUrl}post/delete/$postId";
+    String? sessionToken = GetStorage().read<String>(
+        ConstantData.userAccessToken);
+
+    try {
+      var result = await _dio.delete(url,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $sessionToken',
+            },
+            validateStatus: (status) {
+              return status! < 500;
+            },
+          )
+      );
+
+      print(result.statusCode);
+
+      if(result.statusCode == 400){
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("Sorry! Expired Post cannot be deleted.")));
+      }else if(result.statusCode == 200){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Dashboard(isComeFrom: widget.openFrom == "2" ? '2' : "3",)));
+        // if(widget.openFrom == 2){
+        //
+        // }else{
+        //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Dashboard(isComeFrom: '3',)));
+        // }
+      }
+
+
+    } catch (e) {
+      print('Error deleting user: $e');
+    }
   }
 }

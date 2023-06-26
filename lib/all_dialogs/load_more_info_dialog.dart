@@ -29,8 +29,9 @@ class LoadMoreInfoDialog extends StatefulWidget {
   final String pickupTime;
   final String pickupLocation;
   final String finalLocation;
+  final String openFrom;
 
-  const LoadMoreInfoDialog({Key? key, required this.postDetails, required this.postIndex, this.pickupDate = '', this.pickupTime ='', this.pickupLocation = '', this.finalLocation = ''}) : super(key: key);
+  const LoadMoreInfoDialog({Key? key, required this.postDetails, required this.postIndex, this.pickupDate = '', this.pickupTime ='', this.pickupLocation = '', this.finalLocation = '', this.openFrom = ""}) : super(key: key);
 
   @override
   State<LoadMoreInfoDialog> createState() => _LoadMoreInfoDialogState();
@@ -63,10 +64,14 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
 
   String postId = "0";
 
+  String openFrom = '';
+
   @override
   void initState() {
     super.initState();
     print(widget.postIndex);
+
+    openFrom = widget.openFrom;
 
 
   int totalFare = widget.postDetails[widget.postIndex].fare;
@@ -992,8 +997,11 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
             child: GestureDetector(
               onDoubleTap: (){},
               onTap: (){
-                // Navigator.pop(context);
-                // ApiClient().getDeleteCompanyPost(widget.postDetails[0].id);
+
+                print(postId);
+
+                Navigator.pop(context);
+
                 showGeneralDialog(
                     barrierColor: Colors.black.withOpacity(0.5),
                     transitionBuilder: (context, a1, a2, widget) {
@@ -1006,7 +1014,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                           opacity: a1.value,
                           child: PostDeleteConfirmationDialog(
                             message: "Are You Sure,\nYou Want To Delete a Post",
-                            postId: postId,
+                            postId: postId, openFrom: openFrom,
                           ),
                         ),
                       );

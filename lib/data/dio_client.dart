@@ -276,35 +276,6 @@ class ApiClient {
     }
   }
 
-  Future<Map<String, dynamic>> getDeleteCompanyPost(String postId) async {
-
-    print(postId);
-
-    String url = "${ApiConstants().baseUrl}post/delete/$postId";
-
-    String? sessionToken = GetStorage().read<String>(
-        ConstantData.userAccessToken);
-
-    try {
-      Response response = await _dio.delete(
-        url,
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $sessionToken',
-          },
-        ),
-      );
-
-      print("getDeleteCompanyPostSC --> ${response.statusCode}");
-      print("getDeleteCompanyPostData --> ${response.data}");
-
-
-      return response.data;
-    } on DioError catch (e) {
-      return e.response!.data;
-    }
-  }
-
   Future<Map<String, dynamic>> getAcceptTransporterBid(String bidId) async {
 
 
@@ -412,5 +383,34 @@ class ApiClient {
       return e.response!.data;
     }
   }
+
+
+  // Future<Map<String, dynamic>> postDeleteById(String postId) async {
+  //
+  //   String url = "${ApiConstants().baseUrl}post/delete/$postId";
+  //
+  //   print(url);
+  //
+  //   String? sessionToken = GetStorage().read<String>(
+  //       ConstantData.userAccessToken);
+  //
+  //   try {
+  //     Response response = await _dio.delete(
+  //       url,
+  //       options: Options(
+  //         headers: {
+  //           'Authorization': 'Bearer $sessionToken',
+  //         },
+  //       ),
+  //     );
+  //
+  //     print("getPostByIdSC --> ${response.statusCode}");
+  //     print("getPostByIdData --> ${response.data}");
+  //
+  //     return response.data;
+  //   } on DioError catch (e) {
+  //     return e.response!.data;
+  //   }
+  // }
 
 }

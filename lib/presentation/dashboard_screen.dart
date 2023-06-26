@@ -33,12 +33,25 @@ class _DashboardState extends State<Dashboard> implements HomeChildScreenListene
   void initState() {
     super.initState();
     heading = "FixGo";
+    widget.isComeFrom == "3" ? isShow = false : isShow = true;
     widget.isComeFrom == "1" ?
     addNewScreen(
         ProfileChildScreen(
           mListener: this,
         ),
         ScreenConstant.PROFILE_FRAGMENT) :
+    widget.isComeFrom == "3" ?
+    addNewScreen(
+        OrderChildScreen(
+          mListener: this,
+        ),
+        ScreenConstant.PROFILE_FRAGMENT):
+    widget.isComeFrom == "2" ?
+    addNewScreen(
+        HomeChildScreen(
+          mListener: this,
+        ),
+        ScreenConstant.HOME_PAGE) :
     addNewScreen(
         HomeChildScreen(
           mListener: this,
