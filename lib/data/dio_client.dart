@@ -386,4 +386,31 @@ class ApiClient {
     }
   }
 
+
+  Future<Map<String, dynamic>> getPostById(String postId) async {
+
+    String url = "${ApiConstants().baseUrl}${ApiConstants().getPostInfoById}$postId";
+
+    String? sessionToken = GetStorage().read<String>(
+        ConstantData.userAccessToken);
+
+    try {
+      Response response = await _dio.get(
+        url,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $sessionToken',
+          },
+        ),
+      );
+
+      print("getPostByIdSC --> ${response.statusCode}");
+      print("getPostByIdData --> ${response.data}");
+
+      return response.data;
+    } on DioError catch (e) {
+      return e.response!.data;
+    }
+  }
+
 }

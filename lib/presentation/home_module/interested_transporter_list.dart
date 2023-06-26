@@ -370,7 +370,7 @@ class _InterestedTransporterListState extends State<InterestedTransporterList> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                        const BookingDetailsScreen()));
+                                            BookingDetailsScreen(postId: '',)));
                               },
                               child:
                               Container(

@@ -1,67 +1,206 @@
-import 'package:fixgocompanyapp/all_dialogs/load_more_info_dialog.dart';
+import 'dart:async';
+import 'package:fixgocompanyapp/all_dialogs/single_post_more_info_dialog.dart';
 import 'package:fixgocompanyapp/all_dialogs/transporter_amount_pay_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/data/dio_client.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 
 
 
 class BookingDetailsScreen extends StatefulWidget {
-  const BookingDetailsScreen({Key? key}) : super(key: key);
+
+
+  final String postId;
+
+  const BookingDetailsScreen({Key? key, required this.postId}) : super(key: key);
 
   @override
   State<BookingDetailsScreen> createState() => _BookingDetailsScreenState();
 }
 
 class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
+
+
+  var postData;
+  var postsData;
+
+  Timer? _timer;
+  DateTime? endTime;
+  String formattedTime = '';
+
+  String pickUpLocation = '';
+  String finalLocation = "";
+  String createPostTime = "";
+  String createPostDate = "";
+  String pickUpDate = "";
+  String pickUpTime = "";
+
+  String? passPickIndexAddress;
+  String? passLastIndexAddress;
+  String? pickUpIndexDate;
+  String? pickUpIndexTime;
+
+  bool isLoading = false;
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
+
+    ApiClient().getPostById(widget.postId).then((value) {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+      postsData = value;
+      postData = value['data'];
+      print("postData $postData");
+
+      if(mounted) {
+        setState(() {
+          DateTime dt = DateTime.parse(postData['createdAt']);
+
+          endTime = dt.add(const Duration(days: 2));
+
+          print("endTime $endTime");
+        });
+      }
+
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  String _printDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  }
+
   @override
   Widget build(BuildContext context) {
+
     SizeConfig().init(context);
+
+    if(endTime != null){
+
+      Duration remainingTime = endTime!.difference(DateTime.now());
+
+      formattedTime = _printDuration(remainingTime);
+
+
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (DateTime.now().isAfter(endTime!)) {
+          _timer?.cancel();
+          // Timer has finished, you can handle the desired action here.
+        } else {
+          if(mounted) {
+            setState(() {});
+          }
+        }
+      });
+
+    }
+
+    if(postData != null) {
+      pickUpLocation =
+      "${postData['pickup']['address']['street']}, ${postData['pickup']['address']['city']}, ${postData['pickup']['address']['state']}, ${postData['pickup']['address']['country']}, ${postData['pickup']['address']['postalCode']}";
+
+      finalLocation =
+      "${postData['receiver']['address']['street']}, ${postData['receiver']['address']['city']}, ${postData['receiver']['address']['state']}, ${postData['receiver']['address']['country']}, ${postData['receiver']['address']['postalCode']}";
+
+
+      DateTime tempCreateDate = DateFormat("yyyy-MM-dd").parse(postData['pickupDate']);
+      var inputCreateDate = DateTime.parse(tempCreateDate.toString());
+      var outputCreateFormat = DateFormat('dd MMMM yyyy');
+      createPostDate = outputCreateFormat.format(inputCreateDate);
+
+      DateTime parseCreateDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+          .parse(postData['pickupDate']);
+      var inputCreateTime = DateTime.parse(parseCreateDate.toString());
+      var inputCreateFormat = DateFormat('hh:mm a');
+      createPostTime = inputCreateFormat.format(inputCreateTime);
+
+      DateTime tempDate = DateFormat("yyyy-MM-dd").parse(postData['pickupDate']);
+      var inputDate = DateTime.parse(tempDate.toString());
+      var outputFormat = DateFormat('dd MMMM yyyy');
+      pickUpDate = outputFormat.format(inputDate);
+
+      DateTime parseDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+          .parse(postData['pickupDate']);
+      var inputTime = DateTime.parse(parseDate.toString());
+      var inputFormat = DateFormat('hh:mm a');
+      pickUpTime = inputFormat.format(inputTime);
+    }
+
     return Scaffold(
-      body: ListView(
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
+      body: Stack(
+        alignment: Alignment.center,
         children: [
-          Container(
-            color: CommonColor.APP_BAR_COLOR,
-            height: SizeConfig.safeUsedHeight * .12,
-            child: getTopText(SizeConfig.screenHeight, SizeConfig.screenWidth),
-          ),
+          ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            children: [
+              Container(
+                color: CommonColor.APP_BAR_COLOR,
+                height: SizeConfig.safeUsedHeight * .12,
+                child: getTopText(SizeConfig.screenHeight, SizeConfig.screenWidth),
+              ),
 
-          Container(
-            color: CommonColor.WHITE_COLOR,
-            height: SizeConfig.safeUsedHeight * .88,
-            child: ListView(
-              shrinkWrap: true,
-              padding: EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.1),
-              children: [
+              Container(
+                color: CommonColor.WHITE_COLOR,
+                height: SizeConfig.safeUsedHeight * .88,
+                child: ListView(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.1),
+                  children: [
 
-                Padding(
-                  padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.02,
-                      left: SizeConfig.screenWidth*0.03,
-                      right: SizeConfig.screenWidth*0.03),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 5,
-                            spreadRadius: 1,
-                            offset: const Offset(2, 2)),
-                      ],
+                    Padding(
+                      padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.02,
+                          left: SizeConfig.screenWidth*0.03,
+                          right: SizeConfig.screenWidth*0.03),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 5,
+                                spreadRadius: 1,
+                                offset: const Offset(2, 2)),
+                          ],
+                        ),
+                        child: getInfoCardLayout(SizeConfig.screenHeight, SizeConfig.screenWidth),
+                      ),
                     ),
-                    child: getInfoCardLayout(SizeConfig.screenHeight, SizeConfig.screenWidth),
-                  ),
+
+                    getBookingPayDetailsAndAmount(SizeConfig.screenHeight, SizeConfig.screenWidth)
+
+                  ],
                 ),
-
-                getBookingPayDetailsAndAmount(SizeConfig.screenHeight, SizeConfig.screenWidth)
-
-              ],
-            ),
+              ),
+            ],
+          ),
+          Visibility(
+              visible: isLoading,
+              child: const CircularProgressIndicator()
           ),
         ],
       ),
@@ -112,7 +251,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  "Time Left  23:59:59 hrs.",
+                  "Time Left  $formattedTime",
                   style: TextStyle(
                       color: CommonColor.TO_AREA_COLOR,
                       fontSize: SizeConfig.blockSizeHorizontal*3.0,
@@ -125,8 +264,9 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
           ),
 
           Padding(
-            padding: EdgeInsets.only(left: parentWidth*0.051, top: parentHeight*0.01),
+            padding: EdgeInsets.only(left: parentWidth*0.051, top: parentHeight*0.01, right: parentWidth*0.05),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
 
                 Row(
@@ -146,12 +286,13 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                         width: parentWidth*0.57,
                         color: Colors.transparent,
                         child: Text(
-                          "City Avenue, Wakad",
+                          pickUpLocation,
                           style: TextStyle(
                               color: CommonColor.BLACK_COLOR,
                               fontSize: SizeConfig.blockSizeHorizontal*3.0,
                               fontFamily: "Roboto_Regular",
-                              fontWeight: FontWeight.w400
+                              fontWeight: FontWeight.w400,
+                            overflow: TextOverflow.ellipsis
                           ),
                         ),
                       ),
@@ -169,7 +310,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                       ),
                       children: [
                         TextSpan(
-                            text: ' 12000/-',
+                            text: ' ${postData != null ? postData['fare'] : ""}/-',
                             style: TextStyle(
                                 fontSize: SizeConfig.blockSizeHorizontal*3.7,
                                 color: Colors.black,
@@ -213,12 +354,13 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                     width: parentWidth*0.6,
                     color: Colors.transparent,
                     child: Text(
-                      "Pune Station",
+                      finalLocation,
                       style: TextStyle(
                           color: CommonColor.BLACK_COLOR,
                           fontSize: SizeConfig.blockSizeHorizontal*3.0,
                           fontFamily: "Roboto_Regular",
-                          fontWeight: FontWeight.w400
+                          fontWeight: FontWeight.w400,
+                        overflow: TextOverflow.ellipsis
                       ),
                     ),
                   ),
@@ -233,7 +375,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Post on 26th Jan 2023 | 10:30 am",
+                  "Post on  $createPostDate | $createPostTime",
                   style: TextStyle(
                       color: Colors.black54,
                       fontSize: SizeConfig.blockSizeHorizontal*3.0,
@@ -280,7 +422,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                             child: Row(
                               children: [
                                 Text(
-                                  "28 Jan 2023",
+                                  pickUpDate,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: SizeConfig.blockSizeHorizontal*3.5,
@@ -318,7 +460,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                             child: Row(
                               children: [
                                 Text(
-                                  "02 :00 pm",
+                                  pickUpTime,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: SizeConfig.blockSizeHorizontal*3.5,
@@ -356,7 +498,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                       ),
                       children: [
                         TextSpan(
-                            text: '10 Ton(s)',
+                            text: postData != null ? '${postData['loadDetail']['load']} ${postData['loadDetail']['loadUnit']}' : "",
                             style: TextStyle(
                                 fontSize: SizeConfig.blockSizeHorizontal*3.7,
                                 color: Colors.black,
@@ -367,14 +509,25 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                 GestureDetector(
                   onDoubleTap: (){},
                   onTap: (){
+
+
+                    print(passPickIndexAddress);
+
                     showCupertinoDialog(
                       context: context,
                       barrierDismissible: true,
                       builder: (context) {
-                        return const AnimatedOpacity(
+                        return AnimatedOpacity(
                             opacity: 1.0,
                             duration: Duration(seconds: 2),
-                            child: LoadMoreInfoDialog(postDetails: [], postIndex: 0,));
+                            child: SingleLoadMoreInfoDialog(
+                              model: postData,
+                              pickupDate: pickUpDate.toString(),
+                              pickupTime: pickUpTime.toString(),
+                              pickupLocation: pickUpLocation,
+                              finalLocation: finalLocation,
+                            )
+                        );
                       },
                     );
                     // Navigator.push(context, MaterialPageRoute(builder: (context)=>ProcessTimelinePage()));

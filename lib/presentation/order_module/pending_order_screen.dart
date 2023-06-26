@@ -500,7 +500,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                                                         context,
                                                                         MaterialPageRoute(
                                                                             builder: (context) =>
-                                                                            const BookingDetailsScreen()));
+                                                                                  BookingDetailsScreen(postId: '',)));
                                                                   }else{
                                                                     Container();
                                                                   }

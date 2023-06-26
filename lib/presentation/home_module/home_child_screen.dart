@@ -538,7 +538,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                                                                 context,
                                                                                 MaterialPageRoute(
                                                                                     builder: (context) =>
-                                                                                    const BookingDetailsScreen()));
+                                                                                        BookingDetailsScreen(postId: items[index].id,)));
                                                                           }else{
                                                                             Container();
                                                                           }
