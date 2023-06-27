@@ -30,6 +30,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
 
 
   int? selectedIndex;
+  int? selectedTransListIndex;
   
   List allPost = [];
 
@@ -74,7 +75,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
   void dialogHide() {
     if(mounted){
       setState(() {
-        transportEmptyDialog = false;
+        selectedTransListIndex = -1;
       });
     }
   }
@@ -227,8 +228,10 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                     }else{
                                       if(mounted){
                                         setState(() {
-                                          transportEmptyDialog = true;
-                                          startTimer();
+                                          if (selectedTransListIndex != index) {
+                                            selectedTransListIndex = index;
+                                            startTimer();
+                                          }
                                         });
                                       }
                                     }
@@ -1003,10 +1006,10 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
             ],
           ),
           Visibility(
-            visible: transportEmptyDialog,
+            visible: index == selectedTransListIndex,
             child: Container(
               height: SizeConfig.screenHeight*0.04,
-              width: SizeConfig.screenWidth*0.6,
+              width: SizeConfig.screenWidth*0.4,
               decoration: BoxDecoration(
                 color: CommonColor.SIGN_UP_TEXT_COLOR.withOpacity(0.9),
                 borderRadius: BorderRadius.circular(10),

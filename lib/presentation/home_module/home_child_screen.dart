@@ -28,6 +28,7 @@ class HomeChildScreen extends StatefulWidget {
 
 class _HomeChildScreenState extends State<HomeChildScreen> {
   int? selectedIndex;
+  int? selectedTransListIndex;
 
   int index = 0;
 
@@ -62,7 +63,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
   void dialogHide() {
     if(mounted){
       setState(() {
-        transportEmptyDialog = false;
+        selectedTransListIndex = -1;
       });
     }
   }
@@ -256,11 +257,12 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                         }else{
                                           if(mounted){
                                             setState(() {
-                                              transportEmptyDialog = true;
-                                              startTimer();
+                                              if (selectedTransListIndex != index) {
+                                                selectedTransListIndex = index;
+                                                startTimer();
+                                              }
                                             });
                                           }
-
                                         }
 
 
@@ -673,7 +675,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                 ),
                               ),
                               Visibility(
-                                visible: transportEmptyDialog,
+                                visible: index == selectedTransListIndex,
                                 child: Container(
                                   height: SizeConfig.screenHeight*0.04,
                                   width: SizeConfig.screenWidth*0.4,
