@@ -206,35 +206,55 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                             child: Column(
                               children: [
                                 GestureDetector(
-                                  onTap: (){
-                                    if(bidData.length != 0) {
-                                      if (selectedIndex != index) {
-                                        selectedIndex = index;
+                                  onTap: () {
 
-                                        // print(selectedIndex);
-                                        if (mounted) {
-                                          setState(() {
+                                    print(items[index].id);
+                                    getAllBidsAgainstPostLimited(items[index].id).then((value){
 
-                                          });
+                                      print("dddddd ${bidData.length}");
+
+                                      if(bidData.length != 0){
+                                        if (selectedIndex != index) {
+                                          selectedIndex = index;
+                                          print("hhhhhhh $selectedIndex");
+                                          if (mounted) {
+                                            setState(() {
+                                              if (mounted) {
+                                                setState(() {
+                                                });
+                                              }
+                                            });
+                                          }
                                         }
-                                      } else {
-                                        selectedIndex = -1;
-                                        if (mounted) {
-                                          setState(() {
-
-                                          });
+                                        else {
+                                          selectedIndex = -1;
+                                          if (mounted) {
+                                            setState(() {});
+                                          }
                                         }
-                                      }
-                                    }else{
-                                      if(mounted){
-                                        setState(() {
-                                          if (selectedTransListIndex != index) {
+                                      } else{
+                                        if(mounted){
+                                          setState(() {
+                                            // transportEmptyDialog = true;
                                             selectedTransListIndex = index;
                                             startTimer();
-                                          }
-                                        });
+                                          });
+                                        }
+
                                       }
-                                    }
+
+
+                                    });
+
+                                    print("llll ${bidData.length}");
+
+
+
+
+
+
+
+
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -253,7 +273,8 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                 ),
                                 Visibility(
                                   visible: index == selectedIndex,
-                                  child: Column(
+                                  child:bidData.length != 0 ?
+                                  Column(
                                     children: [
                                       getTransporterListHeading(SizeConfig.screenHeight, SizeConfig.screenWidth),
                                       Container(
@@ -609,7 +630,8 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                         ),
                                       ),
                                     ],
-                                  ),
+                                  )
+                                  : Container(),
                                 ),
                                 SizedBox(
                                   height: SizeConfig.screenHeight*0.02,
@@ -1012,7 +1034,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
               width: SizeConfig.screenWidth*0.4,
               decoration: BoxDecoration(
                 color: CommonColor.SIGN_UP_TEXT_COLOR.withOpacity(0.9),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(6),
               ),
               child: Center(child: Text("No Bid Available.",
                 style: TextStyle(
