@@ -68,7 +68,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
   );
 
   startTimer() {
-    var durtaion = new Duration(seconds: 2);
+    var durtaion = const Duration(seconds: 2);
     return Timer(durtaion, dialogHide);
   }
 
@@ -108,17 +108,18 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
 
             DateTime dt = DateTime.parse(items[i].createdAt);
 
-            endTime = dt.add(Duration(days: 2));
+            endTime = dt.add(const Duration(days: 2));
 
             print("endTime $endTime");
 
 
             print(items[i].id);
             getAllBidsAgainstPostLimited(items[i].id).then((value){
-              if(mounted)
-              setState(() {
+              if(mounted) {
+                setState(() {
 
               });
+              }
             });
 
             int totalFare = items[i].fare;
@@ -158,7 +159,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
       formattedTime = _printDuration(remainingTime);
 
 
-      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         if (DateTime.now().isAfter(endTime!)) {
           _timer?.cancel();
           // Timer has finished, you can handle the desired action here.
@@ -524,7 +525,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                                                                         context,
                                                                         MaterialPageRoute(
                                                                             builder: (context) =>
-                                                                                  BookingDetailsScreen(postId: '',)));
+                                                                                  const BookingDetailsScreen(postId: '',)));
                                                                   }else{
                                                                     Container();
                                                                   }
@@ -659,7 +660,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
             padding: EdgeInsets.only(bottom: SizeConfig.screenHeight*0.1),
             child: Visibility(
                 visible: isLoading,
-                child: CircularProgressIndicator()
+                child: const CircularProgressIndicator()
             ),
           ),
         ],
