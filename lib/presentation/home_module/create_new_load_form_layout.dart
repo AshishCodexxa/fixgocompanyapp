@@ -167,28 +167,31 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
   hideLoadError() {
     Future.delayed(const Duration(seconds: 3), () {
-      if(mounted)
-      setState(() {
+      if(mounted) {
+        setState(() {
         loadErrorShow = false;
       });
+      }
     });
   }
 
   hideVehicleError() {
     Future.delayed(const Duration(seconds: 3), () {
-      if(mounted)
-      setState(() {
+      if(mounted) {
+        setState(() {
         vehicleErrorShow = false;
       });
+      }
     });
   }
 
   hidePaymentError() {
     Future.delayed(const Duration(seconds: 3), () {
-      if(mounted)
-      setState(() {
+      if(mounted) {
+        setState(() {
         paymentErrorShow = false;
       });
+      }
     });
   }
 
@@ -290,10 +293,10 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(),
+                  const CircularProgressIndicator(),
                   Padding(
                     padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.05),
-                    child: Text("Please wait a moment.\nYour post will be created.",
+                    child: const Text("Please wait a moment.\nYour post will be created.",
                     style: TextStyle(
                       color: CommonColor.SIGN_UP_TEXT_COLOR,
                       fontWeight: FontWeight.w400,
@@ -415,8 +418,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                   child: Container(
                     height: SizeConfig.screenWidth * 0.003,
                     color: Colors.black12,
-                    child: Row(
-                      children: const [
+                    child: const Row(
+                      children: [
                         Text(
                           "hii",
                           style: TextStyle(color: Colors.transparent),
@@ -926,8 +929,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               child: Container(
                                 height: SizeConfig.screenWidth * 0.003,
                                 color: Colors.black12,
-                                child: Row(
-                                  children: const [
+                                child: const Row(
+                                  children: [
                                     Text(
                                       "hii",
                                       style:
@@ -1054,8 +1057,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       child: Container(
                                         height: SizeConfig.screenWidth * 0.003,
                                         color: Colors.black12,
-                                        child: Row(
-                                          children: const [
+                                        child: const Row(
+                                          children: [
                                             Text(
                                               "hii",
                                               style: TextStyle(
@@ -1126,8 +1129,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       child: Container(
                                         height: SizeConfig.screenWidth * 0.003,
                                         color: Colors.black12,
-                                        child: Row(
-                                          children: const [
+                                        child: const Row(
+                                          children: [
                                             Text(
                                               "hii",
                                               style: TextStyle(
@@ -1201,8 +1204,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               child: Container(
                                 height: SizeConfig.screenWidth * 0.003,
                                 color: Colors.black12,
-                                child: Row(
-                                  children: const [
+                                child: const Row(
+                                  children: [
                                     Text(
                                       "hii",
                                       style:
@@ -1304,8 +1307,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               child: Container(
                                 height: SizeConfig.screenWidth * 0.003,
                                 color: Colors.black12,
-                                child: Row(
-                                  children: const [
+                                child: const Row(
+                                  children: [
                                     Text(
                                       "hii",
                                       style:
@@ -1524,8 +1527,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                     child: Container(
                                       height: SizeConfig.screenWidth * 0.003,
                                       color: Colors.black12,
-                                      child: Row(
-                                        children: const [
+                                      child: const Row(
+                                        children: [
                                           Text(
                                             "hii",
                                             style: TextStyle(
@@ -2074,8 +2077,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       child: Container(
                                         height: SizeConfig.screenWidth * 0.003,
                                         color: Colors.black12,
-                                        child: Row(
-                                          children: const [
+                                        child: const Row(
+                                          children: [
                                             Text(
                                               "hii",
                                               style: TextStyle(
@@ -2146,8 +2149,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       child: Container(
                                         height: SizeConfig.screenWidth * 0.003,
                                         color: Colors.black12,
-                                        child: Row(
-                                          children: const [
+                                        child: const Row(
+                                          children: [
                                             Text(
                                               "hii",
                                               style: TextStyle(
@@ -2221,8 +2224,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               child: Container(
                                 height: SizeConfig.screenWidth * 0.003,
                                 color: Colors.black12,
-                                child: Row(
-                                  children: const [
+                                child: const Row(
+                                  children: [
                                     Text(
                                       "hii",
                                       style:
@@ -2368,8 +2371,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               height: SizeConfig.screenWidth *
                                                   0.003,
                                               color: Colors.black12,
-                                              child: Row(
-                                                children: const [
+                                              child: const Row(
+                                                children: [
                                                   Text(
                                                     "hii",
                                                     style: TextStyle(
@@ -2450,8 +2453,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               height: SizeConfig.screenWidth *
                                                   0.003,
                                               color: Colors.black12,
-                                              child: Row(
-                                                children: const [
+                                              child: const Row(
+                                                children: [
                                                   Text(
                                                     "hii",
                                                     style: TextStyle(
@@ -2532,8 +2535,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               height: SizeConfig.screenWidth *
                                                   0.003,
                                               color: Colors.black12,
-                                              child: Row(
-                                                children: const [
+                                              child: const Row(
+                                                children: [
                                                   Text(
                                                     "hii",
                                                     style: TextStyle(
@@ -2614,8 +2617,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               height: SizeConfig.screenWidth *
                                                   0.003,
                                               color: Colors.black12,
-                                              child: Row(
-                                                children: const [
+                                              child: const Row(
+                                                children: [
                                                   Text(
                                                     "hii",
                                                     style: TextStyle(
@@ -2696,8 +2699,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                     child: Container(
                                       height: SizeConfig.screenWidth * 0.003,
                                       color: Colors.black12,
-                                      child: Row(
-                                        children: const [
+                                      child: const Row(
+                                        children: [
                                           Text(
                                             "hii",
                                             style: TextStyle(
@@ -3080,8 +3083,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                         SizeConfig.screenWidth *
                                                             0.003,
                                                     color: Colors.black12,
-                                                    child: Row(
-                                                      children: const [
+                                                    child: const Row(
+                                                      children: [
                                                         Text(
                                                           "hii",
                                                           style: TextStyle(
@@ -3173,8 +3176,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                         SizeConfig.screenWidth *
                                                             0.003,
                                                     color: Colors.black12,
-                                                    child: Row(
-                                                      children: const [
+                                                    child: const Row(
+                                                      children: [
                                                         Text(
                                                           "hii",
                                                           style: TextStyle(
@@ -3266,8 +3269,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                         SizeConfig.screenWidth *
                                                             0.003,
                                                     color: Colors.black12,
-                                                    child: Row(
-                                                      children: const [
+                                                    child: const Row(
+                                                      children: [
                                                         Text(
                                                           "hii",
                                                           style: TextStyle(
@@ -3358,8 +3361,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                             height:
                                                 SizeConfig.screenWidth * 0.003,
                                             color: Colors.black12,
-                                            child: Row(
-                                              children: const [
+                                            child: const Row(
+                                              children: [
                                                 Text(
                                                   "hii",
                                                   style: TextStyle(
@@ -3540,8 +3543,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               child: Container(
                                 height: SizeConfig.screenWidth * 0.003,
                                 color: Colors.black12,
-                                child: Row(
-                                  children: const [
+                                child: const Row(
+                                  children: [
                                     Text(
                                       "hii",
                                       style:
@@ -5588,6 +5591,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                   : vehicleType == 3
                       ? "Trailor"
                       : "",
+          "trailorType" : trailerType == 1 ? "Flat Body" : trailerType == 2 ? "Half Body" : trailerType == 3 ? "Car Trailor" : trailerType == 4 ? "Multi Axel" : trailerType == 5 ? "Low Bed" : "",
           "capacity": "${int.parse(carryingCapacityController.text)} RLW, KG",
           "quantity": int.parse(vehicleNumberController.text),
           "tyreType": vehicleType == 1 || vehicleType == 2

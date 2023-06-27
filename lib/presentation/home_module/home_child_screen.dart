@@ -916,7 +916,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                         Padding(
                           padding: EdgeInsets.only(left: parentWidth * 0.02),
                           child: Container(
-                            width: parentWidth * 0.6,
+                            width: parentWidth * 0.4,
                             color: Colors.transparent,
                             child: Text(
                               "$finalLocation",

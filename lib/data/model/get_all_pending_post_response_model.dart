@@ -187,23 +187,23 @@ class LoadDetail {
     required this.load,
     required this.loadUnit,
     required this.loadType,
-    required this.description,
     required this.goodsImage,
+    required this.description,
   });
   late final LoadSize loadSize;
   late final int load;
   late final String loadUnit;
   late final String loadType;
-  late final String description;
   late final List<dynamic> goodsImage;
+  late final String description;
 
   LoadDetail.fromJson(Map<String, dynamic> json){
     loadSize = LoadSize.fromJson(json['loadSize']);
     load = json['load'];
     loadUnit = json['loadUnit'];
     loadType = json['loadType'];
-    description = json['description'];
     goodsImage = List.castFrom<dynamic, dynamic>(json['goodsImage']);
+    description = json['description'];
   }
 
   Map<String, dynamic> toJson() {
@@ -212,8 +212,8 @@ class LoadDetail {
     _data['load'] = load;
     _data['loadUnit'] = loadUnit;
     _data['loadType'] = loadType;
-    _data['description'] = description;
     _data['goodsImage'] = goodsImage;
+    _data['description'] = description;
     return _data;
   }
 }
@@ -246,30 +246,36 @@ class LoadSize {
 class Vehicle {
   Vehicle({
     required this.vehicleType,
-    required this.quantity,
+    required this.trailorType,
     required this.capacity,
+    required this.quantity,
+    required this.length,
+    required this.tyreType,
     required this.capacityUnit,
     required this.quantityAccepted,
-    required this.length,
     required this.width,
     required this.height,
   });
   late final String vehicleType;
-  late final int quantity;
+  late final String trailorType;
   late final int capacity;
+  late final int quantity;
+  late final int length;
+  late final String tyreType;
   late final String capacityUnit;
   late final int quantityAccepted;
-  late final int length;
   late final int width;
   late final int height;
 
   Vehicle.fromJson(Map<String, dynamic> json){
     vehicleType = json['vehicleType'];
-    quantity = json['quantity'];
+    trailorType = json['trailorType'];
     capacity = json['capacity'];
+    quantity = json['quantity'];
+    length = json['length'];
+    tyreType = json['tyreType'];
     capacityUnit = json['capacityUnit'];
     quantityAccepted = json['quantityAccepted'];
-    length = json['length'];
     width = json['width'];
     height = json['height'];
   }
@@ -277,11 +283,13 @@ class Vehicle {
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
     _data['vehicleType'] = vehicleType;
-    _data['quantity'] = quantity;
+    _data['trailorType'] = trailorType;
     _data['capacity'] = capacity;
+    _data['quantity'] = quantity;
+    _data['length'] = length;
+    _data['tyreType'] = tyreType;
     _data['capacityUnit'] = capacityUnit;
     _data['quantityAccepted'] = quantityAccepted;
-    _data['length'] = length;
     _data['width'] = width;
     _data['height'] = height;
     return _data;
@@ -423,6 +431,8 @@ class Address {
     required this.state,
     required this.country,
     required this.postalCode,
+    required this.district,
+    required this.laneNumber,
     required this.id,
   });
   late final String street;
@@ -430,6 +440,8 @@ class Address {
   late final String state;
   late final String country;
   late final String postalCode;
+  late final String district;
+  late final String laneNumber;
   late final String id;
 
   Address.fromJson(Map<String, dynamic> json){
@@ -438,6 +450,8 @@ class Address {
     state = json['state'];
     country = json['country'];
     postalCode = json['postalCode'];
+    district = json['district'];
+    laneNumber = json['laneNumber'];
     id = json['_id'];
   }
 
@@ -448,6 +462,8 @@ class Address {
     _data['state'] = state;
     _data['country'] = country;
     _data['postalCode'] = postalCode;
+    _data['district'] = district;
+    _data['laneNumber'] = laneNumber;
     _data['_id'] = id;
     return _data;
   }
@@ -457,22 +473,21 @@ class Receiver {
   Receiver({
     required this.name,
     required this.phone,
-    required this.customer,
     required this.address,
+    required this.customer,
     required this.id,
   });
   late final String name;
   late final String phone;
-  late final String customer;
   late final Address address;
+  late final String customer;
   late final String id;
-
 
   Receiver.fromJson(Map<String, dynamic> json){
     name = json['name'];
     phone = json['phone'];
-    customer = json['customer'];
     address = Address.fromJson(json['address']);
+    customer = json['customer'];
     id = json['_id'];
   }
 
@@ -480,6 +495,7 @@ class Receiver {
     final _data = <String, dynamic>{};
     _data['name'] = name;
     _data['phone'] = phone;
+    _data['address'] = address.toJson();
     _data['customer'] = customer;
     _data['_id'] = id;
     return _data;
