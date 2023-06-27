@@ -226,48 +226,52 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                     GestureDetector(
                                       onTap: () {
 
-                                        if(bidData.length != 0){
-                                          if (selectedIndex != index) {
-                                            selectedIndex = index;
+                                        print(items[index].id);
+                                        getAllBidsAgainstPostLimited(items[index].id).then((value){
 
+                                          print("dddddd ${bidData.length}");
 
-                                            print("hhhhhhh $selectedIndex");
-                                            if (mounted) {
-                                              setState(() {
-                                                if (mounted) {
-                                                  setState(() {
-                                                    print(items[index].id);
-                                                    getAllBidsAgainstPostLimited(items[index].id).then((value){
-                                                      if(mounted){
-                                                        setState(() {
-                                                          transportList = false;
-                                                        });
-                                                      }
+                                          if(bidData.length != 0){
+                                            if (selectedIndex != index) {
+                                              selectedIndex = index;
+                                              print("hhhhhhh $selectedIndex");
+                                              if (mounted) {
+                                                setState(() {
+                                                  if (mounted) {
+                                                    setState(() {
                                                     });
-                                                  });
-                                                }
-                                              });
+                                                  }
+                                                });
+                                              }
                                             }
-                                          } else {
-                                            selectedIndex = -1;
-                                            if (mounted) {
-                                              setState(() {});
+                                            else {
+                                              selectedIndex = -1;
+                                              if (mounted) {
+                                                setState(() {});
+                                              }
                                             }
-                                          }
-                                        }else{
-                                          if(mounted){
-                                            setState(() {
-                                              if (selectedTransListIndex != index) {
+                                          } else{
+                                            if(mounted){
+                                              setState(() {
+                                                // transportEmptyDialog = true;
                                                 selectedTransListIndex = index;
                                                 startTimer();
-                                              }
-                                            });
+                                              });
+                                            }
+
                                           }
-                                        }
+
+
+                                        });
+
+                                        print("llll ${bidData.length}");
 
 
 
-                                        print(bidData.length);
+
+
+
+
 
                                       },
                                       child: Container(
@@ -294,7 +298,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                     ),
                                     Visibility(
                                       visible: index == selectedIndex,
-                                      child: Stack(
+                                      child:bidData.length != 0 ? Stack(
                                         alignment: Alignment.center,
                                         children: [
                                           Column(
@@ -661,12 +665,13 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                               ),
                                             ],
                                           ),
-                                          Visibility(
-                                            visible: transportList,
-                                              child: const CircularProgressIndicator()
-                                          )
+                                          // Visibility(
+                                          //   visible: transportList,
+                                          //     child: const CircularProgressIndicator()
+                                          // )
                                         ],
-                                      ),
+                                      )
+                                      : Container(),
                                     ),
                                     SizedBox(
                                       height: SizeConfig.screenHeight * 0.02,
@@ -823,8 +828,6 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
 
     finalLocation =
         "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
-
-
 
 
 
@@ -1236,6 +1239,11 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
       if(response.statusCode == 200){
         bidData = response.data['data'] as List;
        print("jsonList $bidData");
+        if(mounted){
+          setState(() {
+            transportList = false;
+          });
+        }
       }
 
       return response.data;
