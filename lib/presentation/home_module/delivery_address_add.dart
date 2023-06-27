@@ -20,7 +20,8 @@ class DeliveryLocationScreen extends StatefulWidget {
   final String citys;
   final String states;
   final String pincodes;
-
+  final String lane;
+  final String taluka;
   final String pickUpAddress;
 
   const DeliveryLocationScreen({Key? key,
@@ -31,7 +32,8 @@ class DeliveryLocationScreen extends StatefulWidget {
     this.personName = '', this.phoneNo = '',
     this.addresses = '', this.citys = '',
     this.states = '', this.pincodes = '',
-    this.pickUpAddress = ''
+    this.pickUpAddress = '', this.lane = '',
+    this.taluka = ''
   }) : super(key: key);
 
   @override
@@ -47,11 +49,15 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
   TextEditingController cityController = TextEditingController();
   TextEditingController stateController = TextEditingController();
   TextEditingController pinCodeController = TextEditingController();
+  TextEditingController talukaController = TextEditingController();
+  TextEditingController laneNoController = TextEditingController();
 
 
   final _receiverNameFocus = FocusNode();
   final _phoneNumberFocus = FocusNode();
   final _addressFocus = FocusNode();
+  final _talukaFocus = FocusNode();
+  final _laneNoFocus = FocusNode();
   final _cityFocus = FocusNode();
   final _stateFocus = FocusNode();
   final _pinCodeFocus = FocusNode();
@@ -68,6 +74,8 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
         cityController = TextEditingController(text: widget.citys);
         stateController = TextEditingController(text: widget.states);
         pinCodeController = TextEditingController(text: widget.pincodes);
+        laneNoController = TextEditingController(text: widget.lane);
+        talukaController = TextEditingController(text: widget.taluka);
       });
     }
 
@@ -77,6 +85,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
+      // resizeToAvoidBottomInset: false,
       body: ListView(
         shrinkWrap: true,
         padding: EdgeInsets.zero,
@@ -110,7 +119,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
             },
             child: Container(
                 color: Colors.transparent,
-                child: Icon(Icons.arrow_back_ios_new,
+                child: const Icon(Icons.arrow_back_ios_new,
                   color: CommonColor.WHITE_COLOR,)),
           ),
           Padding(
@@ -131,7 +140,9 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
   }
 
   Widget getAllPickUpPoints(double parentHeight, double parentWidth){
-    return Column(
+    return ListView(
+      shrinkWrap: true,
+      padding: EdgeInsets.only(bottom: parentHeight*0.1),
       children: [
         Padding(
           padding: EdgeInsets.only(
@@ -263,10 +274,108 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                 focusNode: _addressFocus,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
-                  prefixIcon: Image(image: AssetImage("assets/images/company.png"),),
+                  prefixIcon: const Image(image: AssetImage("assets/images/company.png"),),
                   label: RichText(
                     text: TextSpan(
                       text: 'Address',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w400,
+                        fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                      ),),
+                  ),
+                  labelStyle: TextStyle(
+                      color: CommonColor.REGISTER_HINT_COLOR,
+                      fontSize: SizeConfig.blockSizeHorizontal * 3.5,
+                      fontFamily: 'Roboto_Regular'),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(
+            top: parentHeight*0.02,
+            left: parentWidth*0.03,
+            right: parentWidth*0.03,
+          ),
+          child: Container(
+            height: parentHeight*0.08,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 5,
+                    spreadRadius: 1,
+                    offset: const Offset(2, 6)),
+              ],
+            ),
+            child:  Padding(
+              padding: EdgeInsets.only(
+                top: parentHeight*0.0,
+                left: parentWidth*0.03,
+                right: parentWidth*0.03,
+              ),
+              child: TextFormField(
+                controller: talukaController,
+                focusNode: _talukaFocus,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  prefixIcon: Image(image: AssetImage("assets/images/company.png"),),
+                  label: RichText(
+                    text: TextSpan(
+                      text: 'Taluka',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w400,
+                        fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                      ),),
+                  ),
+                  labelStyle: TextStyle(
+                      color: CommonColor.REGISTER_HINT_COLOR,
+                      fontSize: SizeConfig.blockSizeHorizontal * 3.5,
+                      fontFamily: 'Roboto_Regular'),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(
+            top: parentHeight*0.02,
+            left: parentWidth*0.03,
+            right: parentWidth*0.03,
+          ),
+          child: Container(
+            height: parentHeight*0.08,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 5,
+                    spreadRadius: 1,
+                    offset: const Offset(2, 6)),
+              ],
+            ),
+            child:  Padding(
+              padding: EdgeInsets.only(
+                top: parentHeight*0.0,
+                left: parentWidth*0.03,
+                right: parentWidth*0.03,
+              ),
+              child: TextFormField(
+                controller: laneNoController,
+                focusNode: _laneNoFocus,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  prefixIcon: Image(image: AssetImage("assets/images/company.png"),),
+                  label: RichText(
+                    text: TextSpan(
+                      text: 'Lane No.',
                       style: TextStyle(
                         color: Colors.black54,
                         fontWeight: FontWeight.w400,
@@ -312,7 +421,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                 focusNode: _cityFocus,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
-                  prefixIcon: Image(image: AssetImage("assets/images/company.png"),),
+                  prefixIcon: const Image(image: AssetImage("assets/images/company.png"),),
                   label: RichText(
                     text: TextSpan(
                       text: 'City',
@@ -361,7 +470,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                 focusNode: _stateFocus,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
-                  prefixIcon: Image(image: AssetImage("assets/images/company.png"),),
+                  prefixIcon: const Image(image: AssetImage("assets/images/company.png"),),
                   label: RichText(
                     text: TextSpan(
                       text: 'State',
@@ -410,7 +519,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                 focusNode: _pinCodeFocus,
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
-                  prefixIcon: Image(image: AssetImage("assets/images/company.png"),),
+                  prefixIcon: const Image(image: AssetImage("assets/images/company.png"),),
                   label: RichText(
                     text: TextSpan(
                       text: 'Pincode',
@@ -429,104 +538,113 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
             ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(top: parentHeight*0.05),
-          child: Stack(
-            children: [
-              widget.address.isEmpty ?
-              GestureDetector(
-                onTap: (){
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LocationMapScreen(comeFrom: '2',
-                    personName: receiverNameController.text,
-                    phoneNo: phoneNoController.text, addresses: addressController.text,
-                    citys: cityController.text,
-                    states: stateController.text,
-                    pincodes: pinCodeController.text,
-                    pickUpLocation: widget.pickUpAddress,
-                  )));
-                },
-                child: Container(
-                  height: parentHeight*0.03,
-                  width: parentWidth*0.3,
-                  decoration: BoxDecoration(
-                      color: CommonColor.SIGN_UP_TEXT_COLOR,
-                      borderRadius: BorderRadius.circular(5),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.27),
-                          blurRadius: 5,
-                          spreadRadius: 1,
-                          offset: const Offset(1, 2)),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: parentHeight*0.05),
+              child: Stack(
+                children: [
+                  widget.address.isEmpty ?
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LocationMapScreen(comeFrom: '2',
+                        personName: receiverNameController.text,
+                        phoneNo: phoneNoController.text, addresses: addressController.text,
+                        citys: cityController.text,
+                        states: stateController.text,
+                        pincodes: pinCodeController.text,
+                        pickUpLocation: widget.pickUpAddress,
+                        taluka: talukaController.text,
+                        laneNumber: laneNoController.text,
+                      )));
+                    },
+                    child: Container(
+                      height: parentHeight*0.03,
+                      width: parentWidth*0.3,
+                      decoration: BoxDecoration(
+                          color: CommonColor.SIGN_UP_TEXT_COLOR,
+                          borderRadius: BorderRadius.circular(5),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.27),
+                              blurRadius: 5,
+                              spreadRadius: 1,
+                              offset: const Offset(1, 2)),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
 
-                      Icon(Icons.location_on_outlined,
-                        color: Colors.white,
-                        size: parentHeight*0.021,),
+                          Icon(Icons.location_on_outlined,
+                            color: Colors.white,
+                            size: parentHeight*0.021,),
 
-                      Padding(
-                        padding: EdgeInsets.only(left: parentWidth*0.005),
-                        child: Text("Select Location",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: SizeConfig.blockSizeHorizontal*3.0,
-                              fontFamily: 'Ronoto_Regular',
-                              fontWeight: FontWeight.w400
-                          ),),
-                      )
+                          Padding(
+                            padding: EdgeInsets.only(left: parentWidth*0.005),
+                            child: Text("Select Location",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                                  fontFamily: 'Ronoto_Regular',
+                                  fontWeight: FontWeight.w400
+                              ),),
+                          )
 
-                    ],
-                  ),
-                ),
-              ) :
-              Padding(
-                padding: EdgeInsets.only(
-                  left: parentWidth*0.05,
-                  right: parentWidth*0.05,
-                ),
-                child: GestureDetector(
-                  onTap: (){
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LocationMapScreen(comeFrom: '2',
-                      personName: receiverNameController.text,
-                      phoneNo: phoneNoController.text, addresses: addressController.text,
-                      citys: cityController.text,
-                      states: stateController.text,
-                      pincodes: pinCodeController.text,
-                      pickUpLocation: widget.pickUpAddress,
-                    )));
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(13)
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.location_on_outlined,
+                  ) :
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: parentWidth*0.05,
+                      right: parentWidth*0.05,
+                    ),
+                    child: GestureDetector(
+                      onTap: (){
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LocationMapScreen(comeFrom: '2',
+                          personName: receiverNameController.text,
+                          phoneNo: phoneNoController.text, addresses: addressController.text,
+                          citys: cityController.text,
+                          states: stateController.text,
+                          pincodes: pinCodeController.text,
+                          pickUpLocation: widget.pickUpAddress,
+                          taluka: talukaController.text,
+                          laneNumber: laneNoController.text,
+                        )));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(13)
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(left: parentWidth*0.02,
-                              top: parentHeight*0.01,
-                              bottom: parentHeight*0.01),
-                          child: Container(
-                              color: Colors.transparent,
-                              width: parentWidth*0.7,
-                              child: Text(widget.address)
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.location_on_outlined,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: parentWidth*0.02,
+                                  top: parentHeight*0.01,
+                                  bottom: parentHeight*0.01),
+                              child: Container(
+                                  color: Colors.transparent,
+                                  width: parentWidth*0.7,
+                                  child: Text(widget.address)
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+
+
+                ],
               ),
-
-
-            ],
-          ),
+            ),
+          ],
         ),
         Padding(
           padding: EdgeInsets.only(top: SizeConfig.screenHeight * 0.05,
@@ -563,6 +681,8 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                       long: widget.long,
                       state: stateController.text,
                       country: "India",
+                      lane: laneNoController.text,
+                      taluka: talukaController.text,
                     )));
                   }
 

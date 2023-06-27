@@ -23,13 +23,17 @@ class PickUpLocation extends StatefulWidget {
   final String citys;
   final String states;
   final String pincodes;
+  final String lane;
+  final String taluka;
 
   const PickUpLocation({Key? key,
     this.address = '',
     this.lat = '',
     this.long = '',
     this.country = '',
-    this.personName = '', this.phoneNo = '', this.addresses = '', this.citys = '', this.states = '', this.pincodes = ''
+    this.personName = '', this.phoneNo = '', this.addresses = '',
+    this.citys = '', this.states = '', this.pincodes = '', this.lane = '',
+    this.taluka = ''
   }) : super(key: key);
 
   @override
@@ -42,6 +46,8 @@ class _PickUpLocationState extends State<PickUpLocation> {
   TextEditingController contactPersonController = TextEditingController();
   TextEditingController phoneNoController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  TextEditingController talukaController = TextEditingController();
+  TextEditingController laneNoController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController stateController = TextEditingController();
   TextEditingController pinCodeController = TextEditingController();
@@ -50,6 +56,8 @@ class _PickUpLocationState extends State<PickUpLocation> {
   final _contactPersonFocus = FocusNode();
   final _phoneNumberFocus = FocusNode();
   final _addressFocus = FocusNode();
+  final _talukaFocus = FocusNode();
+  final _laneNoFocus = FocusNode();
   final _cityFocus = FocusNode();
   final _stateFocus = FocusNode();
   final _pinCodeFocus = FocusNode();
@@ -71,6 +79,8 @@ class _PickUpLocationState extends State<PickUpLocation> {
        cityController = TextEditingController(text: widget.citys);
        stateController = TextEditingController(text: widget.states);
        pinCodeController = TextEditingController(text: widget.pincodes);
+       laneNoController = TextEditingController(text: widget.lane);
+       talukaController = TextEditingController(text: widget.taluka);
      });
    }
 
@@ -134,7 +144,9 @@ class _PickUpLocationState extends State<PickUpLocation> {
   }
 
   Widget getAllPickUpPoints(double parentHeight, double parentWidth){
-    return Column(
+    return ListView(
+      shrinkWrap: true,
+      padding: EdgeInsets.only(bottom: parentHeight*0.1),
       children: [
         Padding(
           padding: EdgeInsets.only(
@@ -312,6 +324,104 @@ class _PickUpLocationState extends State<PickUpLocation> {
                 right: parentWidth*0.03,
               ),
               child: TextFormField(
+                controller: talukaController,
+                focusNode: _talukaFocus,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  prefixIcon: Image(image: AssetImage("assets/images/company.png"),),
+                  label: RichText(
+                    text: TextSpan(
+                      text: 'Taluka',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w400,
+                        fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                      ),),
+                  ),
+                  labelStyle: TextStyle(
+                      color: CommonColor.REGISTER_HINT_COLOR,
+                      fontSize: SizeConfig.blockSizeHorizontal * 3.5,
+                      fontFamily: 'Roboto_Regular'),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(
+            top: parentHeight*0.02,
+            left: parentWidth*0.03,
+            right: parentWidth*0.03,
+          ),
+          child: Container(
+            height: parentHeight*0.08,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 5,
+                    spreadRadius: 1,
+                    offset: const Offset(2, 6)),
+              ],
+            ),
+            child:  Padding(
+              padding: EdgeInsets.only(
+                top: parentHeight*0.0,
+                left: parentWidth*0.03,
+                right: parentWidth*0.03,
+              ),
+              child: TextFormField(
+                controller: laneNoController,
+                focusNode: _laneNoFocus,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  prefixIcon: Image(image: AssetImage("assets/images/company.png"),),
+                  label: RichText(
+                    text: TextSpan(
+                      text: 'Lane No.',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w400,
+                        fontSize: SizeConfig.blockSizeHorizontal*3.5,
+                      ),),
+                  ),
+                  labelStyle: TextStyle(
+                      color: CommonColor.REGISTER_HINT_COLOR,
+                      fontSize: SizeConfig.blockSizeHorizontal * 3.5,
+                      fontFamily: 'Roboto_Regular'),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(
+            top: parentHeight*0.02,
+            left: parentWidth*0.03,
+            right: parentWidth*0.03,
+          ),
+          child: Container(
+            height: parentHeight*0.08,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 5,
+                    spreadRadius: 1,
+                    offset: const Offset(2, 6)),
+              ],
+            ),
+            child:  Padding(
+              padding: EdgeInsets.only(
+                top: parentHeight*0.0,
+                left: parentWidth*0.03,
+                right: parentWidth*0.03,
+              ),
+              child: TextFormField(
                 controller: cityController,
                 focusNode: _cityFocus,
                 textInputAction: TextInputAction.next,
@@ -435,91 +545,96 @@ class _PickUpLocationState extends State<PickUpLocation> {
         ),
         Padding(
           padding: EdgeInsets.only(top: parentHeight*0.05),
-          child: Stack(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-             widget.address.isEmpty ?
-             GestureDetector(
-                onTap: (){
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LocationMapScreen(comeFrom: '1',
-                    personName: contactPersonController.text,
-                    phoneNo: phoneNoController.text, addresses: addressController.text,
-                    citys: cityController.text,
-                    states: stateController.text,
-                    pincodes: pinCodeController.text,
-                  )));
-                },
-                child: Container(
-                  height: parentHeight*0.03,
-                  width: parentWidth*0.3,
-                  decoration: BoxDecoration(
-                    color: CommonColor.SIGN_UP_TEXT_COLOR,
-                    borderRadius: BorderRadius.circular(20)
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+              Stack(
+                children: [
+                 widget.address.isEmpty ?
+                 GestureDetector(
+                    onTap: (){
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LocationMapScreen(comeFrom: '1',
+                        personName: contactPersonController.text,
+                        phoneNo: phoneNoController.text, addresses: addressController.text,
+                        citys: cityController.text,
+                        states: stateController.text,
+                        pincodes: pinCodeController.text,
+                        taluka: talukaController.text, laneNumber: laneNoController.text,
+                      )));
+                    },
+                    child: Container(
+                      height: parentHeight*0.03,
+                      width: parentWidth*0.3,
+                      decoration: BoxDecoration(
+                        color: CommonColor.SIGN_UP_TEXT_COLOR,
+                        borderRadius: BorderRadius.circular(20)
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
 
-                      Icon(Icons.location_on_outlined,
-                      color: Colors.white,
-                      size: parentHeight*0.021,),
-
-                      Padding(
-                        padding: EdgeInsets.only(left: parentWidth*0.005),
-                        child: Text("Select Location",
-                        style: TextStyle(
+                          Icon(Icons.location_on_outlined,
                           color: Colors.white,
-                          fontSize: SizeConfig.blockSizeHorizontal*3.0,
-                          fontFamily: 'Ronoto_Regular',
-                          fontWeight: FontWeight.w400
-                        ),),
-                      )
+                          size: parentHeight*0.021,),
 
-                    ],
-                  ),
-                ),
-              ) :
-             Padding(
-               padding: EdgeInsets.only(
-                 left: parentWidth*0.05,
-                 right: parentWidth*0.05,
-               ),
-               child: GestureDetector(
-                 onTap: (){
-                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LocationMapScreen(comeFrom: '1',
-                     personName: contactPersonController.text,
-                     phoneNo: phoneNoController.text, addresses: addressController.text,
-                     citys: cityController.text,
-                     states: stateController.text,
-                     pincodes: pinCodeController.text,
-                   )));
-                 },
-                 child: Container(
-                   decoration: BoxDecoration(
-                       border: Border.all(color: Colors.black),
-                       borderRadius: BorderRadius.circular(13)
+                          Padding(
+                            padding: EdgeInsets.only(left: parentWidth*0.005),
+                            child: Text("Select Location",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: SizeConfig.blockSizeHorizontal*3.0,
+                              fontFamily: 'Ronoto_Regular',
+                              fontWeight: FontWeight.w400
+                            ),),
+                          )
+
+                        ],
+                      ),
+                    ),
+                  ) :
+                 Padding(
+                   padding: EdgeInsets.only(
+                     left: parentWidth*0.05,
+                     right: parentWidth*0.05,
                    ),
-                   child: Row(
-                     mainAxisAlignment: MainAxisAlignment.center,
-                     children: [
-                       Icon(Icons.location_on_outlined,
+                   child: GestureDetector(
+                     onTap: (){
+                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LocationMapScreen(comeFrom: '1',
+                         personName: contactPersonController.text,
+                         phoneNo: phoneNoController.text, addresses: addressController.text,
+                         citys: cityController.text,
+                         states: stateController.text,
+                         pincodes: pinCodeController.text,
+                         taluka: talukaController.text, laneNumber: laneNoController.text,
+                       )));
+                     },
+                     child: Container(
+                       decoration: BoxDecoration(
+                           border: Border.all(color: Colors.black),
+                           borderRadius: BorderRadius.circular(13)
                        ),
-                       Padding(
-                         padding: EdgeInsets.only(left: parentWidth*0.02,
-                             top: parentHeight*0.01,
-                             bottom: parentHeight*0.01),
-                         child: Container(
-                             color: Colors.transparent,
-                             width: parentWidth*0.7,
-                             child: Text("${widget.address}")
-                         ),
+                       child: Row(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: [
+                           Icon(Icons.location_on_outlined,
+                           ),
+                           Padding(
+                             padding: EdgeInsets.only(left: parentWidth*0.02,
+                                 top: parentHeight*0.01,
+                                 bottom: parentHeight*0.01),
+                             child: Container(
+                                 color: Colors.transparent,
+                                 width: parentWidth*0.7,
+                                 child: Text("${widget.address}")
+                             ),
+                           ),
+                         ],
                        ),
-                     ],
+                     ),
                    ),
                  ),
-               ),
-             ),
-
-
+                ],
+              ),
             ],
           ),
         ),
@@ -552,11 +667,13 @@ class _PickUpLocationState extends State<PickUpLocation> {
                         phoneNoController.text,
                         addressController.text,
                         cityController.text,
+                        talukaController.text,
+                        laneNoController.text,
                         stateController.text,
                         widget.country,
                         pinCodeController.text,
                         widget.lat,
-                        widget.long
+                        widget.long,
                     ).then((value) {
 
                      print(value['data']);

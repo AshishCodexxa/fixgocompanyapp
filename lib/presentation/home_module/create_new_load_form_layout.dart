@@ -28,6 +28,8 @@ class NewLoadScreenForm extends StatefulWidget {
   final String postalCode;
   final String lat;
   final String long;
+  final String lane;
+  final String taluka;
 
   const NewLoadScreenForm(
       {Key? key,
@@ -41,7 +43,9 @@ class NewLoadScreenForm extends StatefulWidget {
       this.country = '',
       this.postalCode = '',
       this.lat = "",
-      this.long = ""})
+      this.long = "",
+        this.lane = '',
+        this.taluka = ''})
       : super(key: key);
 
   @override

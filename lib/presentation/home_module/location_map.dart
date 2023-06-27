@@ -25,11 +25,13 @@ class LocationMapScreen extends StatefulWidget {
   final String states;
   final String pincodes;
   final String pickUpLocation;
+  final String laneNumber;
+  final String taluka;
 
   const LocationMapScreen({Key? key, required this.comeFrom,
     required this.personName, required this.phoneNo,
     required this.addresses, required this.citys,
-    required this.states, required this.pincodes, this.pickUpLocation = '',
+    required this.states, required this.pincodes, this.pickUpLocation = '', required this.laneNumber, required this.taluka,
     }) : super(key: key);
 
   @override
@@ -277,6 +279,8 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
                               citys: widget.citys,
                               states: widget.states,
                               pincodes: widget.pincodes,
+                              lane: widget.laneNumber,
+                              taluka: widget.taluka,
                             ))) :
                       widget.comeFrom == "2" ?
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>
@@ -292,6 +296,8 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
                             states: widget.states,
                             pincodes: widget.pincodes,
                             pickUpAddress: widget.pickUpLocation,
+                            lane: widget.laneNumber,
+                            taluka: widget.taluka,
                           ))) : Container();
                       },
                       child: const Text('Save Address'),

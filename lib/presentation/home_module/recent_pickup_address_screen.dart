@@ -130,7 +130,7 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
                                           selectedIndex = index;
                                           setState(() {
 
-                                            pickUpAddress = "${items[index].address.street}, ${items[index].address.city}, ${items[index].address.state}, ${items[index].address.country}, ${items[index].address.postalCode}";
+                                            pickUpAddress = "${items[index].address.street}, ${items[index].address.city}, ${items[index].address.district}, ${items[index].address.laneNumber}, ${items[index].address.state}, ${items[index].address.country}, ${items[index].address.postalCode}";
 
                                             GetStorage().write(ConstantData.pickupAddressId, items[index].id);
 
@@ -167,7 +167,7 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
                                                 child: Container(
                                                   width: SizeConfig.screenWidth*0.73,
                                                   color: Colors.transparent,
-                                                  child: Text("${items[index].address.street}, ${items[index].address.city}, ${items[index].address.state}, ${items[index].address.country}, ${items[index].address.postalCode}",
+                                                  child: Text("${items[index].address.street}, ${items[index].address.district}, ${items[index].address.laneNumber}, ${items[index].address.city}, ${items[index].address.state}, ${items[index].address.country}, ${items[index].address.postalCode}",
                                                     style: TextStyle(
                                                       color: CommonColor.BLACK_COLOR,
                                                       fontSize: SizeConfig.blockSizeHorizontal*4.0,
@@ -200,8 +200,8 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
                                         child: Container(
                                           height: SizeConfig.screenWidth*0.003,
                                           color: Colors.black12,
-                                          child: Row(
-                                            children: const [
+                                          child: const Row(
+                                            children: [
                                               Text("hii",
                                                 style: TextStyle(
                                                     color: Colors.transparent
