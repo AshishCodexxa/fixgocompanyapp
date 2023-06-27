@@ -808,7 +808,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                      right: parentWidth * 0.05,
+                      right: parentWidth * 0.04,
                     ),
                     child: Column(
                       children: [
