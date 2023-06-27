@@ -5552,7 +5552,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
             "city": widget.city,
             "state": widget.state,
             "country": widget.country,
-            "postalCode": widget.postalCode
+            "postalCode": widget.postalCode,
+            "district": widget.taluka,
+            "laneNumber": widget.lane
           },
           "coordinate": {
             "latitude": widget.lat,
