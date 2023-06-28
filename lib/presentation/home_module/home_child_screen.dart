@@ -105,9 +105,11 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
         setState(() {
           for(int i = 0 ; i < items.length; i++){
 
-            DateTime dt = DateTime.parse(items[i].createdAt);
+            DateTime dt = DateTime.parse(items[i].postExpiryDate);
 
-            endTime = dt.add(const Duration(days: 2));
+            print(dt);
+
+            endTime = dt/*.add(const Duration(days: 2))*/;
 
             print("endTime $endTime");
 

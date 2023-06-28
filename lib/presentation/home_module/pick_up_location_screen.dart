@@ -522,7 +522,7 @@ class _PickUpLocationState extends State<PickUpLocation> {
               child: TextFormField(
                 controller: pinCodeController,
                 focusNode: _pinCodeFocus,
-                textInputAction: TextInputAction.next,
+                textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
                   prefixIcon: Image(image: AssetImage("assets/images/company.png"),),
                   label: RichText(

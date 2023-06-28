@@ -269,7 +269,7 @@ class Vehicle {
 
   Vehicle.fromJson(Map<String, dynamic> json){
     vehicleType = json['vehicleType'];
-    trailorType = json['trailorType'];
+    trailorType = json['trailorType'] ?? "";
     capacity = json['capacity'];
     quantity = json['quantity'];
     length = json['length'];
