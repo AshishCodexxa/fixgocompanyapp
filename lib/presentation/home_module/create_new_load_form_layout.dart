@@ -3478,8 +3478,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                   Expanded(
                                     child: TextFormField(
                                       controller: carryingCapacityController,
-                                      // focusNode: _userNameFocus,
                                       textInputAction: TextInputAction.done,
+                                      keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
                                         label: Text(
                                           "RLW (kg)",
@@ -3565,7 +3565,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                   top: SizeConfig.screenHeight * 0.01),
                               child: TextFormField(
                                 controller: vehicleNumberController,
-                                // focusNode: _userNameFocus,
+                                keyboardType: TextInputType.number,
                                 textInputAction: TextInputAction.done,
                                 decoration: InputDecoration(
                                   label: Text(
@@ -3675,8 +3675,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                           color: Colors.transparent,
                                           child: TextFormField(
                                             controller: lengthController,
-                                            // focusNode: _cityFocus,
-                                            textInputAction:
+                                            keyboardType: TextInputType.number,                                            textInputAction:
                                             TextInputAction.done,
                                             decoration: InputDecoration(
                                               label: RichText(
@@ -4034,6 +4033,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                         child: TextFormField(
                                           controller: totalFareController,
                                           textInputAction: TextInputAction.done,
+                                          keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
                                             label: Text(
                                               "Total Fare",
@@ -4906,7 +4906,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                         paymentFieldHide = !paymentFieldHide;
                                         paymentFieldShow = !paymentFieldShow;
                                         submit = 0;
-                                        next = 3;
+                                        next = 2;
                                       });
                                     }
                                   },
@@ -5210,186 +5210,210 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
           top: parentHeight * 0.05,
           left: parentWidth * 0.1,
           right: parentWidth * 0.1),
-      child: GestureDetector(
-        onDoubleTap: () {},
-        onTap: () {
+      child: Stack(
+        children: [
+          GestureDetector(
+            onTap: (){
+              if(next == 0){
+                if (quantityLoadController.text.isEmpty) {
+                  loadError =
+                  "Please Enter Quantity of Loads";
+                  if (mounted) {
+                    setState(() {
+                      loadErrorShow = true;
+                      hideLoadError();
+                    });
+                  }
+                } else if(loadUnit == 0){
+                  loadError =
+                  "Please Select Unit of Weight";
+                  if (mounted) {
+                    setState(() {
+                      loadErrorShow = true;
+                      hideLoadError();
+                    });
+                  }
+                }  else if (loadType == 0) {
+                  loadError = "Please Select Load Type.";
+                  if (mounted) {
+                    setState(() {
+                      loadErrorShow = true;
+                      hideLoadError();
+                    });
+                  }
+                } else if (images.isEmpty) {
+                  loadError = "One load image must be required.";
+                  if (mounted) {
+                    setState(() {
+                      loadErrorShow = true;
+                      hideLoadError();
+                    });
+                  }
+                } else {
+                  if (mounted) {
+                    setState(() {
+                      showAllGoodsField = !showAllGoodsField;
+                      hideAllGoodsField = !hideAllGoodsField;
+                      vehicleDetails = !vehicleDetails;
+                      next = 1;
+                    });
+                  }
+                }
+              }
+              else if(next == 1){
+                if (vehicleType == 0) {
+                  vehicleError = "Please Select Vehicle Type.";
+                  if (mounted) {
+                    setState(() {
+                      vehicleErrorShow = true;
+                      hideVehicleError();
+                    });
+                  }
+                }else if (vehicleNumberController.text.isEmpty) {
+                  vehicleError = "Please add number of Vehicles";
+                  if (mounted) {
+                    setState(() {
+                      vehicleErrorShow = true;
+                      hideVehicleError();
+                    });
+                  }
+                }else if (lengthController.text.isEmpty) {
+                  vehicleError = "Please Add Length of Vehicle.";
+                  if (mounted) {
+                    setState(() {
+                      vehicleErrorShow = true;
+                      hideVehicleError();
+                    });
+                  }
+                } else {
+                  if (mounted) {
+                    setState(() {
+                      showAllVehicleTypes = !showAllVehicleTypes;
+                      hideAllVehicleTypeField =
+                      !hideAllVehicleTypeField;
+                      paymentDetails = !paymentDetails;
+                      print(paymentDetails);
+                      next = 2;
+                    });
+                  }
+                }
+              }
+              else if(next == 2){
+                if (totalFareController.text.isEmpty) {
+                  paymentError =
+                  "Please total fare amount must be required.";
+                  if (mounted) {
+                    setState(() {
+                      paymentErrorShow = true;
+                      hidePaymentError();
+                    });
+                  }
+                } else if (advancePay == 0) {
+                  paymentError =
+                  "Select Who's paid advance payment.";
+                  if (mounted) {
+                    setState(() {
+                      paymentErrorShow = true;
+                      hidePaymentError();
+                    });
+                  }
+                } else if (advPay == 0) {
+                  paymentError =
+                  "Select advance payment method.";
+                  if (mounted) {
+                    setState(() {
+                      paymentErrorShow = true;
+                      hidePaymentError();
+                    });
+                  }
+                } else if (deliveryPay == 0) {
+                  paymentError =
+                  "Select Who's paid deliver payment.";
+                  if (mounted) {
+                    setState(() {
+                      paymentErrorShow = true;
+                      hidePaymentError();
+                    });
+                  }
+                } else if (deliverPay == 0) {
+                  paymentError =
+                  "Select deliver payment method.";
+                  if (mounted) {
+                    setState(() {
+                      paymentErrorShow = true;
+                      hidePaymentError();
+                    });
+                  }
+                } else {
+                  paymentFieldShow = !paymentFieldShow;
+                  paymentFieldHide = !paymentFieldHide;
+                  if(mounted){
+                    setState(() {
+                      next = 3;
+                      print(next);
+                    });
+                  }
 
-
-          if(next == 0){
-            if (quantityLoadController.text.isEmpty) {
-              loadError =
-              "Please Enter Quantity of Loads";
-              if (mounted) {
-                setState(() {
-                  loadErrorShow = true;
-                  hideLoadError();
-                });
+                }
               }
-            } else if(loadUnit == 0){
-              loadError =
-              "Please Select Unit of Weight";
-              if (mounted) {
-                setState(() {
-                  loadErrorShow = true;
-                  hideLoadError();
-                });
-              }
-            }  else if (loadType == 0) {
-              loadError = "Please Select Load Type.";
-              if (mounted) {
-                setState(() {
-                  loadErrorShow = true;
-                  hideLoadError();
-                });
-              }
-            } else if (images.isEmpty) {
-              loadError = "One load image must be required.";
-              if (mounted) {
-                setState(() {
-                  loadErrorShow = true;
-                  hideLoadError();
-                });
-              }
-            } else {
-              if (mounted) {
-                setState(() {
-                  showAllGoodsField = !showAllGoodsField;
-                  hideAllGoodsField = !hideAllGoodsField;
-                  vehicleDetails = !vehicleDetails;
-                  next = 1;
-                });
-              }
-            }
-          }
-          else if(next == 1){
-            if (vehicleType == 0) {
-              vehicleError = "Please Select Vehicle Type.";
-              if (mounted) {
-                setState(() {
-                  vehicleErrorShow = true;
-                  hideVehicleError();
-                });
-              }
-            }else if (vehicleNumberController.text.isEmpty) {
-              vehicleError = "Please add number of Vehicles";
-              if (mounted) {
-                setState(() {
-                  vehicleErrorShow = true;
-                  hideVehicleError();
-                });
-              }
-            }else if (lengthController.text.isEmpty) {
-              vehicleError = "Please Add Length of Vehicle.";
-              if (mounted) {
-                setState(() {
-                  vehicleErrorShow = true;
-                  hideVehicleError();
-                });
-              }
-            } else {
-              if (mounted) {
-                setState(() {
-                  showAllVehicleTypes = !showAllVehicleTypes;
-                  hideAllVehicleTypeField =
-                  !hideAllVehicleTypeField;
-                  paymentDetails = !paymentDetails;
-                  print(paymentDetails);
-                  next = 2;
-                });
-              }
-            }
-          }
-          else if(next == 2){
-            if (totalFareController.text.isEmpty) {
-              paymentError =
-              "Please total fare amount must be required.";
-              if (mounted) {
-                setState(() {
-                  paymentErrorShow = true;
-                  hidePaymentError();
-                });
-              }
-            } else if (advancePay == 0) {
-              paymentError =
-              "Select Who's paid advance payment.";
-              if (mounted) {
-                setState(() {
-                  paymentErrorShow = true;
-                  hidePaymentError();
-                });
-              }
-            } else if (advPay == 0) {
-              paymentError =
-              "Select advance payment method.";
-              if (mounted) {
-                setState(() {
-                  paymentErrorShow = true;
-                  hidePaymentError();
-                });
-              }
-            } else if (deliveryPay == 0) {
-              paymentError =
-              "Select Who's paid deliver payment.";
-              if (mounted) {
-                setState(() {
-                  paymentErrorShow = true;
-                  hidePaymentError();
-                });
-              }
-            } else if (deliverPay == 0) {
-              paymentError =
-              "Select deliver payment method.";
-              if (mounted) {
-                setState(() {
-                  paymentErrorShow = true;
-                  hidePaymentError();
-                });
-              }
-            } else {
-              paymentFieldShow = !paymentFieldShow;
-              paymentFieldHide = !paymentFieldHide;
-              submit = 1;
-            }
-          }
-
-
-          if(submit == 1){
-            if (isLoading == false) {
-              print("One Time");
-
-              if(mounted){
-                setState(() {
-                  isLoading = true;
-                  uploadImages().then((value) {
-                    createCompanyPost();
-                  });
-                });
-              }
-            }
-          }
-
-
-        },
-        child: Container(
-          height: parentHeight * 0.055,
-          width: parentWidth * 0.6,
-          decoration: BoxDecoration(
-              color: /*submit == 0 || deliverPay == 0
-                  ? CommonColor.LOAD_SUBMIT_COLOR
-                  : */CommonColor.SIGN_UP_TEXT_COLOR,
-              borderRadius: BorderRadius.circular(15)),
-          child: Center(
-            child: Text(
-              next == 0 ? "Next" : next == 1 ? "Next" :"Submit",
-              style: TextStyle(
-                  color: /*submit == 0
-                      ? CommonColor.LOAD_SUBMIT_TEXT_COLOR
-                      : */CommonColor.WHITE_COLOR,
-                  fontSize: SizeConfig.blockSizeHorizontal * 5.0,
-                  fontFamily: 'Roboto_Bold'),
+            },
+            child: Container(
+              height: parentHeight * 0.055,
+              width: parentWidth * 0.6,
+              decoration: BoxDecoration(
+                  color: /*submit == 0 || deliverPay == 0
+                      ? CommonColor.LOAD_SUBMIT_COLOR
+                      : */CommonColor.SIGN_UP_TEXT_COLOR,
+                  borderRadius: BorderRadius.circular(15)),
+              child: Center(
+                child: Text(
+                  next == 0 ? "Next" : next == 1 ? "Next" : next == 2 ? "Done" : "",
+                  style: TextStyle(
+                      color: /*submit == 0
+                          ? CommonColor.LOAD_SUBMIT_TEXT_COLOR
+                          : */CommonColor.WHITE_COLOR,
+                      fontSize: SizeConfig.blockSizeHorizontal * 5.0,
+                      fontFamily: 'Roboto_Bold'),
+                ),
+              ),
             ),
           ),
-        ),
+          Visibility(
+            visible: next == 3 ? true : false,
+            child: GestureDetector(
+              onTap: (){
+                if (isLoading == false) {
+                  print("One Time");
+
+                  if(mounted){
+                    setState(() {
+                      isLoading = true;
+                      uploadImages().then((value) {
+                        createCompanyPost();
+                      });
+                    });
+                  }
+                }
+              },
+              child: Container(
+                height: parentHeight * 0.055,
+                width: parentWidth * 0.6,
+                decoration: BoxDecoration(
+                    color: CommonColor.SIGN_UP_TEXT_COLOR,
+                    borderRadius: BorderRadius.circular(15)),
+                child: Center(
+                  child: Text(
+                    "Submit",
+                    style: TextStyle(
+                        color: CommonColor.WHITE_COLOR,
+                        fontSize: SizeConfig.blockSizeHorizontal * 5.0,
+                        fontFamily: 'Roboto_Bold'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

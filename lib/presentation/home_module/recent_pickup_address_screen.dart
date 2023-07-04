@@ -208,7 +208,6 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
                                                       pageBuilder: (context, animation2, animation1) {
                                                         return Container();
                                                       }).then((value){
-
                                                           if(mounted){
                                                             setState(() {
                                                               items.clear();

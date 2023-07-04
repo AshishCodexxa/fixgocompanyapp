@@ -223,6 +223,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                 controller: phoneNoController,
                 focusNode: _phoneNumberFocus,
                 textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.phone_android_outlined,
                     color: Colors.black,),
@@ -424,7 +425,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                   prefixIcon: const Image(image: AssetImage("assets/images/company.png"),),
                   label: RichText(
                     text: TextSpan(
-                      text: 'City',
+                      text: 'City / District',
                       style: TextStyle(
                         color: Colors.black54,
                         fontWeight: FontWeight.w400,
@@ -518,6 +519,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
                 controller: pinCodeController,
                 focusNode: _pinCodeFocus,
                 textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   prefixIcon: const Image(image: AssetImage("assets/images/company.png"),),
                   label: RichText(

@@ -1134,13 +1134,16 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                   },
                   child: Container(
                     color: Colors.transparent,
-                    child: Text(
-                      "More",
-                      style: TextStyle(
-                          color: CommonColor.SIGN_UP_TEXT_COLOR,
-                          fontSize: SizeConfig.blockSizeHorizontal * 3.7,
-                          fontFamily: "Roboto_Medium",
-                          fontWeight: FontWeight.w500),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "More",
+                        style: TextStyle(
+                            color: CommonColor.SIGN_UP_TEXT_COLOR,
+                            fontSize: SizeConfig.blockSizeHorizontal * 3.7,
+                            fontFamily: "Roboto_Medium",
+                            fontWeight: FontWeight.w500),
+                      ),
                     ),
                   ),
                 ),
