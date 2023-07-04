@@ -429,7 +429,7 @@ class _PickUpLocationState extends State<PickUpLocation> {
                   prefixIcon: Image(image: AssetImage("assets/images/company.png"),),
                   label: RichText(
                     text: TextSpan(
-                        text: 'City',
+                        text: 'City / District',
                         style: TextStyle(
                           color: Colors.black54,
                           fontWeight: FontWeight.w400,
@@ -522,6 +522,7 @@ class _PickUpLocationState extends State<PickUpLocation> {
               child: TextFormField(
                 controller: pinCodeController,
                 focusNode: _pinCodeFocus,
+                keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
                   prefixIcon: Image(image: AssetImage("assets/images/company.png"),),

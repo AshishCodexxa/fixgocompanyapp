@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:dio/dio.dart';
 import 'package:fixgocompanyapp/all_dialogs/load_more_info_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
@@ -16,6 +15,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+
+String _printDuration(Duration duration) {
+  String twoDigits(int n) => n.toString().padLeft(2, "0");
+  String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+  String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+  return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+}
 
 class HomeChildScreen extends StatefulWidget {
   final HomeChildScreenListener mListener;
@@ -61,7 +67,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
   }
 
   void dialogHide() {
-    if(mounted){
+    if (mounted) {
       setState(() {
         selectedTransListIndex = -1;
       });
@@ -69,14 +75,11 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
   }
 
   Timer? _timer;
-  DateTime? endTime;
-  String formattedTime = '';
 
   AlertDialog alert = const AlertDialog(
     title: Text("Bid Book"),
     content: Text("Bid Book Successful."),
   );
-
 
   @override
   void initState() {
@@ -99,41 +102,75 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
 
       items.addAll(jsonList.data.docs);
 
-
-
-      if(mounted){
+      if (mounted) {
         setState(() {
-          for(int i = 0 ; i < items.length; i++){
-
+          for (int i = 0; i < items.length; i++) {
             DateTime dt = DateTime.parse(items[i].postExpiryDate);
 
-            print(dt);
-
-            endTime = dt/*.add(const Duration(days: 2))*/;
-
-            print("endTime $endTime");
-
-            print(items[i].id);
-            getAllBidsAgainstPostLimited(items[i].id).then((value){
-              setState(() {
-
-              });
+            getAllBidsAgainstPostLimited(items[i].id).then((value) {
+              setState(() {});
             });
 
             int totalFare = items[i].fare;
             double ratio = items[i].advancePayment.ratio / 100;
             advancePay = totalFare * ratio;
 
-            print(advancePay);
           }
         });
       }
 
-
-
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        if(mounted) {
+          setState(
+                () {},
+          );
+        }
+      });
     });
 
 
+  }
+
+  Future<Null> refreshList() async {
+    items.clear();
+    await Future.delayed(const Duration(seconds: 2));
+    ApiClient().getCompanyAllPost().then((value) {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+
+      var jsonList = GetAllPendingPostResponseModel.fromJson(value);
+
+      items.addAll(jsonList.data.docs);
+
+      if (mounted) {
+        setState(() {
+          for (int i = 0; i < items.length; i++) {
+            DateTime dt = DateTime.parse(items[i].postExpiryDate);
+
+            getAllBidsAgainstPostLimited(items[i].id).then((value) {
+              setState(() {});
+            });
+
+            int totalFare = items[i].fare;
+            double ratio = items[i].advancePayment.ratio / 100;
+            advancePay = totalFare * ratio;
+
+          }
+        });
+      }
+
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        if(mounted) {
+          setState(
+                () {},
+          );
+        }
+      });
+    });
+    return;
   }
 
   @override
@@ -142,625 +179,546 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
     super.dispose();
   }
 
-  String _printDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
-  }
+
 
   @override
   Widget build(BuildContext context) {
-    if(endTime != null){
-
-      Duration remainingTime = endTime!.difference(DateTime.now());
-
-        formattedTime = _printDuration(remainingTime);
-
-
-      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        if (DateTime.now().isAfter(endTime!)) {
-          _timer?.cancel();
-          // Timer has finished, you can handle the desired action here.
-        } else {
-          if(mounted) {
-            setState(() {});
-          }
-        }
-      });
-
-    }
-    return Scaffold(
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              CustomScrollView(
-                slivers: <Widget>[
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        getAdvContainer(
-                            SizeConfig.screenHeight, SizeConfig.screenWidth)
-                      ],
+    return RefreshIndicator(
+      onRefresh: refreshList,
+      child: Scaffold(
+        body: Stack(
+          alignment: Alignment.center,
+          children: [
+            Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                CustomScrollView(
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          getAdvContainer(
+                              SizeConfig.screenHeight, SizeConfig.screenWidth)
+                        ],
+                      ),
                     ),
-                  ),
-                  SliverPadding(
-                    padding:
-                        EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.1),
-                    sliver: SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                      childCount: items.length,
-                      (context, index) {
-                        return bidData == null ?
-                        Container():
-                        Padding(
-                          padding: EdgeInsets.only(
-                            bottom: selectedIndex == index
-                                ? SizeConfig.screenHeight * 0.02
-                                : SizeConfig.screenHeight * 0.0,
-                            left: SizeConfig.screenWidth * 0.03,
-                            right: SizeConfig.screenWidth * 0.03,
-                          ),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: selectedIndex == index
-                                        ? Colors.white
-                                        : Colors.transparent,
-                                    boxShadow: <BoxShadow>[
-                                      selectedIndex == index
-                                          ? BoxShadow(
-                                              color: Colors.black.withOpacity(0.1),
-                                              blurRadius: 5,
-                                              spreadRadius: 1,
-                                              offset: const Offset(2, 6))
-                                          : const BoxShadow(
-                                              color: Colors.transparent),
-                                    ],
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Column(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
+                    SliverPadding(
+                      padding:
+                          EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.1),
+                      sliver: SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                        childCount: items.length,
+                        (context, index) {
+                          return bidData == null
+                              ? Container()
+                              : Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: selectedIndex == index
+                                        ? SizeConfig.screenHeight * 0.02
+                                        : SizeConfig.screenHeight * 0.0,
+                                    left: SizeConfig.screenWidth * 0.03,
+                                    right: SizeConfig.screenWidth * 0.03,
+                                  ),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color: selectedIndex == index
+                                                ? Colors.white
+                                                : Colors.transparent,
+                                            boxShadow: <BoxShadow>[
+                                              selectedIndex == index
+                                                  ? BoxShadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.1),
+                                                      blurRadius: 5,
+                                                      spreadRadius: 1,
+                                                      offset: const Offset(2, 6))
+                                                  : const BoxShadow(
+                                                      color: Colors.transparent),
+                                            ],
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Column(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                print(items[index].id);
+                                                getAllBidsAgainstPostLimited(
+                                                        items[index].id)
+                                                    .then((value) {
+                                                  print(
+                                                      "dddddd ${bidData.length}");
 
-                                        print(items[index].id);
-                                        getAllBidsAgainstPostLimited(items[index].id).then((value){
-
-                                          print("dddddd ${bidData.length}");
-
-                                          if(bidData.length != 0){
-                                            if (selectedIndex != index) {
-                                              selectedIndex = index;
-                                              print("hhhhhhh $selectedIndex");
-                                              if (mounted) {
-                                                setState(() {
-                                                  if (mounted) {
-                                                    setState(() {
-                                                    });
+                                                  if (bidData.length != 0) {
+                                                    if (selectedIndex != index) {
+                                                      selectedIndex = index;
+                                                      print(
+                                                          "hhhhhhh $selectedIndex");
+                                                      if (mounted) {
+                                                        setState(() {
+                                                          if (mounted) {
+                                                            setState(() {});
+                                                          }
+                                                        });
+                                                      }
+                                                    } else {
+                                                      selectedIndex = -1;
+                                                      if (mounted) {
+                                                        setState(() {});
+                                                      }
+                                                    }
+                                                  } else {
+                                                    if (mounted) {
+                                                      setState(() {
+                                                        // transportEmptyDialog = true;
+                                                        selectedTransListIndex =
+                                                            index;
+                                                        startTimer();
+                                                      });
+                                                    }
                                                   }
                                                 });
-                                              }
-                                            }
-                                            else {
-                                              selectedIndex = -1;
-                                              if (mounted) {
-                                                setState(() {});
-                                              }
-                                            }
-                                          } else{
-                                            if(mounted){
-                                              setState(() {
-                                                // transportEmptyDialog = true;
-                                                selectedTransListIndex = index;
-                                                startTimer();
-                                              });
-                                            }
 
-                                          }
-
-
-                                        });
-
-                                        print("llll ${bidData.length}");
-
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(15),
-                                          boxShadow: <BoxShadow>[
-                                            index != selectedIndex
-                                                ? BoxShadow(
-                                                    color: Colors.black
-                                                        .withOpacity(0.1),
-                                                    blurRadius: 5,
-                                                    spreadRadius: 1,
-                                                    offset: const Offset(2, 6))
-                                                : const BoxShadow(
-                                                    color: Colors.transparent),
-                                          ],
-                                        ),
-                                        child: getInfoCardLayout(
-                                            SizeConfig.screenHeight,
-                                            SizeConfig.screenWidth,
-                                            index),
-                                      ),
-                                    ),
-                                    Visibility(
-                                      visible: index == selectedIndex,
-                                      child:bidData.length != 0 ? Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Column(
-                                            children: [
-                                              getTransporterListHeading(
-                                                  SizeConfig.screenHeight,
-                                                  SizeConfig.screenWidth),
-                                              Container(
-                                                height:bidData.length == 1 ? SizeConfig.screenHeight * 0.14 : bidData.length == 2 ? SizeConfig.screenHeight * 0.26 : bidData.length == 3 ? SizeConfig.screenHeight * 0.38 : 0.0,
-                                                color: Colors.transparent,
-                                                child: ListView.builder(
-                                                    itemCount: bidData == null ? 0 : bidData.length,
-                                                    physics:
-                                                        const NeverScrollableScrollPhysics(),
-                                                    padding: EdgeInsets.only(
-                                                        bottom:
-                                                            SizeConfig.screenHeight *
-                                                                0.0),
-                                                    itemBuilder: (BuildContext context,
-                                                        int index) {
-                                                      return Padding(
-                                                        padding: EdgeInsets.only(
-                                                          top: SizeConfig.screenHeight *
-                                                              0.02,
-                                                          left: SizeConfig.screenWidth *
-                                                              0.05,
-                                                          right:
-                                                              SizeConfig.screenWidth *
-                                                                  0.05,
-                                                        ),
-                                                        child: GestureDetector(
-                                                          onTap: () {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) =>
-                                                                         TransporterProfile(transporterName: "${bidData[index]['customer']['name']}",
-                                                                          transporterLocation: '',
-                                                                          transporterTrip: '',
-                                                                          transporterRating: '${bidData[index]['customer']['rating']['rate']}',
-                                                                           transporterAddress: "${bidData[index]['customer']['companyAddress']}",
-
-                                                                         )));
-                                                          },
-                                                          child: Container(
-                                                            color: Colors.transparent,
-                                                            child: Column(
-                                                              children: [
-                                                                Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
-                                                                  children: [
-                                                                    Text(
-                                                                      bidData[index]['customer']['name'],
-                                                                      style: TextStyle(
-                                                                          color: CommonColor
-                                                                              .BLACK_COLOR,
-                                                                          fontSize:
-                                                                              SizeConfig
-                                                                                      .blockSizeHorizontal *
-                                                                                  4.0,
-                                                                          fontWeight:
-                                                                              FontWeight
-                                                                                  .w500,
-                                                                          fontFamily:
-                                                                              'Roboto_Regular'),
-                                                                    ),
-                                                                    RichText(
-                                                                      text: TextSpan(
-                                                                          text:
-                                                                              '\u{20B9}',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            color: Colors
-                                                                                .black,
-                                                                            fontWeight:
-                                                                                FontWeight
-                                                                                    .w400,
-                                                                            fontSize:
-                                                                                SizeConfig.blockSizeHorizontal *
-                                                                                    4.0,
-                                                                          ),
-                                                                          children: [
-                                                                            TextSpan(
-                                                                                text:
-                                                                                    ' ${bidData[index]['bidAmount']}/-',
-                                                                                style: TextStyle(
-                                                                                    fontSize: SizeConfig.blockSizeHorizontal *
-                                                                                        3.7,
-                                                                                    color:
-                                                                                        Colors.black,
-                                                                                    fontWeight: FontWeight.w400))
-                                                                          ]),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                Padding(
-                                                                  padding: EdgeInsets.only(
-                                                                      top: SizeConfig
+                                                print("llll ${bidData.length}");
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                  boxShadow: <BoxShadow>[
+                                                    index != selectedIndex
+                                                        ? BoxShadow(
+                                                            color: Colors.black
+                                                                .withOpacity(0.1),
+                                                            blurRadius: 5,
+                                                            spreadRadius: 1,
+                                                            offset: const Offset(
+                                                                2, 6))
+                                                        : const BoxShadow(
+                                                            color: Colors
+                                                                .transparent),
+                                                  ],
+                                                ),
+                                                child: getInfoCardLayout(
+                                                    SizeConfig.screenHeight,
+                                                    SizeConfig.screenWidth,
+                                                    index),
+                                              ),
+                                            ),
+                                            Visibility(
+                                              visible: index == selectedIndex,
+                                              child: bidData.length != 0
+                                                  ? Stack(
+                                                      alignment: Alignment.center,
+                                                      children: [
+                                                        Column(
+                                                          children: [
+                                                            getTransporterListHeading(
+                                                                SizeConfig
+                                                                    .screenHeight,
+                                                                SizeConfig
+                                                                    .screenWidth),
+                                                            Container(
+                                                              height: bidData
+                                                                          .length ==
+                                                                      1
+                                                                  ? SizeConfig
+                                                                          .screenHeight *
+                                                                      0.14
+                                                                  : bidData.length ==
+                                                                          2
+                                                                      ? SizeConfig
                                                                               .screenHeight *
-                                                                          0.007),
-                                                                  child: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .start,
-                                                                    children: [
-                                                                      Container(
-                                                                        width: SizeConfig.screenWidth*0.6,
-                                                                        color: Colors.transparent,
-                                                                        child: Text(
-                                                                          bidData[index]['customer']['companyAddress'],
+                                                                          0.26
+                                                                      : bidData.length ==
+                                                                              3
+                                                                          ? SizeConfig.screenHeight *
+                                                                              0.38
+                                                                          : 0.0,
+                                                              color: Colors
+                                                                  .transparent,
+                                                              child: ListView
+                                                                  .builder(
+                                                                      itemCount: bidData == null
+                                                                          ? 0
+                                                                          : bidData
+                                                                              .length,
+                                                                      physics:
+                                                                          const NeverScrollableScrollPhysics(),
+                                                                      padding: EdgeInsets.only(
+                                                                          bottom: SizeConfig.screenHeight *
+                                                                              0.0),
+                                                                      itemBuilder:
+                                                                          (BuildContext
+                                                                                  context,
+                                                                              int index) {
+                                                                        return Padding(
+                                                                          padding:
+                                                                              EdgeInsets.only(
+                                                                            top: SizeConfig.screenHeight *
+                                                                                0.02,
+                                                                            left: SizeConfig.screenWidth *
+                                                                                0.05,
+                                                                            right:
+                                                                                SizeConfig.screenWidth * 0.05,
+                                                                          ),
+                                                                          child:
+                                                                              GestureDetector(
+                                                                            onTap:
+                                                                                () {
+                                                                              Navigator.push(
+                                                                                  context,
+                                                                                  MaterialPageRoute(
+                                                                                      builder: (context) => TransporterProfile(
+                                                                                            transporterName: "${bidData[index]['customer']['name']}",
+                                                                                            transporterLocation: '',
+                                                                                            transporterTrip: '',
+                                                                                            transporterRating: '${bidData[index]['customer']['rating']['rate']}',
+                                                                                            transporterAddress: "${bidData[index]['customer']['companyAddress']}",
+                                                                                          )));
+                                                                            },
+                                                                            child:
+                                                                                Container(
+                                                                              color:
+                                                                                  Colors.transparent,
+                                                                              child:
+                                                                                  Column(
+                                                                                children: [
+                                                                                  Row(
+                                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                    children: [
+                                                                                      Text(
+                                                                                        bidData[index]['customer']['name'],
+                                                                                        style: TextStyle(color: CommonColor.BLACK_COLOR, fontSize: SizeConfig.blockSizeHorizontal * 4.0, fontWeight: FontWeight.w500, fontFamily: 'Roboto_Regular'),
+                                                                                      ),
+                                                                                      RichText(
+                                                                                        text: TextSpan(
+                                                                                            text: '\u{20B9}',
+                                                                                            style: TextStyle(
+                                                                                              color: Colors.black,
+                                                                                              fontWeight: FontWeight.w400,
+                                                                                              fontSize: SizeConfig.blockSizeHorizontal * 4.0,
+                                                                                            ),
+                                                                                            children: [
+                                                                                              TextSpan(text: ' ${bidData[index]['bidAmount']}/-', style: TextStyle(fontSize: SizeConfig.blockSizeHorizontal * 3.7, color: Colors.black, fontWeight: FontWeight.w400))
+                                                                                            ]),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                  Padding(
+                                                                                    padding: EdgeInsets.only(top: SizeConfig.screenHeight * 0.007),
+                                                                                    child: Row(
+                                                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                                                      children: [
+                                                                                        Container(
+                                                                                          width: SizeConfig.screenWidth * 0.6,
+                                                                                          color: Colors.transparent,
+                                                                                          child: Text(
+                                                                                            bidData[index]['customer']['companyAddress'],
+                                                                                            style: TextStyle(color: CommonColor.BLACK_COLOR, fontSize: SizeConfig.blockSizeHorizontal * 3.0, fontWeight: FontWeight.w500, fontFamily: 'Roboto_Regular'),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                  /*Padding(
+                                                                    padding: EdgeInsets.only(
+                                                                        top: SizeConfig
+                                                                                .screenHeight *
+                                                                            0.003),
+                                                                    child: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        Text(
+                                                                          "Vehicle Available on : 1 Feb 23",
                                                                           style: TextStyle(
                                                                               color: CommonColor
                                                                                   .BLACK_COLOR,
                                                                               fontSize:
                                                                                   SizeConfig.blockSizeHorizontal *
-                                                                                      3.0,
+                                                                                      3.5,
                                                                               fontWeight:
                                                                                   FontWeight
                                                                                       .w500,
                                                                               fontFamily:
                                                                                   'Roboto_Regular'),
                                                                         ),
-                                                                      ),
-                                                                    ],
+                                                                      ],
+                                                                    ),
+                                                                  ),*/
+                                                                                  Padding(
+                                                                                    padding: EdgeInsets.only(top: SizeConfig.screenHeight * 0.005),
+                                                                                    child: Row(
+                                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                      children: [
+                                                                                        Container(
+                                                                                          width: SizeConfig.screenWidth * 0.1,
+                                                                                          height: SizeConfig.screenHeight * 0.023,
+                                                                                          decoration: BoxDecoration(
+                                                                                            color: CommonColor.SELECT_TYPE_COLOR,
+                                                                                            borderRadius: BorderRadius.circular(5),
+                                                                                          ),
+                                                                                          child: Row(
+                                                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                                                            children: [
+                                                                                              Padding(
+                                                                                                padding: EdgeInsets.only(left: SizeConfig.screenWidth * 0.02),
+                                                                                                child: Padding(
+                                                                                                  padding: EdgeInsets.only(right: SizeConfig.screenWidth * 0.005),
+                                                                                                  child: Text(
+                                                                                                    "${bidData[index]['customer']['rating']['rate']}",
+                                                                                                    style: TextStyle(color: CommonColor.WHITE_COLOR, fontSize: SizeConfig.blockSizeHorizontal * 2.7, fontWeight: FontWeight.w500, fontFamily: 'Roboto_Medium'),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                              Padding(
+                                                                                                padding: EdgeInsets.only(right: SizeConfig.screenWidth * 0.017),
+                                                                                                child: Icon(
+                                                                                                  Icons.star,
+                                                                                                  size: SizeConfig.blockSizeHorizontal * 2.5,
+                                                                                                  color: Colors.white,
+                                                                                                ),
+                                                                                              )
+                                                                                            ],
+                                                                                          ),
+                                                                                        ),
+                                                                                        GestureDetector(
+                                                                                          onTap: () {
+                                                                                            if (items[index].advancePayment.mode == "CASH") {
+                                                                                              ApiClient().getAcceptTransporterBid(bidData[index]['_id']).then((value) {
+                                                                                                showDialog(
+                                                                                                  context: context,
+                                                                                                  builder: (BuildContext context) {
+                                                                                                    return alert;
+                                                                                                  },
+                                                                                                );
+
+                                                                                                widget.mListener.addOrderPrentScreen("1");
+                                                                                              });
+                                                                                            } else if (items[index].advancePayment.mode == "ONLINE") {
+                                                                                              Navigator.push(
+                                                                                                  context,
+                                                                                                  MaterialPageRoute(
+                                                                                                      builder: (context) => BookingDetailsScreen(
+                                                                                                            postId: items[index].id,
+                                                                                                          )));
+                                                                                            } else {
+                                                                                              Container();
+                                                                                            }
+                                                                                          },
+                                                                                          child: Container(
+                                                                                            width: SizeConfig.screenWidth * 0.18,
+                                                                                            height: SizeConfig.screenHeight * 0.03,
+                                                                                            decoration: BoxDecoration(
+                                                                                              color: CommonColor.SIGN_UP_TEXT_COLOR,
+                                                                                              borderRadius: BorderRadius.circular(7),
+                                                                                            ),
+                                                                                            child: Row(
+                                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                                              children: [
+                                                                                                Text(
+                                                                                                  "Book Now",
+                                                                                                  style: TextStyle(color: CommonColor.WHITE_COLOR, fontSize: SizeConfig.blockSizeHorizontal * 3.0, fontWeight: FontWeight.w500, fontFamily: 'Roboto_Medium'),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                  Padding(
+                                                                                    padding: EdgeInsets.only(top: SizeConfig.screenHeight * 0.02),
+                                                                                    child: Container(
+                                                                                      height: SizeConfig.screenWidth * 0.003,
+                                                                                      color: Colors.black12,
+                                                                                      child: const Row(
+                                                                                        children: [
+                                                                                          Text(
+                                                                                            "hii",
+                                                                                            style: TextStyle(color: Colors.transparent),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        );
+                                                                      }),
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  EdgeInsets.only(
+                                                                top: SizeConfig
+                                                                        .screenHeight *
+                                                                    0.02,
+                                                              ),
+                                                              child:
+                                                                  GestureDetector(
+                                                                onTap: () {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              InterestedTransporterList(
+                                                                                postId: items[index].id,
+                                                                              )));
+                                                                },
+                                                                child: Container(
+                                                                  width: SizeConfig
+                                                                          .screenWidth *
+                                                                      0.21,
+                                                                  height: SizeConfig
+                                                                          .screenHeight *
+                                                                      0.04,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: Colors
+                                                                        .transparent,
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(
+                                                                                10),
                                                                   ),
-                                                                ),
-                                                                /*Padding(
-                                                                  padding: EdgeInsets.only(
-                                                                      top: SizeConfig
-                                                                              .screenHeight *
-                                                                          0.003),
                                                                   child: Row(
                                                                     mainAxisAlignment:
                                                                         MainAxisAlignment
-                                                                            .start,
+                                                                            .center,
                                                                     children: [
                                                                       Text(
-                                                                        "Vehicle Available on : 1 Feb 23",
+                                                                        "View All",
                                                                         style: TextStyle(
                                                                             color: CommonColor
                                                                                 .BLACK_COLOR,
-                                                                            fontSize:
-                                                                                SizeConfig.blockSizeHorizontal *
-                                                                                    3.5,
-                                                                            fontWeight:
-                                                                                FontWeight
-                                                                                    .w500,
+                                                                            fontSize: SizeConfig.blockSizeHorizontal *
+                                                                                4.0,
+                                                                            fontWeight: FontWeight
+                                                                                .w500,
                                                                             fontFamily:
-                                                                                'Roboto_Regular'),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),*/
-                                                                Padding(
-                                                                  padding: EdgeInsets.only(
-                                                                      top: SizeConfig
-                                                                              .screenHeight *
-                                                                          0.005),
-                                                                  child: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
-                                                                    children: [
-                                                                      Container(
-                                                                        width: SizeConfig
-                                                                                .screenWidth *
-                                                                            0.1,
-                                                                        height: SizeConfig
-                                                                                .screenHeight *
-                                                                            0.023,
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          color: CommonColor
-                                                                              .SELECT_TYPE_COLOR,
-                                                                          borderRadius:
-                                                                              BorderRadius
-                                                                                  .circular(
-                                                                                      5),
-                                                                        ),
-                                                                        child: Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment
-                                                                                  .center,
-                                                                          children: [
-                                                                            Padding(
-                                                                              padding: EdgeInsets.only(
-                                                                                  left: SizeConfig.screenWidth *
-                                                                                      0.02),
-                                                                              child:
-                                                                                  Padding(
-                                                                                    padding: EdgeInsets.only(
-                                                                                      right:
-                                                                                      SizeConfig.screenWidth * 0.005),
-                                                                                    child: Text(
-                                                                                "${bidData[index]['customer']['rating']['rate']}",
-                                                                                style: TextStyle(
-                                                                                      color: CommonColor
-                                                                                          .WHITE_COLOR,
-                                                                                      fontSize: SizeConfig.blockSizeHorizontal *
-                                                                                          2.7,
-                                                                                      fontWeight:
-                                                                                          FontWeight.w500,
-                                                                                      fontFamily: 'Roboto_Medium'),
-                                                                              ),
-                                                                                  ),
-                                                                            ),
-                                                                            Padding(
-                                                                              padding: EdgeInsets.only(
-                                                                                  right:
-                                                                                      SizeConfig.screenWidth * 0.017),
-                                                                              child:
-                                                                                  Icon(
-                                                                                Icons
-                                                                                    .star,
-                                                                                size: SizeConfig.blockSizeHorizontal *
-                                                                                    2.5,
-                                                                                color: Colors
-                                                                                    .white,
-                                                                              ),
-                                                                            )
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      GestureDetector(
-                                                                        onTap: () {
-
-                                                                          if(items[index].advancePayment.mode == "CASH"){
-                                                                            ApiClient().getAcceptTransporterBid(bidData[index]['_id']).then((value){
-                                                                              showDialog(
-                                                                                context: context,
-                                                                                builder: (BuildContext context) {
-                                                                                  return alert;
-                                                                                },
-                                                                              );
-
-                                                                              widget.mListener.addOrderPrentScreen("1");
-
-                                                                            });
-                                                                          }else if(items[index].advancePayment.mode == "ONLINE"){
-                                                                            Navigator.push(
-                                                                                context,
-                                                                                MaterialPageRoute(
-                                                                                    builder: (context) =>
-                                                                                        BookingDetailsScreen(postId: items[index].id,)));
-                                                                          }else{
-                                                                            Container();
-                                                                          }
-
-                                                                        },
-                                                                        child:
-                                                                            Container(
-                                                                          width: SizeConfig
-                                                                                  .screenWidth *
-                                                                              0.18,
-                                                                          height: SizeConfig
-                                                                                  .screenHeight *
-                                                                              0.03,
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            color: CommonColor
-                                                                                .SIGN_UP_TEXT_COLOR,
-                                                                            borderRadius:
-                                                                                BorderRadius
-                                                                                    .circular(7),
-                                                                          ),
-                                                                          child: Row(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment
-                                                                                    .center,
-                                                                            children: [
-                                                                              Text(
-                                                                                "Book Now",
-                                                                                style: TextStyle(
-                                                                                    color: CommonColor
-                                                                                        .WHITE_COLOR,
-                                                                                    fontSize: SizeConfig.blockSizeHorizontal *
-                                                                                        3.0,
-                                                                                    fontWeight:
-                                                                                        FontWeight.w500,
-                                                                                    fontFamily: 'Roboto_Medium'),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ),
+                                                                                'Roboto_Medium'),
                                                                       ),
                                                                     ],
                                                                   ),
                                                                 ),
-                                                                Padding(
-                                                                  padding: EdgeInsets.only(
-                                                                      top: SizeConfig
-                                                                              .screenHeight *
-                                                                          0.02),
-                                                                  child: Container(
-                                                                    height: SizeConfig
-                                                                            .screenWidth *
-                                                                        0.003,
-                                                                    color:
-                                                                        Colors.black12,
-                                                                    child: const Row(
-                                                                      children: [
-                                                                        Text(
-                                                                          "hii",
-                                                                          style: TextStyle(
-                                                                              color: Colors
-                                                                                  .transparent),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
+                                                              ),
                                                             ),
-                                                          ),
+                                                          ],
                                                         ),
-                                                      );
-                                                    }),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                  top: SizeConfig.screenHeight * 0.02,
-                                                ),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                InterestedTransporterList(postId: items[index].id,)));
-                                                  },
-                                                  child: Container(
-                                                    width:
-                                                        SizeConfig.screenWidth * 0.21,
-                                                    height:
-                                                        SizeConfig.screenHeight * 0.04,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.transparent,
-                                                      borderRadius:
-                                                          BorderRadius.circular(10),
-                                                    ),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.center,
-                                                      children: [
-                                                        Text(
-                                                          "View All",
-                                                          style: TextStyle(
-                                                              color: CommonColor
-                                                                  .BLACK_COLOR,
-                                                              fontSize: SizeConfig
-                                                                      .blockSizeHorizontal *
-                                                                  4.0,
-                                                              fontWeight:
-                                                                  FontWeight.w500,
-                                                              fontFamily:
-                                                                  'Roboto_Medium'),
-                                                        ),
+                                                        // Visibility(
+                                                        //   visible: transportList,
+                                                        //     child: const CircularProgressIndicator()
+                                                        // )
                                                       ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
+                                                    )
+                                                  : Container(),
+                                            ),
+                                            SizedBox(
+                                              height:
+                                                  SizeConfig.screenHeight * 0.02,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Visibility(
+                                        visible: index == selectedTransListIndex,
+                                        child: Container(
+                                          height: SizeConfig.screenHeight * 0.04,
+                                          width: SizeConfig.screenWidth * 0.4,
+                                          decoration: BoxDecoration(
+                                            color: CommonColor.SIGN_UP_TEXT_COLOR
+                                                .withOpacity(0.9),
+                                            borderRadius:
+                                                BorderRadius.circular(6),
                                           ),
-                                          // Visibility(
-                                          //   visible: transportList,
-                                          //     child: const CircularProgressIndicator()
-                                          // )
-                                        ],
-                                      )
-                                      : Container(),
-                                    ),
-                                    SizedBox(
-                                      height: SizeConfig.screenHeight * 0.02,
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Visibility(
-                                visible: index == selectedTransListIndex,
-                                child: Container(
-                                  height: SizeConfig.screenHeight*0.04,
-                                  width: SizeConfig.screenWidth*0.4,
-                                  decoration: BoxDecoration(
-                                    color: CommonColor.SIGN_UP_TEXT_COLOR.withOpacity(0.9),
-                                    borderRadius: BorderRadius.circular(6),
+                                          child: Center(
+                                              child: Text(
+                                            "No Bid Available.",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: SizeConfig
+                                                        .blockSizeHorizontal *
+                                                    3.7,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'Roboto_Medium'),
+                                          )),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  child: Center(child: Text("No Bid Available.",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: SizeConfig.blockSizeHorizontal*3.7,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Roboto_Medium'
-                                  ),)),
+                                );
+                        },
+                      )),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.03),
+                  child: GestureDetector(
+                    onDoubleTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const NewLoadScreenForm()));
+                    },
+                    child: Container(
+                      height: SizeConfig.screenHeight * 0.05,
+                      width: SizeConfig.screenWidth * 0.33,
+                      decoration: BoxDecoration(
+                          color: CommonColor.SIGN_UP_TEXT_COLOR,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Padding(
+                        padding:
+                            EdgeInsets.only(left: SizeConfig.screenWidth * 0.03),
+                        child: Row(
+                          children: [
+                            Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Container(
+                                  height: SizeConfig.screenHeight * 0.035,
+                                  width: SizeConfig.screenWidth * 0.07,
+                                  decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle),
                                 ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    )),
-                  ),
-                ],
-              ),
-              Padding(
-                padding:
-                    EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.03),
-                child: GestureDetector(
-                  onDoubleTap: () {},
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const NewLoadScreenForm()));
-                  },
-                  child: Container(
-                    height: SizeConfig.screenHeight * 0.05,
-                    width: SizeConfig.screenWidth * 0.33,
-                    decoration: BoxDecoration(
-                        color: CommonColor.SIGN_UP_TEXT_COLOR,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Padding(
-                      padding:
-                          EdgeInsets.only(left: SizeConfig.screenWidth * 0.03),
-                      child: Row(
-                        children: [
-                          Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Container(
-                                height: SizeConfig.screenHeight * 0.035,
-                                width: SizeConfig.screenWidth * 0.07,
-                                decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle),
-                              ),
-                              const Icon(Icons.add)
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: SizeConfig.screenWidth * 0.02),
-                            child: Text(
-                              "New Load",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize:
-                                      SizeConfig.blockSizeHorizontal * 4.0,
-                                  fontFamily: "Roboto_Medium",
-                                  fontWeight: FontWeight.w400),
+                                const Icon(Icons.add)
+                              ],
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: SizeConfig.screenWidth * 0.02),
+                              child: Text(
+                                "New Load",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize:
+                                        SizeConfig.blockSizeHorizontal * 4.0,
+                                    fontFamily: "Roboto_Medium",
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              )
-            ],
-          ),
-          Visibility(
-              visible: isLoading,
-              child: const CircularProgressIndicator()
-          ),
-        ],
+                )
+              ],
+            ),
+            Visibility(
+                visible: isLoading, child: const CircularProgressIndicator()),
+          ],
+        ),
       ),
     );
   }
@@ -805,36 +763,66 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
     var inputFormat = DateFormat('hh:mm a');
     pickUpTime = inputFormat.format(inputTime);
 
-    DateTime tempCreateDate = DateFormat("yyyy-MM-dd").parse(items[index].pickupDate);
+    DateTime tempCreateDate =
+        DateFormat("yyyy-MM-dd").parse(items[index].createdAt);
     var inputCreateDate = DateTime.parse(tempCreateDate.toString());
     var outputCreateFormat = DateFormat('dd MMMM yyyy');
     createPostDate = outputCreateFormat.format(inputCreateDate);
 
     DateTime parseCreateDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-        .parse(items[index].pickupDate);
+        .parse(items[index].createdAt);
     var inputCreateTime = DateTime.parse(parseCreateDate.toString());
     var inputCreateFormat = DateFormat('hh:mm a');
     createPostTime = inputCreateFormat.format(inputCreateTime);
 
-    pickUpLocation = "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
-
+    pickUpLocation =
+        "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
 
     // print(pickUpLocation);
 
     finalLocation =
         "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
 
+    final endTime = DateTime.parse(items[index].postExpiryDate);
+    Duration remainingTime = endTime.difference(DateTime.now());
 
+    final formattedTime = _printDuration(remainingTime);
 
     return Padding(
       padding: EdgeInsets.only(top: parentHeight * 0.015),
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(right: SizeConfig.screenWidth * 0.05),
+            padding: EdgeInsets.only(right: SizeConfig.screenWidth * 0.05, left: parentWidth*0.05),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Visibility(
+                  visible: items[index].lowestBid != 0 ? true : false,
+                  child: Row(
+                    children: [
+                      Container(
+                        height: parentHeight*0.007,
+                        width: parentWidth*0.015,
+                        decoration: BoxDecoration(
+                            color: CommonColor.APP_BAR_COLOR,
+                          borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: parentWidth*0.007),
+                        child: Text(
+                          "Tap to View Transporter Bid",
+                          style: TextStyle(
+                              color: CommonColor.APP_BAR_COLOR,
+                              fontSize: SizeConfig.blockSizeHorizontal * 2.0,
+                              fontFamily: "Roboto_Medium",
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 Text(
                   "Time Left  $formattedTime",
                   style: TextStyle(
@@ -1082,7 +1070,8 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                       ),
                       children: [
                         TextSpan(
-                            text: '${items[index].loadDetail.load} ${items[index].loadDetail.loadUnit}',
+                            text:
+                                '${items[index].loadDetail.load} ${items[index].loadDetail.loadUnit}',
                             style: TextStyle(
                                 fontSize: SizeConfig.blockSizeHorizontal * 3.7,
                                 color: Colors.black,
@@ -1092,23 +1081,23 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-
-                    passPickIndexAddress = "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.district}, ${items[index].pickup.address.laneNumber}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
-
+                    passPickIndexAddress =
+                        "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.district}, ${items[index].pickup.address.laneNumber}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
 
                     // print(passPickIndexAddress);
 
                     passLastIndexAddress =
-                    "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.district}, ${items[index].receiver.address.laneNumber} ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
+                        "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.district}, ${items[index].receiver.address.laneNumber} ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
 
-
-                    DateTime tempDate = DateFormat("yyyy-MM-dd").parse(items[index].pickupDate);
+                    DateTime tempDate =
+                        DateFormat("yyyy-MM-dd").parse(items[index].pickupDate);
                     var inputDate = DateTime.parse(tempDate.toString());
                     var outputFormat = DateFormat('dd MMMM yyyy');
                     pickUpIndexDate = outputFormat.format(inputDate);
 
-                    DateTime parseDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                        .parse(items[index].pickupDate);
+                    DateTime parseDate =
+                        DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                            .parse(items[index].pickupDate);
                     var inputTime = DateTime.parse(parseDate.toString());
                     var inputFormat = DateFormat('hh:mm a');
                     pickUpIndexTime = inputFormat.format(inputTime);
@@ -1204,16 +1193,14 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
     );
   }
 
-
-
-  Future<Map<String, dynamic>> getAllBidsAgainstPostLimited(String postId) async {
-
+  Future<Map<String, dynamic>> getAllBidsAgainstPostLimited(
+      String postId) async {
     String url = "${ApiConstants().baseUrl}post/bid/$postId/?limit=3";
 
-    String? sessionToken = GetStorage().read<String>(
-        ConstantData.userAccessToken);
+    String? sessionToken =
+        GetStorage().read<String>(ConstantData.userAccessToken);
 
-    if(mounted){
+    if (mounted) {
       setState(() {
         transportList = true;
       });
@@ -1232,12 +1219,10 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
       print("getAllBidsAgainstPostLimitedSC --> ${response.statusCode}");
       print("getAllBidsAgainstPostLimitedData --> ${response.data}");
 
-
-
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         bidData = response.data['data'] as List;
-       print("jsonList $bidData");
-        if(mounted){
+        print("jsonList $bidData");
+        if (mounted) {
           setState(() {
             transportList = false;
           });
@@ -1249,7 +1234,6 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
       return e.response!.data;
     }
   }
-
 }
 
 abstract class HomeChildScreenListener {
