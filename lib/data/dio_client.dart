@@ -414,33 +414,33 @@ class ApiClient {
     }
   }
 
+  Future<void> pickUpAddressDeleteById({required String postId}) async {
+    String url = "${ApiConstants().baseUrl}${ApiConstants().deletePickupAddress}$postId";
+    String? sessionToken = GetStorage().read<String>(
+        ConstantData.userAccessToken);
 
-  // Future<Map<String, dynamic>> postDeleteById(String postId) async {
-  //
-  //   String url = "${ApiConstants().baseUrl}post/delete/$postId";
-  //
-  //   print(url);
-  //
-  //   String? sessionToken = GetStorage().read<String>(
-  //       ConstantData.userAccessToken);
-  //
-  //   try {
-  //     Response response = await _dio.delete(
-  //       url,
-  //       options: Options(
-  //         headers: {
-  //           'Authorization': 'Bearer $sessionToken',
-  //         },
-  //       ),
-  //     );
-  //
-  //     print("getPostByIdSC --> ${response.statusCode}");
-  //     print("getPostByIdData --> ${response.data}");
-  //
-  //     return response.data;
-  //   } on DioError catch (e) {
-  //     return e.response!.data;
-  //   }
-  // }
+    try {
+      var result = await _dio.delete(url,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $sessionToken',
+            },
+          )
+      );
+
+      print(result.statusCode);
+
+      if(result.statusCode == 200){
+
+        print(result.data);
+        // Navigator.pop(context);
+        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>PreviousAddressListScreen()));
+      }
+
+
+    } catch (e) {
+      print('Error deleting user: $e');
+    }
+  }
 
 }

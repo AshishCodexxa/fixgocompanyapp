@@ -36,7 +36,7 @@ class ApiConstants {
   String userVerifyDetails = "user/detail/";
   String getPostInfoById = "post/detail/";
   String postDeleteById = "post/delete/";
-
+  String deletePickupAddress = "pickup/delete/";
 
 
 }

@@ -4,6 +4,7 @@ import 'package:fixgocompanyapp/data/api_constant/api_url.dart';
 import 'package:fixgocompanyapp/data/data_constant/constant_data.dart';
 import 'package:fixgocompanyapp/data/dio_client.dart';
 import 'package:fixgocompanyapp/presentation/dashboard_screen.dart';
+import 'package:fixgocompanyapp/presentation/home_module/recent_pickup_address_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -26,6 +27,8 @@ class _PostDeleteConfirmationDialogState extends State<PostDeleteConfirmationDia
 
   final Dio _dio = Dio();
 
+  bool isLoading = false;
+
 
   @override
   void initState() {
@@ -46,6 +49,7 @@ class _PostDeleteConfirmationDialogState extends State<PostDeleteConfirmationDia
           return Future.value(false);
         },
         child: Stack(
+          alignment: Alignment.center,
           children: [
             Align(
               alignment: Alignment.topCenter,
@@ -74,7 +78,10 @@ class _PostDeleteConfirmationDialogState extends State<PostDeleteConfirmationDia
                 ),
               ),
             ),
-            // Positioned.fill(child: CommonWidget.isLoaderShow(isLoaderShow))
+            Visibility(
+                visible: isLoading,
+                child: CircularProgressIndicator()
+            ),
           ],
         ),
       ),
@@ -114,14 +121,30 @@ class _PostDeleteConfirmationDialogState extends State<PostDeleteConfirmationDia
         GestureDetector(
           onTap: () {
             print("Yesss");
-            postDeleteById(postId: widget.postId).then((value){
-              if(mounted){
-                setState(() {
 
-                  // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Dashboard()));
-                });
-              }
-            });
+            if(mounted){
+              setState(() {
+                isLoading = true;
+              });
+            }
+
+            if(widget.openFrom == "2") {
+              postDeleteById(postId: widget.postId).then((value) {
+                if (mounted) {
+                  setState(() {
+                    isLoading = false;
+                  });
+                }
+              });
+            }else if(widget.openFrom == "1"){
+              ApiClient().pickUpAddressDeleteById(postId: widget.postId).then((value){
+                isLoading = false;
+                Navigator.pop(context);
+                // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>PreviousAddressListScreen()));
+              });
+            }
+
+
           },
           child: Container(
             height: 50,

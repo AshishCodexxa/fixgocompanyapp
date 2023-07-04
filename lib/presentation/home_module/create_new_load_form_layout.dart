@@ -393,7 +393,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      const PreviousAddressListScreen()));
+                                  const PreviousAddressListScreen()));
                         },
                         child: Container(
                           color: Colors.transparent,
@@ -422,8 +422,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                   child: Container(
                     height: SizeConfig.screenWidth * 0.003,
                     color: Colors.black12,
-                    child: const Row(
-                      children: [
+                    child: Row(
+                      children: const [
                         Text(
                           "hii",
                           style: TextStyle(color: Colors.transparent),
@@ -445,8 +445,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => DeliveryLocationScreen(
-                                        pickUpAddress: widget.pickUpAddress,
-                                      )));
+                                    pickUpAddress: widget.pickUpAddress,
+                                  )));
                         },
                         child: Container(
                           color: Colors.transparent,
@@ -556,26 +556,38 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
               child: GestureDetector(
                 onDoubleTap: () {},
                 onTap: () async {
+                  pickedDates = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now().add(const Duration(days: 3)),
+                    firstDate: DateTime.now().add(const Duration(days: 3)),
+                    lastDate: DateTime(2100),
+                  );
 
-                  if(widget.deliveryAddress.isEmpty){
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(const SnackBar(content: Text("Please add delivery address.")));
-                  }else {
-                    pickedDates = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now().add(const Duration(days: 3)),
-                      firstDate: DateTime.now().add(const Duration(days: 3)),
-                      lastDate: DateTime(2100),
-                    );
+                  pickUpDate = pickedDates;
 
-                    pickUpDate = pickedDates;
+                  print(pickUpDate);
+                  setState(() {
+                    dateInput.text = pickUpDate.toString();
+                  });
+
+                  /*  if(pickedDates!.isBefore(DateTime.now())){
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(const SnackBar(
+                          content: Text(
+                              "Please Select After 2 Days Date of Current Date")));
+                    }else if(pickedDates!.isBefore(DateTime.now().add(Duration(days: 2)))){
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(const SnackBar(
+                          content: Text(
+                              "Please Select After")));
+                    }else{
+                      pickUpDate = pickedDates;
 
                     print(pickUpDate);
                     setState(() {
                       dateInput.text = pickUpDate.toString();
                     });
-                  }
-
+                    }*/
                 },
                 child: Container(
                   width: parentWidth * 0.3,
@@ -618,89 +630,78 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
               child: GestureDetector(
                 onDoubleTap: () {},
                 onTap: () async {
-
-                  if(pickUpDate == null){
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(const SnackBar(content: Text("Please add PickUp Date.")));
-                  }else {
-                    Future<DateTime?> result = showModalBottomSheet<DateTime>(
-                        context: context,
-                        isScrollControlled: true,
-                        // backgroundColor: CommonColor.APP_BAR_COLOR.w,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
-                          ),
+                  Future<DateTime?> result = showModalBottomSheet<DateTime>(
+                      context: context,
+                      isScrollControlled: true,
+                      // backgroundColor: CommonColor.APP_BAR_COLOR.w,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
                         ),
-                        builder: (context) {
-                          DateTime? _time;
+                      ),
+                      builder: (context) {
+                        DateTime? _time;
 
-                          return Padding(
-                            padding: MediaQuery
-                                .of(context)
-                                .viewInsets,
-                            child:
-                            Column(mainAxisSize: MainAxisSize.min, children: [
-                              SizedBox(
-                                height: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .height * .3,
-                                child: CupertinoDatePicker(
-                                  mode: CupertinoDatePickerMode.time,
-                                  onDateTimeChanged: (DateTime newTime) {
-                                    _time = newTime;
-                                  },
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).pop(_time);
+                        return Padding(
+                          padding: MediaQuery.of(context).viewInsets,
+                          child:
+                          Column(mainAxisSize: MainAxisSize.min, children: [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .3,
+                              child: CupertinoDatePicker(
+                                mode: CupertinoDatePickerMode.time,
+                                onDateTimeChanged: (DateTime newTime) {
+                                  _time = newTime;
                                 },
-                                child: Container(
-                                  height: parentHeight * 0.05,
-                                  width: parentWidth * 0.4,
-                                  decoration: BoxDecoration(
-                                      color: CommonColor.SIGN_UP_TEXT_COLOR,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Center(
-                                    child: Text(
-                                      "Save",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize:
-                                          SizeConfig.blockSizeHorizontal *
-                                              5.0,
-                                          fontWeight: FontWeight.w400,
-                                          fontFamily: 'Roboto_Medium'),
-                                    ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pop(_time);
+                              },
+                              child: Container(
+                                height: parentHeight * 0.05,
+                                width: parentWidth * 0.4,
+                                decoration: BoxDecoration(
+                                    color: CommonColor.SIGN_UP_TEXT_COLOR,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Center(
+                                  child: Text(
+                                    "Save",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize:
+                                        SizeConfig.blockSizeHorizontal *
+                                            5.0,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Roboto_Medium'),
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                height: parentHeight * 0.03,
-                              )
-                            ]),
-                          );
-                        });
+                            ),
+                            SizedBox(
+                              height: parentHeight * 0.03,
+                            )
+                          ]),
+                        );
+                      });
 
-                    result.then((value) {
-                      if (mounted) {
-                        setState(() {
-                          pickUpTime = value;
-                          if (value == null) {
-                            if (mounted) {
-                              setState(() {
-                                vehicleDetailsUI = false;
-                                vehicleDetails = false;
-                                paymentDetails = false;
-                              });
-                            }
+                  result.then((value) {
+                    if (mounted) {
+                      setState(() {
+                        pickUpTime = value;
+                        if (value == null) {
+                          if (mounted) {
+                            setState(() {
+                              vehicleDetailsUI = false;
+                              vehicleDetails = false;
+                              paymentDetails = false;
+                            });
                           }
-                        });
-                      }
-                    });
-                  }
+                        }
+                      });
+                    }
+                  });
                 },
                 child: Container(
                   color: Colors.transparent,
@@ -778,8 +779,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                     "Goods/Load",
                                     style: TextStyle(
                                         fontSize:
-                                            SizeConfig.blockSizeHorizontal *
-                                                5.0,
+                                        SizeConfig.blockSizeHorizontal *
+                                            5.0,
                                         fontFamily: "Roboto_Medium",
                                         fontWeight: FontWeight.w500,
                                         color: Colors.black),
@@ -809,7 +810,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   .withOpacity(1.0),
                                               fontWeight: FontWeight.w400,
                                               fontSize: SizeConfig
-                                                      .blockSizeHorizontal *
+                                                  .blockSizeHorizontal *
                                                   3.5,
                                             ),
                                           ),
@@ -817,15 +818,15 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               left: parentWidth * 0.05,
                                               right: parentWidth * 0.05),
                                           enabledBorder:
-                                              const UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color:
-                                                          Colors.transparent)),
+                                          const UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color:
+                                                  Colors.transparent)),
                                           focusedBorder:
-                                              const UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color:
-                                                          Colors.transparent)),
+                                          const UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color:
+                                                  Colors.transparent)),
                                         ),
                                       ),
                                     ),
@@ -838,7 +839,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       color: Colors.transparent,
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         children: [
                                           GestureDetector(
                                             onDoubleTap: () {},
@@ -856,12 +857,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               decoration: BoxDecoration(
                                                   color: loadUnit == 1
                                                       ? CommonColor
-                                                          .SIGN_UP_TEXT_COLOR
+                                                      .SIGN_UP_TEXT_COLOR
                                                       : CommonColor
-                                                          .WEIGHT_COLOR,
+                                                      .WEIGHT_COLOR,
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
+                                                  BorderRadius.circular(
+                                                      10)),
                                               child: Center(
                                                 child: Text(
                                                   "Ton(s)",
@@ -870,12 +871,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                           ? Colors.white
                                                           : Colors.black54,
                                                       fontWeight:
-                                                          FontWeight.w400,
+                                                      FontWeight.w400,
                                                       fontSize: SizeConfig
-                                                              .blockSizeHorizontal *
+                                                          .blockSizeHorizontal *
                                                           3.0,
                                                       fontFamily:
-                                                          'Roboto_Regular'),
+                                                      'Roboto_Regular'),
                                                 ),
                                               ),
                                             ),
@@ -896,12 +897,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               decoration: BoxDecoration(
                                                   color: loadUnit == 2
                                                       ? CommonColor
-                                                          .SIGN_UP_TEXT_COLOR
+                                                      .SIGN_UP_TEXT_COLOR
                                                       : CommonColor
-                                                          .WEIGHT_COLOR,
+                                                      .WEIGHT_COLOR,
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
+                                                  BorderRadius.circular(
+                                                      10)),
                                               child: Center(
                                                 child: Text(
                                                   "Kg(s)",
@@ -910,12 +911,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                           ? Colors.white
                                                           : Colors.black54,
                                                       fontWeight:
-                                                          FontWeight.w400,
+                                                      FontWeight.w400,
                                                       fontSize: SizeConfig
-                                                              .blockSizeHorizontal *
+                                                          .blockSizeHorizontal *
                                                           3.0,
                                                       fontFamily:
-                                                          'Roboto_Regular'),
+                                                      'Roboto_Regular'),
                                                 ),
                                               ),
                                             ),
@@ -933,12 +934,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               child: Container(
                                 height: SizeConfig.screenWidth * 0.003,
                                 color: Colors.black12,
-                                child: const Row(
-                                  children: [
+                                child: Row(
+                                  children: const [
                                     Text(
                                       "hii",
                                       style:
-                                          TextStyle(color: Colors.transparent),
+                                      TextStyle(color: Colors.transparent),
                                     ),
                                   ],
                                 ),
@@ -960,7 +961,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                   color: Colors.transparent,
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       RichText(
                                         text: TextSpan(
@@ -970,13 +971,13 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                           style: TextStyle(
                                             color: loadType == 0
                                                 ? CommonColor
-                                                    .UNSELECT_TYPE_COLOR
-                                                    .withOpacity(1.0)
+                                                .UNSELECT_TYPE_COLOR
+                                                .withOpacity(1.0)
                                                 : Colors.black,
                                             fontWeight: FontWeight.w400,
                                             fontSize:
-                                                SizeConfig.blockSizeHorizontal *
-                                                    4.0,
+                                            SizeConfig.blockSizeHorizontal *
+                                                4.0,
                                           ),
                                         ),
                                       ),
@@ -1028,9 +1029,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                     shape: BoxShape.circle,
                                                     color: loadType == 1
                                                         ? CommonColor
-                                                            .SIGN_UP_TEXT_COLOR
+                                                        .SIGN_UP_TEXT_COLOR
                                                         : CommonColor
-                                                            .WHITE_COLOR),
+                                                        .WHITE_COLOR),
                                               ),
                                               Padding(
                                                 padding: EdgeInsets.only(
@@ -1040,12 +1041,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   style: TextStyle(
                                                       color: Colors.black54,
                                                       fontWeight:
-                                                          FontWeight.w400,
+                                                      FontWeight.w400,
                                                       fontSize: SizeConfig
-                                                              .blockSizeHorizontal *
+                                                          .blockSizeHorizontal *
                                                           4.0,
                                                       fontFamily:
-                                                          'Roboto_Regular'),
+                                                      'Roboto_Regular'),
                                                 ),
                                               ),
                                             ],
@@ -1061,8 +1062,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       child: Container(
                                         height: SizeConfig.screenWidth * 0.003,
                                         color: Colors.black12,
-                                        child: const Row(
-                                          children: [
+                                        child: Row(
+                                          children: const [
                                             Text(
                                               "hii",
                                               style: TextStyle(
@@ -1100,9 +1101,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                     shape: BoxShape.circle,
                                                     color: loadType == 2
                                                         ? CommonColor
-                                                            .SIGN_UP_TEXT_COLOR
+                                                        .SIGN_UP_TEXT_COLOR
                                                         : CommonColor
-                                                            .WHITE_COLOR),
+                                                        .WHITE_COLOR),
                                               ),
                                               Padding(
                                                 padding: EdgeInsets.only(
@@ -1112,12 +1113,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   style: TextStyle(
                                                       color: Colors.black54,
                                                       fontWeight:
-                                                          FontWeight.w400,
+                                                      FontWeight.w400,
                                                       fontSize: SizeConfig
-                                                              .blockSizeHorizontal *
+                                                          .blockSizeHorizontal *
                                                           4.0,
                                                       fontFamily:
-                                                          'Roboto_Regular'),
+                                                      'Roboto_Regular'),
                                                 ),
                                               ),
                                             ],
@@ -1133,8 +1134,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       child: Container(
                                         height: SizeConfig.screenWidth * 0.003,
                                         color: Colors.black12,
-                                        child: const Row(
-                                          children: [
+                                        child: Row(
+                                          children: const [
                                             Text(
                                               "hii",
                                               style: TextStyle(
@@ -1156,7 +1157,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                           if (mounted) {
                                             setState(() {
                                               typeLoad =
-                                                  "Over Dimensional Load";
+                                              "Over Dimensional Load";
                                             });
                                           }
                                         },
@@ -1173,9 +1174,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                     shape: BoxShape.circle,
                                                     color: loadType == 3
                                                         ? CommonColor
-                                                            .SIGN_UP_TEXT_COLOR
+                                                        .SIGN_UP_TEXT_COLOR
                                                         : CommonColor
-                                                            .WHITE_COLOR),
+                                                        .WHITE_COLOR),
                                               ),
                                               Padding(
                                                 padding: EdgeInsets.only(
@@ -1185,12 +1186,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   style: TextStyle(
                                                       color: Colors.black54,
                                                       fontWeight:
-                                                          FontWeight.w400,
+                                                      FontWeight.w400,
                                                       fontSize: SizeConfig
-                                                              .blockSizeHorizontal *
+                                                          .blockSizeHorizontal *
                                                           4.0,
                                                       fontFamily:
-                                                          'Roboto_Regular'),
+                                                      'Roboto_Regular'),
                                                 ),
                                               ),
                                             ],
@@ -1208,12 +1209,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               child: Container(
                                 height: SizeConfig.screenWidth * 0.003,
                                 color: Colors.black12,
-                                child: const Row(
-                                  children: [
+                                child: Row(
+                                  children: const [
                                     Text(
                                       "hii",
                                       style:
-                                          TextStyle(color: Colors.transparent),
+                                      TextStyle(color: Colors.transparent),
                                     ),
                                   ],
                                 ),
@@ -1225,7 +1226,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                   top: parentHeight * 0.02),
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   RichText(
                                     text: TextSpan(
@@ -1235,19 +1236,19 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                         style: TextStyle(
                                           color: images.length == 0
                                               ? CommonColor.UNSELECT_TYPE_COLOR
-                                                  .withOpacity(1.0)
+                                              .withOpacity(1.0)
                                               : Colors.black54,
                                           fontWeight: FontWeight.w400,
                                           fontSize:
-                                              SizeConfig.blockSizeHorizontal *
-                                                  4.0,
+                                          SizeConfig.blockSizeHorizontal *
+                                              4.0,
                                         ),
                                         children: [
                                           TextSpan(
                                               text: '  (maximum 3 imgs)',
                                               style: TextStyle(
                                                   fontSize: SizeConfig
-                                                          .blockSizeHorizontal *
+                                                      .blockSizeHorizontal *
                                                       3.0,
                                                   color: CommonColor
                                                       .UNSELECT_TYPE_COLOR
@@ -1275,7 +1276,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                       .bottom,
                                                 ),
                                                 child:
-                                                    const CameraGalleryDialog(),
+                                                const CameraGalleryDialog(),
                                               );
                                             }).then((value) {
                                           if (value == null) {
@@ -1286,9 +1287,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                             images.length < 3
                                                 ? images.addAll(value)
                                                 : ScaffoldMessenger.of(context)
-                                                    .showSnackBar(const SnackBar(
-                                                        content: Text(
-                                                            "You can upload only 3 Images")));
+                                                .showSnackBar(const SnackBar(
+                                                content: Text(
+                                                    "You can upload only 3 Images")));
                                           });
                                         });
                                       },
@@ -1311,12 +1312,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               child: Container(
                                 height: SizeConfig.screenWidth * 0.003,
                                 color: Colors.black12,
-                                child: const Row(
-                                  children: [
+                                child: Row(
+                                  children: const [
                                     Text(
                                       "hii",
                                       style:
-                                          TextStyle(color: Colors.transparent),
+                                      TextStyle(color: Colors.transparent),
                                     ),
                                   ],
                                 ),
@@ -1336,7 +1337,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                           "Size of Load",
                                           style: TextStyle(
                                               fontSize: SizeConfig
-                                                      .blockSizeHorizontal *
+                                                  .blockSizeHorizontal *
                                                   3.5,
                                               fontFamily: "Roboto_Regular",
                                               fontWeight: FontWeight.w400,
@@ -1360,10 +1361,10 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               height: parentHeight * 0.05,
                                               child: TextFormField(
                                                 controller:
-                                                    vehicleLengthController,
+                                                vehicleLengthController,
                                                 // focusNode: _cityFocus,
                                                 textInputAction:
-                                                    TextInputAction.next,
+                                                TextInputAction.next,
                                                 decoration: InputDecoration(
                                                   label: RichText(
                                                     text: TextSpan(
@@ -1373,9 +1374,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                             .UNSELECT_TYPE_COLOR
                                                             .withOpacity(1.0),
                                                         fontWeight:
-                                                            FontWeight.w400,
+                                                        FontWeight.w400,
                                                         fontSize: SizeConfig
-                                                                .blockSizeHorizontal *
+                                                            .blockSizeHorizontal *
                                                             2.8,
                                                       ),
                                                     ),
@@ -1385,24 +1386,24 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                           .UNSELECT_TYPE_COLOR
                                                           .withOpacity(1.0),
                                                       fontSize: SizeConfig
-                                                              .blockSizeHorizontal *
+                                                          .blockSizeHorizontal *
                                                           3.5,
                                                       fontFamily:
-                                                          'Roboto_Regular'),
+                                                      'Roboto_Regular'),
                                                   border:
-                                                      const OutlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                                  width: 1.0,
-                                                                  color: Colors
-                                                                      .black)),
+                                                  const OutlineInputBorder(
+                                                      borderSide:
+                                                      BorderSide(
+                                                          width: 1.0,
+                                                          color: Colors
+                                                              .black)),
                                                   focusedBorder:
-                                                      const OutlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                                  width: 1.0,
-                                                                  color: Colors
-                                                                      .black)),
+                                                  const OutlineInputBorder(
+                                                      borderSide:
+                                                      BorderSide(
+                                                          width: 1.0,
+                                                          color: Colors
+                                                              .black)),
                                                 ),
                                                 textAlign: TextAlign.center,
                                               ),
@@ -1419,7 +1420,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                 controller: widthController,
                                                 // focusNode: _cityFocus,
                                                 textInputAction:
-                                                    TextInputAction.next,
+                                                TextInputAction.next,
                                                 decoration: InputDecoration(
                                                   label: RichText(
                                                     text: TextSpan(
@@ -1429,9 +1430,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                             .UNSELECT_TYPE_COLOR
                                                             .withOpacity(1.0),
                                                         fontWeight:
-                                                            FontWeight.w400,
+                                                        FontWeight.w400,
                                                         fontSize: SizeConfig
-                                                                .blockSizeHorizontal *
+                                                            .blockSizeHorizontal *
                                                             2.8,
                                                       ),
                                                     ),
@@ -1441,24 +1442,24 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                           .UNSELECT_TYPE_COLOR
                                                           .withOpacity(1.0),
                                                       fontSize: SizeConfig
-                                                              .blockSizeHorizontal *
+                                                          .blockSizeHorizontal *
                                                           3.5,
                                                       fontFamily:
-                                                          'Roboto_Regular'),
+                                                      'Roboto_Regular'),
                                                   border:
-                                                      const OutlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                                  width: 1.0,
-                                                                  color: Colors
-                                                                      .black)),
+                                                  const OutlineInputBorder(
+                                                      borderSide:
+                                                      BorderSide(
+                                                          width: 1.0,
+                                                          color: Colors
+                                                              .black)),
                                                   focusedBorder:
-                                                      const OutlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                                  width: 1.0,
-                                                                  color: Colors
-                                                                      .black)),
+                                                  const OutlineInputBorder(
+                                                      borderSide:
+                                                      BorderSide(
+                                                          width: 1.0,
+                                                          color: Colors
+                                                              .black)),
                                                 ),
                                                 textAlign: TextAlign.center,
                                               ),
@@ -1475,7 +1476,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                 controller: heightController,
                                                 // focusNode: _cityFocus,
                                                 textInputAction:
-                                                    TextInputAction.next,
+                                                TextInputAction.next,
                                                 decoration: InputDecoration(
                                                   label: RichText(
                                                     text: TextSpan(
@@ -1485,9 +1486,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                             .UNSELECT_TYPE_COLOR
                                                             .withOpacity(1.0),
                                                         fontWeight:
-                                                            FontWeight.w400,
+                                                        FontWeight.w400,
                                                         fontSize: SizeConfig
-                                                                .blockSizeHorizontal *
+                                                            .blockSizeHorizontal *
                                                             2.8,
                                                       ),
                                                     ),
@@ -1498,24 +1499,24 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                           .UNSELECT_TYPE_COLOR
                                                           .withOpacity(1.0),
                                                       fontSize: SizeConfig
-                                                              .blockSizeHorizontal *
+                                                          .blockSizeHorizontal *
                                                           3.5,
                                                       fontFamily:
-                                                          'Roboto_Regular'),
+                                                      'Roboto_Regular'),
                                                   border:
-                                                      const OutlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                                  width: 1.0,
-                                                                  color: Colors
-                                                                      .black)),
+                                                  const OutlineInputBorder(
+                                                      borderSide:
+                                                      BorderSide(
+                                                          width: 1.0,
+                                                          color: Colors
+                                                              .black)),
                                                   focusedBorder:
-                                                      const OutlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                                  width: 1.0,
-                                                                  color: Colors
-                                                                      .black)),
+                                                  const OutlineInputBorder(
+                                                      borderSide:
+                                                      BorderSide(
+                                                          width: 1.0,
+                                                          color: Colors
+                                                              .black)),
                                                 ),
                                                 textAlign: TextAlign.center,
                                               ),
@@ -1531,8 +1532,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                     child: Container(
                                       height: SizeConfig.screenWidth * 0.003,
                                       color: Colors.black12,
-                                      child: const Row(
-                                        children: [
+                                      child: Row(
+                                        children: const [
                                           Text(
                                             "hii",
                                             style: TextStyle(
@@ -1547,7 +1548,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             ),
                             Padding(
                               padding:
-                                  EdgeInsets.only(top: parentHeight * 0.01),
+                              EdgeInsets.only(top: parentHeight * 0.01),
                               child: Container(
                                 color: Colors.transparent,
                                 child: TextFormField(
@@ -1562,8 +1563,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                             .withOpacity(1.0),
                                         fontWeight: FontWeight.w400,
                                         fontSize:
-                                            SizeConfig.blockSizeHorizontal *
-                                                4.0,
+                                        SizeConfig.blockSizeHorizontal *
+                                            4.0,
                                       ),
                                     ),
                                     contentPadding: EdgeInsets.only(
@@ -1677,7 +1678,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize:
-                                        SizeConfig.blockSizeHorizontal * 4.5,
+                                    SizeConfig.blockSizeHorizontal * 4.5,
                                     fontWeight: FontWeight.w500,
                                     fontFamily: 'Roboto_Medium'),
                               ),
@@ -1723,7 +1724,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               if (images.isNotEmpty)
-                                // for(var file in images)
+                              // for(var file in images)
                                 for (int i = 0; i < images.length; i++)
                                   Padding(
                                     padding: EdgeInsets.only(
@@ -1773,7 +1774,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   shape: BoxShape.circle),
                                               child: Padding(
                                                 padding:
-                                                    const EdgeInsets.all(3.0),
+                                                const EdgeInsets.all(3.0),
                                                 child: Icon(
                                                   Icons.clear,
                                                   color: Colors.black,
@@ -1811,7 +1812,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                 style: TextStyle(
                                     color: Colors.black45,
                                     fontSize:
-                                        SizeConfig.blockSizeHorizontal * 3.5,
+                                    SizeConfig.blockSizeHorizontal * 3.5,
                                     fontWeight: FontWeight.w500,
                                     fontFamily: 'Roboto_Regular'),
                               ),
@@ -1820,13 +1821,13 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize:
-                                        SizeConfig.blockSizeHorizontal * 3.7,
+                                    SizeConfig.blockSizeHorizontal * 3.7,
                                     fontWeight: FontWeight.w500,
                                     fontFamily: 'Roboto_Regular'),
                               ),
                               Padding(
                                 padding:
-                                    EdgeInsets.only(left: parentWidth * 0.02),
+                                EdgeInsets.only(left: parentWidth * 0.02),
                                 child: Container(
                                   height: parentHeight * 0.04,
                                   width: parentWidth * 0.002,
@@ -1835,13 +1836,13 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               ),
                               Padding(
                                 padding:
-                                    EdgeInsets.only(left: parentWidth * 0.02),
+                                EdgeInsets.only(left: parentWidth * 0.02),
                                 child: Text(
                                   "${quantityLoadController.text} $loadUnits",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize:
-                                          SizeConfig.blockSizeHorizontal * 3.7,
+                                      SizeConfig.blockSizeHorizontal * 3.7,
                                       fontWeight: FontWeight.w500,
                                       fontFamily: 'Roboto_Regular'),
                                 ),
@@ -1861,7 +1862,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize:
-                                        SizeConfig.blockSizeHorizontal * 3.0,
+                                    SizeConfig.blockSizeHorizontal * 3.0,
                                     fontWeight: FontWeight.w500,
                                     fontFamily: 'Roboto_Regular'),
                               ),
@@ -1951,8 +1952,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                     "Vehicle",
                                     style: TextStyle(
                                         fontSize:
-                                            SizeConfig.blockSizeHorizontal *
-                                                5.0,
+                                        SizeConfig.blockSizeHorizontal *
+                                            5.0,
                                         fontFamily: "Roboto_Medium",
                                         fontWeight: FontWeight.w500,
                                         color: Colors.black),
@@ -1979,7 +1980,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                   color: Colors.transparent,
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       RichText(
                                         text: TextSpan(
@@ -1989,13 +1990,13 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                           style: TextStyle(
                                             color: vehicleType == 0
                                                 ? CommonColor
-                                                    .UNSELECT_TYPE_COLOR
-                                                    .withOpacity(1.0)
+                                                .UNSELECT_TYPE_COLOR
+                                                .withOpacity(1.0)
                                                 : Colors.black,
                                             fontWeight: FontWeight.w400,
                                             fontSize:
-                                                SizeConfig.blockSizeHorizontal *
-                                                    4.0,
+                                            SizeConfig.blockSizeHorizontal *
+                                                4.0,
                                           ),
                                         ),
                                       ),
@@ -2048,9 +2049,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                     shape: BoxShape.circle,
                                                     color: vehicleType == 1
                                                         ? CommonColor
-                                                            .SIGN_UP_TEXT_COLOR
+                                                        .SIGN_UP_TEXT_COLOR
                                                         : CommonColor
-                                                            .WHITE_COLOR),
+                                                        .WHITE_COLOR),
                                               ),
                                               Padding(
                                                 padding: EdgeInsets.only(
@@ -2060,12 +2061,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   style: TextStyle(
                                                       color: Colors.black54,
                                                       fontWeight:
-                                                          FontWeight.w400,
+                                                      FontWeight.w400,
                                                       fontSize: SizeConfig
-                                                              .blockSizeHorizontal *
+                                                          .blockSizeHorizontal *
                                                           4.0,
                                                       fontFamily:
-                                                          'Roboto_Regular'),
+                                                      'Roboto_Regular'),
                                                 ),
                                               ),
                                             ],
@@ -2081,8 +2082,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       child: Container(
                                         height: SizeConfig.screenWidth * 0.003,
                                         color: Colors.black12,
-                                        child: const Row(
-                                          children: [
+                                        child: Row(
+                                          children: const [
                                             Text(
                                               "hii",
                                               style: TextStyle(
@@ -2120,9 +2121,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                     shape: BoxShape.circle,
                                                     color: vehicleType == 2
                                                         ? CommonColor
-                                                            .SIGN_UP_TEXT_COLOR
+                                                        .SIGN_UP_TEXT_COLOR
                                                         : CommonColor
-                                                            .WHITE_COLOR),
+                                                        .WHITE_COLOR),
                                               ),
                                               Padding(
                                                 padding: EdgeInsets.only(
@@ -2132,12 +2133,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   style: TextStyle(
                                                       color: Colors.black54,
                                                       fontWeight:
-                                                          FontWeight.w400,
+                                                      FontWeight.w400,
                                                       fontSize: SizeConfig
-                                                              .blockSizeHorizontal *
+                                                          .blockSizeHorizontal *
                                                           4.0,
                                                       fontFamily:
-                                                          'Roboto_Regular'),
+                                                      'Roboto_Regular'),
                                                 ),
                                               ),
                                             ],
@@ -2153,8 +2154,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       child: Container(
                                         height: SizeConfig.screenWidth * 0.003,
                                         color: Colors.black12,
-                                        child: const Row(
-                                          children: [
+                                        child: Row(
+                                          children: const [
                                             Text(
                                               "hii",
                                               style: TextStyle(
@@ -2192,9 +2193,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                     shape: BoxShape.circle,
                                                     color: vehicleType == 3
                                                         ? CommonColor
-                                                            .SIGN_UP_TEXT_COLOR
+                                                        .SIGN_UP_TEXT_COLOR
                                                         : CommonColor
-                                                            .WHITE_COLOR),
+                                                        .WHITE_COLOR),
                                               ),
                                               Padding(
                                                 padding: EdgeInsets.only(
@@ -2204,12 +2205,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   style: TextStyle(
                                                       color: Colors.black54,
                                                       fontWeight:
-                                                          FontWeight.w400,
+                                                      FontWeight.w400,
                                                       fontSize: SizeConfig
-                                                              .blockSizeHorizontal *
+                                                          .blockSizeHorizontal *
                                                           4.0,
                                                       fontFamily:
-                                                          'Roboto_Regular'),
+                                                      'Roboto_Regular'),
                                                 ),
                                               ),
                                             ],
@@ -2228,12 +2229,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               child: Container(
                                 height: SizeConfig.screenWidth * 0.003,
                                 color: Colors.black12,
-                                child: const Row(
-                                  children: [
+                                child: Row(
+                                  children: const [
                                     Text(
                                       "hii",
                                       style:
-                                          TextStyle(color: Colors.transparent),
+                                      TextStyle(color: Colors.transparent),
                                     ),
                                   ],
                                 ),
@@ -2264,7 +2265,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                         color: Colors.transparent,
                                         child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                           children: [
                                             RichText(
                                               text: TextSpan(
@@ -2274,12 +2275,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                 style: TextStyle(
                                                   color: tyreTypes == 0
                                                       ? CommonColor
-                                                          .UNSELECT_TYPE_COLOR
-                                                          .withOpacity(1.0)
+                                                      .UNSELECT_TYPE_COLOR
+                                                      .withOpacity(1.0)
                                                       : Colors.black,
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: SizeConfig
-                                                          .blockSizeHorizontal *
+                                                      .blockSizeHorizontal *
                                                       4.0,
                                                 ),
                                               ),
@@ -2313,7 +2314,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               onDoubleTap: () {},
                                               onTap: () {
                                                 showAllTyresType =
-                                                    !showAllTyresType;
+                                                !showAllTyresType;
                                                 tyreTypes = 1;
                                                 if (mounted) {
                                                   setState(() {
@@ -2328,19 +2329,19 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   children: [
                                                     Container(
                                                       height:
-                                                          parentHeight * 0.03,
+                                                      parentHeight * 0.03,
                                                       width: parentWidth * 0.06,
                                                       decoration: BoxDecoration(
                                                           border: Border.all(
                                                               color:
-                                                                  Colors.black),
+                                                              Colors.black),
                                                           shape:
-                                                              BoxShape.circle,
+                                                          BoxShape.circle,
                                                           color: tyreTypes == 1
                                                               ? CommonColor
-                                                                  .SIGN_UP_TEXT_COLOR
+                                                              .SIGN_UP_TEXT_COLOR
                                                               : CommonColor
-                                                                  .WHITE_COLOR),
+                                                              .WHITE_COLOR),
                                                     ),
                                                     Padding(
                                                       padding: EdgeInsets.only(
@@ -2350,14 +2351,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                         "6 Tyre",
                                                         style: TextStyle(
                                                             color:
-                                                                Colors.black54,
+                                                            Colors.black54,
                                                             fontWeight:
-                                                                FontWeight.w400,
+                                                            FontWeight.w400,
                                                             fontSize: SizeConfig
-                                                                    .blockSizeHorizontal *
+                                                                .blockSizeHorizontal *
                                                                 4.0,
                                                             fontFamily:
-                                                                'Roboto_Regular'),
+                                                            'Roboto_Regular'),
                                                       ),
                                                     ),
                                                   ],
@@ -2375,13 +2376,13 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               height: SizeConfig.screenWidth *
                                                   0.003,
                                               color: Colors.black12,
-                                              child: const Row(
-                                                children: [
+                                              child: Row(
+                                                children: const [
                                                   Text(
                                                     "hii",
                                                     style: TextStyle(
                                                         color:
-                                                            Colors.transparent),
+                                                        Colors.transparent),
                                                   ),
                                                 ],
                                               ),
@@ -2395,7 +2396,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               onDoubleTap: () {},
                                               onTap: () {
                                                 showAllTyresType =
-                                                    !showAllTyresType;
+                                                !showAllTyresType;
                                                 tyreTypes = 2;
                                                 if (mounted) {
                                                   setState(() {
@@ -2410,19 +2411,19 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   children: [
                                                     Container(
                                                       height:
-                                                          parentHeight * 0.03,
+                                                      parentHeight * 0.03,
                                                       width: parentWidth * 0.06,
                                                       decoration: BoxDecoration(
                                                           border: Border.all(
                                                               color:
-                                                                  Colors.black),
+                                                              Colors.black),
                                                           shape:
-                                                              BoxShape.circle,
+                                                          BoxShape.circle,
                                                           color: tyreTypes == 2
                                                               ? CommonColor
-                                                                  .SIGN_UP_TEXT_COLOR
+                                                              .SIGN_UP_TEXT_COLOR
                                                               : CommonColor
-                                                                  .WHITE_COLOR),
+                                                              .WHITE_COLOR),
                                                     ),
                                                     Padding(
                                                       padding: EdgeInsets.only(
@@ -2432,14 +2433,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                         "10 Tyre",
                                                         style: TextStyle(
                                                             color:
-                                                                Colors.black54,
+                                                            Colors.black54,
                                                             fontWeight:
-                                                                FontWeight.w400,
+                                                            FontWeight.w400,
                                                             fontSize: SizeConfig
-                                                                    .blockSizeHorizontal *
+                                                                .blockSizeHorizontal *
                                                                 4.0,
                                                             fontFamily:
-                                                                'Roboto_Regular'),
+                                                            'Roboto_Regular'),
                                                       ),
                                                     ),
                                                   ],
@@ -2457,13 +2458,13 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               height: SizeConfig.screenWidth *
                                                   0.003,
                                               color: Colors.black12,
-                                              child: const Row(
-                                                children: [
+                                              child: Row(
+                                                children: const [
                                                   Text(
                                                     "hii",
                                                     style: TextStyle(
                                                         color:
-                                                            Colors.transparent),
+                                                        Colors.transparent),
                                                   ),
                                                 ],
                                               ),
@@ -2477,7 +2478,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               onDoubleTap: () {},
                                               onTap: () {
                                                 showAllTyresType =
-                                                    !showAllTyresType;
+                                                !showAllTyresType;
                                                 tyreTypes = 3;
                                                 if (mounted) {
                                                   setState(() {
@@ -2492,19 +2493,19 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   children: [
                                                     Container(
                                                       height:
-                                                          parentHeight * 0.03,
+                                                      parentHeight * 0.03,
                                                       width: parentWidth * 0.06,
                                                       decoration: BoxDecoration(
                                                           border: Border.all(
                                                               color:
-                                                                  Colors.black),
+                                                              Colors.black),
                                                           shape:
-                                                              BoxShape.circle,
+                                                          BoxShape.circle,
                                                           color: tyreTypes == 3
                                                               ? CommonColor
-                                                                  .SIGN_UP_TEXT_COLOR
+                                                              .SIGN_UP_TEXT_COLOR
                                                               : CommonColor
-                                                                  .WHITE_COLOR),
+                                                              .WHITE_COLOR),
                                                     ),
                                                     Padding(
                                                       padding: EdgeInsets.only(
@@ -2514,14 +2515,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                         "12 Tyre",
                                                         style: TextStyle(
                                                             color:
-                                                                Colors.black54,
+                                                            Colors.black54,
                                                             fontWeight:
-                                                                FontWeight.w400,
+                                                            FontWeight.w400,
                                                             fontSize: SizeConfig
-                                                                    .blockSizeHorizontal *
+                                                                .blockSizeHorizontal *
                                                                 4.0,
                                                             fontFamily:
-                                                                'Roboto_Regular'),
+                                                            'Roboto_Regular'),
                                                       ),
                                                     ),
                                                   ],
@@ -2539,13 +2540,13 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               height: SizeConfig.screenWidth *
                                                   0.003,
                                               color: Colors.black12,
-                                              child: const Row(
-                                                children: [
+                                              child: Row(
+                                                children: const [
                                                   Text(
                                                     "hii",
                                                     style: TextStyle(
                                                         color:
-                                                            Colors.transparent),
+                                                        Colors.transparent),
                                                   ),
                                                 ],
                                               ),
@@ -2559,7 +2560,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               onDoubleTap: () {},
                                               onTap: () {
                                                 showAllTyresType =
-                                                    !showAllTyresType;
+                                                !showAllTyresType;
                                                 tyreTypes = 4;
                                                 if (mounted) {
                                                   setState(() {
@@ -2574,19 +2575,19 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   children: [
                                                     Container(
                                                       height:
-                                                          parentHeight * 0.03,
+                                                      parentHeight * 0.03,
                                                       width: parentWidth * 0.06,
                                                       decoration: BoxDecoration(
                                                           border: Border.all(
                                                               color:
-                                                                  Colors.black),
+                                                              Colors.black),
                                                           shape:
-                                                              BoxShape.circle,
+                                                          BoxShape.circle,
                                                           color: tyreTypes == 4
                                                               ? CommonColor
-                                                                  .SIGN_UP_TEXT_COLOR
+                                                              .SIGN_UP_TEXT_COLOR
                                                               : CommonColor
-                                                                  .WHITE_COLOR),
+                                                              .WHITE_COLOR),
                                                     ),
                                                     Padding(
                                                       padding: EdgeInsets.only(
@@ -2596,14 +2597,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                         "14 Tyre",
                                                         style: TextStyle(
                                                             color:
-                                                                Colors.black54,
+                                                            Colors.black54,
                                                             fontWeight:
-                                                                FontWeight.w400,
+                                                            FontWeight.w400,
                                                             fontSize: SizeConfig
-                                                                    .blockSizeHorizontal *
+                                                                .blockSizeHorizontal *
                                                                 4.0,
                                                             fontFamily:
-                                                                'Roboto_Regular'),
+                                                            'Roboto_Regular'),
                                                       ),
                                                     ),
                                                   ],
@@ -2621,13 +2622,13 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               height: SizeConfig.screenWidth *
                                                   0.003,
                                               color: Colors.black12,
-                                              child: const Row(
-                                                children: [
+                                              child: Row(
+                                                children: const [
                                                   Text(
                                                     "hii",
                                                     style: TextStyle(
                                                         color:
-                                                            Colors.transparent),
+                                                        Colors.transparent),
                                                   ),
                                                 ],
                                               ),
@@ -2641,7 +2642,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               onDoubleTap: () {},
                                               onTap: () {
                                                 showAllTyresType =
-                                                    !showAllTyresType;
+                                                !showAllTyresType;
                                                 tyreTypes = 5;
                                                 if (mounted) {
                                                   setState(() {
@@ -2656,19 +2657,19 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   children: [
                                                     Container(
                                                       height:
-                                                          parentHeight * 0.03,
+                                                      parentHeight * 0.03,
                                                       width: parentWidth * 0.06,
                                                       decoration: BoxDecoration(
                                                           border: Border.all(
                                                               color:
-                                                                  Colors.black),
+                                                              Colors.black),
                                                           shape:
-                                                              BoxShape.circle,
+                                                          BoxShape.circle,
                                                           color: tyreTypes == 5
                                                               ? CommonColor
-                                                                  .SIGN_UP_TEXT_COLOR
+                                                              .SIGN_UP_TEXT_COLOR
                                                               : CommonColor
-                                                                  .WHITE_COLOR),
+                                                              .WHITE_COLOR),
                                                     ),
                                                     Padding(
                                                       padding: EdgeInsets.only(
@@ -2678,14 +2679,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                         "16 Tyre",
                                                         style: TextStyle(
                                                             color:
-                                                                Colors.black54,
+                                                            Colors.black54,
                                                             fontWeight:
-                                                                FontWeight.w400,
+                                                            FontWeight.w400,
                                                             fontSize: SizeConfig
-                                                                    .blockSizeHorizontal *
+                                                                .blockSizeHorizontal *
                                                                 4.0,
                                                             fontFamily:
-                                                                'Roboto_Regular'),
+                                                            'Roboto_Regular'),
                                                       ),
                                                     ),
                                                   ],
@@ -2703,8 +2704,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                     child: Container(
                                       height: SizeConfig.screenWidth * 0.003,
                                       color: Colors.black12,
-                                      child: const Row(
-                                        children: [
+                                      child: Row(
+                                        children: const [
                                           Text(
                                             "hii",
                                             style: TextStyle(
@@ -2729,7 +2730,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                         right: parentWidth * 0.05),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                       children: [
                                         GestureDetector(
                                           onTap: () {
@@ -2744,28 +2745,28 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               decoration: BoxDecoration(
                                                   color: trailerType == 1
                                                       ? CommonColor
-                                                          .SIGN_UP_TEXT_COLOR
+                                                      .SIGN_UP_TEXT_COLOR
                                                       : Colors.white,
                                                   border: Border.all(
                                                       color: Colors.black54),
                                                   borderRadius:
-                                                      BorderRadius.circular(7)),
+                                                  BorderRadius.circular(7)),
                                               child: Center(
                                                 child: Text(
                                                   "Flat Body",
                                                   style: TextStyle(
                                                       color: trailerType == 1
                                                           ? CommonColor
-                                                              .WHITE_COLOR
+                                                          .WHITE_COLOR
                                                           : CommonColor
-                                                              .BLACK_COLOR,
+                                                          .BLACK_COLOR,
                                                       fontWeight:
-                                                          FontWeight.w400,
+                                                      FontWeight.w400,
                                                       fontSize: SizeConfig
-                                                              .blockSizeHorizontal *
+                                                          .blockSizeHorizontal *
                                                           3.5,
                                                       fontFamily:
-                                                          'Roboto_Medium'),
+                                                      'Roboto_Medium'),
                                                 ),
                                               )),
                                         ),
@@ -2782,28 +2783,28 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               decoration: BoxDecoration(
                                                   color: trailerType == 2
                                                       ? CommonColor
-                                                          .SIGN_UP_TEXT_COLOR
+                                                      .SIGN_UP_TEXT_COLOR
                                                       : Colors.white,
                                                   border: Border.all(
                                                       color: Colors.black54),
                                                   borderRadius:
-                                                      BorderRadius.circular(7)),
+                                                  BorderRadius.circular(7)),
                                               child: Center(
                                                 child: Text(
                                                   "Half Body",
                                                   style: TextStyle(
                                                       color: trailerType == 2
                                                           ? CommonColor
-                                                              .WHITE_COLOR
+                                                          .WHITE_COLOR
                                                           : CommonColor
-                                                              .BLACK_COLOR,
+                                                          .BLACK_COLOR,
                                                       fontWeight:
-                                                          FontWeight.w400,
+                                                      FontWeight.w400,
                                                       fontSize: SizeConfig
-                                                              .blockSizeHorizontal *
+                                                          .blockSizeHorizontal *
                                                           3.5,
                                                       fontFamily:
-                                                          'Roboto_Medium'),
+                                                      'Roboto_Medium'),
                                                 ),
                                               )),
                                         ),
@@ -2820,28 +2821,28 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               decoration: BoxDecoration(
                                                   color: trailerType == 3
                                                       ? CommonColor
-                                                          .SIGN_UP_TEXT_COLOR
+                                                      .SIGN_UP_TEXT_COLOR
                                                       : Colors.white,
                                                   border: Border.all(
                                                       color: Colors.black54),
                                                   borderRadius:
-                                                      BorderRadius.circular(7)),
+                                                  BorderRadius.circular(7)),
                                               child: Center(
                                                 child: Text(
                                                   "Car Trailer",
                                                   style: TextStyle(
                                                       color: trailerType == 3
                                                           ? CommonColor
-                                                              .WHITE_COLOR
+                                                          .WHITE_COLOR
                                                           : CommonColor
-                                                              .BLACK_COLOR,
+                                                          .BLACK_COLOR,
                                                       fontWeight:
-                                                          FontWeight.w400,
+                                                      FontWeight.w400,
                                                       fontSize: SizeConfig
-                                                              .blockSizeHorizontal *
+                                                          .blockSizeHorizontal *
                                                           3.5,
                                                       fontFamily:
-                                                          'Roboto_Medium'),
+                                                      'Roboto_Medium'),
                                                 ),
                                               )),
                                         )
@@ -2950,7 +2951,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                             onDoubleTap: () {},
                                             onTap: () {
                                               showAllTyresType =
-                                                  !showAllTyresType;
+                                              !showAllTyresType;
                                               if (mounted) {
                                                 setState(() {});
                                               }
@@ -2959,27 +2960,27 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               color: Colors.transparent,
                                               child: Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                                MainAxisAlignment
+                                                    .spaceBetween,
                                                 children: [
                                                   RichText(
                                                     text: TextSpan(
                                                       text:
-                                                          trailerTyreTypes == 0
-                                                              ? 'Type of Tyre'
-                                                              : trailerTyreName,
+                                                      trailerTyreTypes == 0
+                                                          ? 'Type of Tyre'
+                                                          : trailerTyreName,
                                                       style: TextStyle(
                                                         color: trailerTyreTypes ==
-                                                                0
+                                                            0
                                                             ? CommonColor
-                                                                .UNSELECT_TYPE_COLOR
-                                                                .withOpacity(
-                                                                    1.0)
+                                                            .UNSELECT_TYPE_COLOR
+                                                            .withOpacity(
+                                                            1.0)
                                                             : Colors.black,
                                                         fontWeight:
-                                                            FontWeight.w400,
+                                                        FontWeight.w400,
                                                         fontSize: SizeConfig
-                                                                .blockSizeHorizontal *
+                                                            .blockSizeHorizontal *
                                                             4.0,
                                                       ),
                                                     ),
@@ -2987,7 +2988,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   Padding(
                                                     padding: EdgeInsets.only(
                                                         right:
-                                                            parentWidth * 0.05),
+                                                        parentWidth * 0.05),
                                                     child: const Icon(
                                                       Icons
                                                           .keyboard_arrow_down_outlined,
@@ -3014,14 +3015,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                     onDoubleTap: () {},
                                                     onTap: () {
                                                       showAllTyresType =
-                                                          !showAllTyresType;
+                                                      !showAllTyresType;
                                                       trailerTyreTypes = 1;
                                                       if (mounted) {
                                                         setState(() {
                                                           trailerTyreName =
-                                                              "14 Tyre";
+                                                          "14 Tyre";
                                                           carringCapacity =
-                                                              "28500";
+                                                          "28500";
                                                         });
                                                       }
                                                     },
@@ -3031,8 +3032,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                         children: [
                                                           Container(
                                                             height:
-                                                                parentHeight *
-                                                                    0.03,
+                                                            parentHeight *
+                                                                0.03,
                                                             width: parentWidth *
                                                                 0.06,
                                                             decoration: BoxDecoration(
@@ -3042,31 +3043,31 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                                 shape: BoxShape
                                                                     .circle,
                                                                 color: trailerTyreTypes ==
-                                                                        1
+                                                                    1
                                                                     ? CommonColor
-                                                                        .SIGN_UP_TEXT_COLOR
+                                                                    .SIGN_UP_TEXT_COLOR
                                                                     : CommonColor
-                                                                        .WHITE_COLOR),
+                                                                    .WHITE_COLOR),
                                                           ),
                                                           Padding(
                                                             padding: EdgeInsets.only(
                                                                 left:
-                                                                    parentWidth *
-                                                                        0.03),
+                                                                parentWidth *
+                                                                    0.03),
                                                             child: Text(
                                                               "14 Tyre",
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .black54,
                                                                   fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
+                                                                  FontWeight
+                                                                      .w400,
                                                                   fontSize:
-                                                                      SizeConfig
-                                                                              .blockSizeHorizontal *
-                                                                          4.0,
+                                                                  SizeConfig
+                                                                      .blockSizeHorizontal *
+                                                                      4.0,
                                                                   fontFamily:
-                                                                      'Roboto_Regular'),
+                                                                  'Roboto_Regular'),
                                                             ),
                                                           ),
                                                         ],
@@ -3077,18 +3078,18 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                 Padding(
                                                   padding: EdgeInsets.only(
                                                       top: SizeConfig
-                                                              .screenHeight *
+                                                          .screenHeight *
                                                           0.01,
                                                       left: parentWidth * 0.03,
                                                       right:
-                                                          parentWidth * 0.03),
+                                                      parentWidth * 0.03),
                                                   child: Container(
                                                     height:
-                                                        SizeConfig.screenWidth *
-                                                            0.003,
+                                                    SizeConfig.screenWidth *
+                                                        0.003,
                                                     color: Colors.black12,
-                                                    child: const Row(
-                                                      children: [
+                                                    child: Row(
+                                                      children: const [
                                                         Text(
                                                           "hii",
                                                           style: TextStyle(
@@ -3107,14 +3108,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                     onDoubleTap: () {},
                                                     onTap: () {
                                                       showAllTyresType =
-                                                          !showAllTyresType;
+                                                      !showAllTyresType;
                                                       trailerTyreTypes = 2;
                                                       if (mounted) {
                                                         setState(() {
                                                           trailerTyreName =
-                                                              "16 Tyre";
+                                                          "16 Tyre";
                                                           carringCapacity =
-                                                              "42500";
+                                                          "42500";
                                                         });
                                                       }
                                                     },
@@ -3124,8 +3125,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                         children: [
                                                           Container(
                                                             height:
-                                                                parentHeight *
-                                                                    0.03,
+                                                            parentHeight *
+                                                                0.03,
                                                             width: parentWidth *
                                                                 0.06,
                                                             decoration: BoxDecoration(
@@ -3135,31 +3136,31 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                                 shape: BoxShape
                                                                     .circle,
                                                                 color: trailerTyreTypes ==
-                                                                        2
+                                                                    2
                                                                     ? CommonColor
-                                                                        .SIGN_UP_TEXT_COLOR
+                                                                    .SIGN_UP_TEXT_COLOR
                                                                     : CommonColor
-                                                                        .WHITE_COLOR),
+                                                                    .WHITE_COLOR),
                                                           ),
                                                           Padding(
                                                             padding: EdgeInsets.only(
                                                                 left:
-                                                                    parentWidth *
-                                                                        0.03),
+                                                                parentWidth *
+                                                                    0.03),
                                                             child: Text(
                                                               "16 Tyre",
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .black54,
                                                                   fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
+                                                                  FontWeight
+                                                                      .w400,
                                                                   fontSize:
-                                                                      SizeConfig
-                                                                              .blockSizeHorizontal *
-                                                                          4.0,
+                                                                  SizeConfig
+                                                                      .blockSizeHorizontal *
+                                                                      4.0,
                                                                   fontFamily:
-                                                                      'Roboto_Regular'),
+                                                                  'Roboto_Regular'),
                                                             ),
                                                           ),
                                                         ],
@@ -3170,18 +3171,18 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                 Padding(
                                                   padding: EdgeInsets.only(
                                                       top: SizeConfig
-                                                              .screenHeight *
+                                                          .screenHeight *
                                                           0.01,
                                                       left: parentWidth * 0.03,
                                                       right:
-                                                          parentWidth * 0.03),
+                                                      parentWidth * 0.03),
                                                   child: Container(
                                                     height:
-                                                        SizeConfig.screenWidth *
-                                                            0.003,
+                                                    SizeConfig.screenWidth *
+                                                        0.003,
                                                     color: Colors.black12,
-                                                    child: const Row(
-                                                      children: [
+                                                    child: Row(
+                                                      children: const [
                                                         Text(
                                                           "hii",
                                                           style: TextStyle(
@@ -3200,14 +3201,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                     onDoubleTap: () {},
                                                     onTap: () {
                                                       showAllTyresType =
-                                                          !showAllTyresType;
+                                                      !showAllTyresType;
                                                       trailerTyreTypes = 3;
                                                       if (mounted) {
                                                         setState(() {
                                                           trailerTyreName =
-                                                              "18 Tyre";
+                                                          "18 Tyre";
                                                           carringCapacity =
-                                                              "45500";
+                                                          "45500";
                                                         });
                                                       }
                                                     },
@@ -3217,8 +3218,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                         children: [
                                                           Container(
                                                             height:
-                                                                parentHeight *
-                                                                    0.03,
+                                                            parentHeight *
+                                                                0.03,
                                                             width: parentWidth *
                                                                 0.06,
                                                             decoration: BoxDecoration(
@@ -3228,31 +3229,31 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                                 shape: BoxShape
                                                                     .circle,
                                                                 color: trailerTyreTypes ==
-                                                                        3
+                                                                    3
                                                                     ? CommonColor
-                                                                        .SIGN_UP_TEXT_COLOR
+                                                                    .SIGN_UP_TEXT_COLOR
                                                                     : CommonColor
-                                                                        .WHITE_COLOR),
+                                                                    .WHITE_COLOR),
                                                           ),
                                                           Padding(
                                                             padding: EdgeInsets.only(
                                                                 left:
-                                                                    parentWidth *
-                                                                        0.03),
+                                                                parentWidth *
+                                                                    0.03),
                                                             child: Text(
                                                               "18 Tyre",
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .black54,
                                                                   fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
+                                                                  FontWeight
+                                                                      .w400,
                                                                   fontSize:
-                                                                      SizeConfig
-                                                                              .blockSizeHorizontal *
-                                                                          4.0,
+                                                                  SizeConfig
+                                                                      .blockSizeHorizontal *
+                                                                      4.0,
                                                                   fontFamily:
-                                                                      'Roboto_Regular'),
+                                                                  'Roboto_Regular'),
                                                             ),
                                                           ),
                                                         ],
@@ -3263,18 +3264,18 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                 Padding(
                                                   padding: EdgeInsets.only(
                                                       top: SizeConfig
-                                                              .screenHeight *
+                                                          .screenHeight *
                                                           0.01,
                                                       left: parentWidth * 0.03,
                                                       right:
-                                                          parentWidth * 0.03),
+                                                      parentWidth * 0.03),
                                                   child: Container(
                                                     height:
-                                                        SizeConfig.screenWidth *
-                                                            0.003,
+                                                    SizeConfig.screenWidth *
+                                                        0.003,
                                                     color: Colors.black12,
-                                                    child: const Row(
-                                                      children: [
+                                                    child: Row(
+                                                      children: const [
                                                         Text(
                                                           "hii",
                                                           style: TextStyle(
@@ -3293,14 +3294,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                     onDoubleTap: () {},
                                                     onTap: () {
                                                       showAllTyresType =
-                                                          !showAllTyresType;
+                                                      !showAllTyresType;
                                                       trailerTyreTypes = 4;
                                                       if (mounted) {
                                                         setState(() {
                                                           trailerTyreName =
-                                                              "22 Tyre";
+                                                          "22 Tyre";
                                                           carringCapacity =
-                                                              "55000";
+                                                          "55000";
                                                         });
                                                       }
                                                     },
@@ -3310,8 +3311,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                         children: [
                                                           Container(
                                                             height:
-                                                                parentHeight *
-                                                                    0.03,
+                                                            parentHeight *
+                                                                0.03,
                                                             width: parentWidth *
                                                                 0.06,
                                                             decoration: BoxDecoration(
@@ -3321,31 +3322,31 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                                 shape: BoxShape
                                                                     .circle,
                                                                 color: tyreTypes ==
-                                                                        4
+                                                                    4
                                                                     ? CommonColor
-                                                                        .SIGN_UP_TEXT_COLOR
+                                                                    .SIGN_UP_TEXT_COLOR
                                                                     : CommonColor
-                                                                        .WHITE_COLOR),
+                                                                    .WHITE_COLOR),
                                                           ),
                                                           Padding(
                                                             padding: EdgeInsets.only(
                                                                 left:
-                                                                    parentWidth *
-                                                                        0.03),
+                                                                parentWidth *
+                                                                    0.03),
                                                             child: Text(
                                                               "22 Tyre",
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .black54,
                                                                   fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
+                                                                  FontWeight
+                                                                      .w400,
                                                                   fontSize:
-                                                                      SizeConfig
-                                                                              .blockSizeHorizontal *
-                                                                          4.0,
+                                                                  SizeConfig
+                                                                      .blockSizeHorizontal *
+                                                                      4.0,
                                                                   fontFamily:
-                                                                      'Roboto_Regular'),
+                                                                  'Roboto_Regular'),
                                                             ),
                                                           ),
                                                         ],
@@ -3363,15 +3364,15 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   0.02),
                                           child: Container(
                                             height:
-                                                SizeConfig.screenWidth * 0.003,
+                                            SizeConfig.screenWidth * 0.003,
                                             color: Colors.black12,
-                                            child: const Row(
-                                              children: [
+                                            child: Row(
+                                              children: const [
                                                 Text(
                                                   "hii",
                                                   style: TextStyle(
                                                       color:
-                                                          Colors.transparent),
+                                                      Colors.transparent),
                                                 ),
                                               ],
                                             ),
@@ -3547,12 +3548,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               child: Container(
                                 height: SizeConfig.screenWidth * 0.003,
                                 color: Colors.black12,
-                                child: const Row(
-                                  children: [
+                                child: Row(
+                                  children: const [
                                     Text(
                                       "hii",
                                       style:
-                                          TextStyle(color: Colors.transparent),
+                                      TextStyle(color: Colors.transparent),
                                     ),
                                   ],
                                 ),
@@ -3574,7 +3575,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                           .withOpacity(1.0),
                                       fontWeight: FontWeight.w400,
                                       fontSize:
-                                          SizeConfig.blockSizeHorizontal * 3.5,
+                                      SizeConfig.blockSizeHorizontal * 3.5,
                                     ),
                                   ),
                                   contentPadding: EdgeInsets.only(
@@ -3582,10 +3583,10 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       right: parentWidth * 0.05),
                                   enabledBorder: const UnderlineInputBorder(
                                       borderSide:
-                                          BorderSide(color: Colors.black12)),
+                                      BorderSide(color: Colors.black12)),
                                   focusedBorder: const UnderlineInputBorder(
                                       borderSide:
-                                          BorderSide(color: Colors.black12)),
+                                      BorderSide(color: Colors.black12)),
                                 ),
                                 onFieldSubmitted: (val) {
                                   /*if(mounted){
@@ -3606,7 +3607,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               ),
                               child: Row(
                                 children: [
-                                /*  SizedBox(
+                                  /*  SizedBox(
                                     height: SizeConfig.screenHeight * 0.07,
                                     width: SizeConfig.screenWidth * 0.07,
                                     child: Column(
@@ -3645,7 +3646,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                               color: Colors.black54,
                                               fontWeight: FontWeight.w400,
                                               fontSize: SizeConfig
-                                                      .blockSizeHorizontal *
+                                                  .blockSizeHorizontal *
                                                   3.5,
                                               fontFamily: 'Roboto_Medium'),
                                         ),
@@ -3676,7 +3677,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                             controller: lengthController,
                                             // focusNode: _cityFocus,
                                             textInputAction:
-                                                TextInputAction.done,
+                                            TextInputAction.done,
                                             decoration: InputDecoration(
                                               label: RichText(
                                                 text: TextSpan(
@@ -3687,7 +3688,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                         .withOpacity(1.0),
                                                     fontWeight: FontWeight.w400,
                                                     fontSize: SizeConfig
-                                                            .blockSizeHorizontal *
+                                                        .blockSizeHorizontal *
                                                         3.5,
                                                   ),
                                                 ),
@@ -3697,7 +3698,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                       .UNSELECT_TYPE_COLOR
                                                       .withOpacity(1.0),
                                                   fontSize: SizeConfig
-                                                          .blockSizeHorizontal *
+                                                      .blockSizeHorizontal *
                                                       3.5,
                                                   fontFamily: 'Roboto_Regular'),
                                               border: const OutlineInputBorder(
@@ -3705,10 +3706,10 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                       width: 1.0,
                                                       color: Colors.black)),
                                               focusedBorder:
-                                                  const OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          width: 1.0,
-                                                          color: Colors.black)),
+                                              const OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      width: 1.0,
+                                                      color: Colors.black)),
                                             ),
                                           ),
                                         ),
@@ -3803,7 +3804,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize:
-                                        SizeConfig.blockSizeHorizontal * 4.5,
+                                    SizeConfig.blockSizeHorizontal * 4.5,
                                     fontWeight: FontWeight.w500,
                                     fontFamily: 'Roboto_Medium'),
                               ),
@@ -3813,9 +3814,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                   if (mounted) {
                                     setState(() {
                                       hideAllVehicleTypeField =
-                                          !hideAllVehicleTypeField;
+                                      !hideAllVehicleTypeField;
                                       showAllVehicleTypes =
-                                          !showAllVehicleTypes;
+                                      !showAllVehicleTypes;
                                       submit = 0;
                                       next = 1;
                                       if (paymentDetails == true) {
@@ -3850,7 +3851,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize:
-                                        SizeConfig.blockSizeHorizontal * 3.5,
+                                    SizeConfig.blockSizeHorizontal * 3.5,
                                     fontWeight: FontWeight.w400,
                                     fontFamily: 'Roboto_Regular'),
                               ),
@@ -3869,20 +3870,20 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                 ),),*/
                               Padding(
                                   padding:
-                                      EdgeInsets.only(left: parentWidth * 0.0),
+                                  EdgeInsets.only(left: parentWidth * 0.0),
                                   child: /*vehicleType == 1 || vehicleType == 2 ?*/
-                                      Text("${carryingCapacityController.text} RLW(kg)",
+                                  Text("${carryingCapacityController.text} RLW(kg)",
                                     style: TextStyle(
                                         color: tyreTypes == 0
                                             ? Colors.black26
                                             : CommonColor.BLACK_COLOR,
                                         fontWeight: FontWeight.w400,
                                         fontSize:
-                                            SizeConfig.blockSizeHorizontal *
-                                                3.5,
+                                        SizeConfig.blockSizeHorizontal *
+                                            3.5,
                                         fontFamily: 'Roboto_Regular'),
                                   )
-                                  ),
+                              ),
                               Container(
                                 height: parentHeight * 0.035,
                                 width: parentWidth * 0.003,
@@ -3893,7 +3894,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize:
-                                        SizeConfig.blockSizeHorizontal * 3.5,
+                                    SizeConfig.blockSizeHorizontal * 3.5,
                                     fontWeight: FontWeight.w400,
                                     fontFamily: 'Roboto_Regular'),
                               ),
@@ -3913,15 +3914,15 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       color: Colors.black26,
                                       fontWeight: FontWeight.w400,
                                       fontSize:
-                                          SizeConfig.blockSizeHorizontal * 3.5,
+                                      SizeConfig.blockSizeHorizontal * 3.5,
                                     ),
                                     children: [
                                       TextSpan(
                                           text:
-                                              ' ${vehicleNumberController.text}',
+                                          ' ${vehicleNumberController.text}',
                                           style: TextStyle(
                                               fontSize: SizeConfig
-                                                      .blockSizeHorizontal *
+                                                  .blockSizeHorizontal *
                                                   4.5,
                                               color: Colors.black,
                                               fontWeight: FontWeight.w400))
@@ -4013,8 +4014,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize:
-                                              SizeConfig.blockSizeHorizontal *
-                                                  4.5,
+                                          SizeConfig.blockSizeHorizontal *
+                                              4.5,
                                           fontWeight: FontWeight.w500,
                                           fontFamily: 'Roboto_Medium'),
                                     ),
@@ -4042,7 +4043,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                     .withOpacity(1.0),
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: SizeConfig
-                                                        .blockSizeHorizontal *
+                                                    .blockSizeHorizontal *
                                                     3.5,
                                               ),
                                             ),
@@ -4050,13 +4051,13 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                 left: parentWidth * 0.05,
                                                 right: parentWidth * 0.05),
                                             enabledBorder:
-                                                const UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: Colors.black26)),
+                                            const UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.black26)),
                                             focusedBorder:
-                                                const UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: Colors.black26)),
+                                            const UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.black26)),
                                             prefixIcon: Icon(
                                               Icons.currency_rupee,
                                               size: SizeConfig.screenHeight *
@@ -4067,7 +4068,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                           style: TextStyle(
                                               color: CommonColor.BLACK_COLOR,
                                               fontSize: SizeConfig
-                                                      .blockSizeHorizontal *
+                                                  .blockSizeHorizontal *
                                                   5.0,
                                               fontFamily: 'Roboto_Medium'),
                                           onFieldSubmitted: (val) {
@@ -4086,7 +4087,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.only(
@@ -4097,8 +4098,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                       style: TextStyle(
                                           color: Colors.black54,
                                           fontSize:
-                                              SizeConfig.blockSizeHorizontal *
-                                                  3.0,
+                                          SizeConfig.blockSizeHorizontal *
+                                              3.0,
                                           fontWeight: FontWeight.w500,
                                           fontFamily: 'Roboto_Regular'),
                                     ),
@@ -4121,14 +4122,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                           },
                                           child: Container(
                                             height:
-                                                SizeConfig.screenHeight * 0.027,
+                                            SizeConfig.screenHeight * 0.027,
                                             width:
-                                                SizeConfig.screenWidth * 0.07,
+                                            SizeConfig.screenWidth * 0.07,
                                             decoration: BoxDecoration(
                                                 color: CommonColor
                                                     .ADVANCE_INCREMENT_COLOR,
                                                 borderRadius:
-                                                    BorderRadius.circular(5)),
+                                                BorderRadius.circular(5)),
                                             child: Icon(
                                               Icons.remove,
                                               color: Colors.white,
@@ -4140,7 +4141,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                         Padding(
                                           padding: EdgeInsets.only(
                                               left:
-                                                  SizeConfig.screenWidth * 0.02,
+                                              SizeConfig.screenWidth * 0.02,
                                               right: SizeConfig.screenWidth *
                                                   0.02),
                                           child: Text(
@@ -4148,7 +4149,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: SizeConfig
-                                                        .blockSizeHorizontal *
+                                                    .blockSizeHorizontal *
                                                     3.7,
                                                 fontWeight: FontWeight.w500,
                                                 fontFamily: 'Roboto_Regular'),
@@ -4166,14 +4167,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                           },
                                           child: Container(
                                             height:
-                                                SizeConfig.screenHeight * 0.027,
+                                            SizeConfig.screenHeight * 0.027,
                                             width:
-                                                SizeConfig.screenWidth * 0.07,
+                                            SizeConfig.screenWidth * 0.07,
                                             decoration: BoxDecoration(
                                                 color: CommonColor
                                                     .ADVANCE_INCREMENT_COLOR,
                                                 borderRadius:
-                                                    BorderRadius.circular(5)),
+                                                BorderRadius.circular(5)),
                                             child: Icon(
                                               Icons.add,
                                               color: Colors.white,
@@ -4194,7 +4195,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                     right: parentWidth * 0.25),
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     GestureDetector(
                                       onDoubleTap: () {},
@@ -4205,7 +4206,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
                                             if (advPayAmountShow == false) {
                                               advPayAmountShow =
-                                                  !advPayAmountShow;
+                                              !advPayAmountShow;
                                             }
                                           });
                                         }
@@ -4223,9 +4224,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   shape: BoxShape.circle,
                                                   color: advancePay == 1
                                                       ? CommonColor
-                                                          .SIGN_UP_TEXT_COLOR
+                                                      .SIGN_UP_TEXT_COLOR
                                                       : CommonColor
-                                                          .WHITE_COLOR),
+                                                      .WHITE_COLOR),
                                             ),
                                             Padding(
                                               padding: EdgeInsets.only(
@@ -4236,10 +4237,10 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                     color: Colors.black,
                                                     fontWeight: FontWeight.w400,
                                                     fontSize: SizeConfig
-                                                            .blockSizeHorizontal *
+                                                        .blockSizeHorizontal *
                                                         4.0,
                                                     fontFamily:
-                                                        'Roboto_Regular'),
+                                                    'Roboto_Regular'),
                                               ),
                                             ),
                                           ],
@@ -4254,7 +4255,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                             advancePay = 2;
                                             if (advPayAmountShow == false) {
                                               advPayAmountShow =
-                                                  !advPayAmountShow;
+                                              !advPayAmountShow;
                                             }
                                           });
                                         }
@@ -4272,9 +4273,9 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   shape: BoxShape.circle,
                                                   color: advancePay == 2
                                                       ? CommonColor
-                                                          .SIGN_UP_TEXT_COLOR
+                                                      .SIGN_UP_TEXT_COLOR
                                                       : CommonColor
-                                                          .WHITE_COLOR),
+                                                      .WHITE_COLOR),
                                             ),
                                             Padding(
                                               padding: EdgeInsets.only(
@@ -4285,10 +4286,10 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                     color: Colors.black,
                                                     fontWeight: FontWeight.w400,
                                                     fontSize: SizeConfig
-                                                            .blockSizeHorizontal *
+                                                        .blockSizeHorizontal *
                                                         4.0,
                                                     fontFamily:
-                                                        'Roboto_Regular'),
+                                                    'Roboto_Regular'),
                                               ),
                                             ),
                                           ],
@@ -4311,7 +4312,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                         color: Colors.white,
                                         borderRadius: BorderRadius.circular(7),
                                         border:
-                                            Border.all(color: Colors.black12)),
+                                        Border.all(color: Colors.black12)),
                                     child: Row(
                                       children: [
                                         Padding(
@@ -4329,34 +4330,34 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                 top: parentHeight * 0.01),
                                             child: TextFormField(
                                               textInputAction:
-                                                  TextInputAction.next,
+                                              TextInputAction.next,
                                               enabled: false,
                                               decoration: InputDecoration(
                                                 hintText: fareVal == 0.0 ||
-                                                        totalFareController
-                                                            .text.isEmpty
+                                                    totalFareController
+                                                        .text.isEmpty
                                                     ? "Amount"
                                                     : ((count / 100) * fareVal)
-                                                        .toStringAsFixed(1),
+                                                    .toStringAsFixed(1),
                                                 hintStyle: TextStyle(
                                                   color: fareVal == 0.0 ||
-                                                          totalFareController
-                                                              .text.isEmpty
+                                                      totalFareController
+                                                          .text.isEmpty
                                                       ? CommonColor
-                                                          .UNSELECT_TYPE_COLOR
-                                                          .withOpacity(1.0)
+                                                      .UNSELECT_TYPE_COLOR
+                                                      .withOpacity(1.0)
                                                       : Colors.black,
                                                   fontWeight: FontWeight.w400,
                                                   fontFamily: 'Roboto_Medium',
                                                   fontSize: SizeConfig
-                                                          .blockSizeHorizontal *
+                                                      .blockSizeHorizontal *
                                                       6.0,
                                                 ),
                                                 contentPadding: EdgeInsets.only(
                                                     left: parentWidth * 0.05,
                                                     right: parentWidth * 0.05,
                                                     bottom:
-                                                        parentHeight * 0.016),
+                                                    parentHeight * 0.016),
                                                 /*enabledBorder:
                                                     const UnderlineInputBorder(
                                                         borderSide: BorderSide(
@@ -4380,8 +4381,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                             color: Colors.transparent,
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              MainAxisAlignment
+                                                  .spaceBetween,
                                               children: [
                                                 GestureDetector(
                                                   onDoubleTap: () {},
@@ -4395,17 +4396,17 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   },
                                                   child: Container(
                                                     height:
-                                                        parentHeight * 0.025,
+                                                    parentHeight * 0.025,
                                                     width: parentWidth * 0.15,
                                                     decoration: BoxDecoration(
                                                         color: advPay == 1
                                                             ? CommonColor
-                                                                .SIGN_UP_TEXT_COLOR
+                                                            .SIGN_UP_TEXT_COLOR
                                                             : CommonColor
-                                                                .WEIGHT_COLOR,
+                                                            .WEIGHT_COLOR,
                                                         borderRadius:
-                                                            BorderRadius
-                                                                .circular(10)),
+                                                        BorderRadius
+                                                            .circular(10)),
                                                     child: Center(
                                                       child: Text(
                                                         "Online",
@@ -4413,14 +4414,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                             color: advPay == 1
                                                                 ? Colors.white
                                                                 : Colors
-                                                                    .black54,
+                                                                .black54,
                                                             fontWeight:
-                                                                FontWeight.w400,
+                                                            FontWeight.w400,
                                                             fontSize: SizeConfig
-                                                                    .blockSizeHorizontal *
+                                                                .blockSizeHorizontal *
                                                                 3.0,
                                                             fontFamily:
-                                                                'Roboto_Regular'),
+                                                            'Roboto_Regular'),
                                                       ),
                                                     ),
                                                   ),
@@ -4437,17 +4438,17 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   },
                                                   child: Container(
                                                     height:
-                                                        parentHeight * 0.025,
+                                                    parentHeight * 0.025,
                                                     width: parentWidth * 0.15,
                                                     decoration: BoxDecoration(
                                                         color: advPay == 2
                                                             ? CommonColor
-                                                                .SIGN_UP_TEXT_COLOR
+                                                            .SIGN_UP_TEXT_COLOR
                                                             : CommonColor
-                                                                .WEIGHT_COLOR,
+                                                            .WEIGHT_COLOR,
                                                         borderRadius:
-                                                            BorderRadius
-                                                                .circular(10)),
+                                                        BorderRadius
+                                                            .circular(10)),
                                                     child: Center(
                                                       child: Text(
                                                         "Cash",
@@ -4455,14 +4456,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                             color: advPay == 2
                                                                 ? Colors.white
                                                                 : Colors
-                                                                    .black54,
+                                                                .black54,
                                                             fontWeight:
-                                                                FontWeight.w400,
+                                                            FontWeight.w400,
                                                             fontSize: SizeConfig
-                                                                    .blockSizeHorizontal *
+                                                                .blockSizeHorizontal *
                                                                 3.0,
                                                             fontFamily:
-                                                                'Roboto_Regular'),
+                                                            'Roboto_Regular'),
                                                       ),
                                                     ),
                                                   ),
@@ -4478,10 +4479,10 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               ),
                               Padding(
                                 padding:
-                                    EdgeInsets.only(top: parentHeight * 0.01),
+                                EdgeInsets.only(top: parentHeight * 0.01),
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Padding(
                                       padding: EdgeInsets.only(
@@ -4492,8 +4493,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                         style: TextStyle(
                                             color: Colors.black54,
                                             fontSize:
-                                                SizeConfig.blockSizeHorizontal *
-                                                    3.0,
+                                            SizeConfig.blockSizeHorizontal *
+                                                3.0,
                                             fontWeight: FontWeight.w500,
                                             fontFamily: 'Roboto_Regular'),
                                       ),
@@ -4508,7 +4509,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                     right: parentWidth * 0.25),
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     GestureDetector(
                                       onDoubleTap: () {},
@@ -4519,7 +4520,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
                                             if (deliverPayAmountShow == false) {
                                               deliverPayAmountShow =
-                                                  !deliverPayAmountShow;
+                                              !deliverPayAmountShow;
                                             }
                                           });
                                         }
@@ -4535,7 +4536,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                 shape: BoxShape.circle,
                                                 color: deliveryPay == 1
                                                     ? CommonColor
-                                                        .SIGN_UP_TEXT_COLOR
+                                                    .SIGN_UP_TEXT_COLOR
                                                     : CommonColor.WHITE_COLOR),
                                           ),
                                           Padding(
@@ -4547,7 +4548,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   color: Colors.black,
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: SizeConfig
-                                                          .blockSizeHorizontal *
+                                                      .blockSizeHorizontal *
                                                       4.0,
                                                   fontFamily: 'Roboto_Regular'),
                                             ),
@@ -4564,7 +4565,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
 
                                             if (deliverPayAmountShow == false) {
                                               deliverPayAmountShow =
-                                                  !deliverPayAmountShow;
+                                              !deliverPayAmountShow;
                                             }
                                           });
                                         }
@@ -4580,7 +4581,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                 shape: BoxShape.circle,
                                                 color: deliveryPay == 2
                                                     ? CommonColor
-                                                        .SIGN_UP_TEXT_COLOR
+                                                    .SIGN_UP_TEXT_COLOR
                                                     : CommonColor.WHITE_COLOR),
                                           ),
                                           Padding(
@@ -4592,7 +4593,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                   color: Colors.black,
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: SizeConfig
-                                                          .blockSizeHorizontal *
+                                                      .blockSizeHorizontal *
                                                       4.0,
                                                   fontFamily: 'Roboto_Regular'),
                                             ),
@@ -4616,7 +4617,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                         color: Colors.white,
                                         borderRadius: BorderRadius.circular(7),
                                         border:
-                                            Border.all(color: Colors.black12)),
+                                        Border.all(color: Colors.black12)),
                                     child: Row(
                                       children: [
                                         Padding(
@@ -4635,36 +4636,36 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                             child: TextFormField(
                                               enabled: false,
                                               textInputAction:
-                                                  TextInputAction.done,
+                                              TextInputAction.done,
                                               decoration: InputDecoration(
                                                 hintText:
-                                                    deliverPayment == 0.0 ||
-                                                            totalFareController
-                                                                .text.isEmpty
-                                                        ? "Amount"
-                                                        : deliverPayment
-                                                            .toStringAsFixed(1),
+                                                deliverPayment == 0.0 ||
+                                                    totalFareController
+                                                        .text.isEmpty
+                                                    ? "Amount"
+                                                    : deliverPayment
+                                                    .toStringAsFixed(1),
                                                 hintStyle: TextStyle(
                                                   color: deliverPayment ==
-                                                              0.0 ||
-                                                          totalFareController
-                                                              .text.isEmpty
+                                                      0.0 ||
+                                                      totalFareController
+                                                          .text.isEmpty
                                                       ? CommonColor
-                                                          .UNSELECT_TYPE_COLOR
-                                                          .withOpacity(1.0)
+                                                      .UNSELECT_TYPE_COLOR
+                                                      .withOpacity(1.0)
                                                       : Colors.black,
                                                   fontWeight: FontWeight.w400,
                                                   fontFamily: 'Roboto_Medium',
                                                   fontSize: SizeConfig
-                                                          .blockSizeHorizontal *
+                                                      .blockSizeHorizontal *
                                                       6.0,
                                                 ),
                                                 contentPadding: EdgeInsets.only(
                                                     left: parentWidth * 0.05,
                                                     right: parentWidth * 0.05,
                                                     bottom:
-                                                        parentHeight * 0.016),
-                                              /*  enabledBorder:
+                                                    parentHeight * 0.016),
+                                                /*  enabledBorder:
                                                     const UnderlineInputBorder(
                                                         borderSide: BorderSide(
                                                             color: Colors
@@ -4687,8 +4688,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                             color: Colors.transparent,
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              MainAxisAlignment
+                                                  .spaceBetween,
                                               children: [
                                                 GestureDetector(
                                                   onDoubleTap: () {},
@@ -4697,39 +4698,39 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                       setState(() {
                                                         deliverPay = 1;
                                                         deliveryPayMethod =
-                                                            "Online";
+                                                        "Online";
                                                       });
                                                     }
                                                   },
                                                   child: Container(
                                                     height:
-                                                        parentHeight * 0.025,
+                                                    parentHeight * 0.025,
                                                     width: parentWidth * 0.15,
                                                     decoration: BoxDecoration(
                                                         color: deliverPay == 1
                                                             ? CommonColor
-                                                                .SIGN_UP_TEXT_COLOR
+                                                            .SIGN_UP_TEXT_COLOR
                                                             : CommonColor
-                                                                .WEIGHT_COLOR,
+                                                            .WEIGHT_COLOR,
                                                         borderRadius:
-                                                            BorderRadius
-                                                                .circular(10)),
+                                                        BorderRadius
+                                                            .circular(10)),
                                                     child: Center(
                                                       child: Text(
                                                         "Online",
                                                         style: TextStyle(
                                                             color: deliverPay ==
-                                                                    1
+                                                                1
                                                                 ? Colors.white
                                                                 : Colors
-                                                                    .black54,
+                                                                .black54,
                                                             fontWeight:
-                                                                FontWeight.w400,
+                                                            FontWeight.w400,
                                                             fontSize: SizeConfig
-                                                                    .blockSizeHorizontal *
+                                                                .blockSizeHorizontal *
                                                                 3.0,
                                                             fontFamily:
-                                                                'Roboto_Regular'),
+                                                            'Roboto_Regular'),
                                                       ),
                                                     ),
                                                   ),
@@ -4741,39 +4742,39 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                                       setState(() {
                                                         deliverPay = 2;
                                                         deliveryPayMethod =
-                                                            "Cash";
+                                                        "Cash";
                                                       });
                                                     }
                                                   },
                                                   child: Container(
                                                     height:
-                                                        parentHeight * 0.025,
+                                                    parentHeight * 0.025,
                                                     width: parentWidth * 0.15,
                                                     decoration: BoxDecoration(
                                                         color: deliverPay == 2
                                                             ? CommonColor
-                                                                .SIGN_UP_TEXT_COLOR
+                                                            .SIGN_UP_TEXT_COLOR
                                                             : CommonColor
-                                                                .WEIGHT_COLOR,
+                                                            .WEIGHT_COLOR,
                                                         borderRadius:
-                                                            BorderRadius
-                                                                .circular(10)),
+                                                        BorderRadius
+                                                            .circular(10)),
                                                     child: Center(
                                                       child: Text(
                                                         "Cash",
                                                         style: TextStyle(
                                                             color: deliverPay ==
-                                                                    2
+                                                                2
                                                                 ? Colors.white
                                                                 : Colors
-                                                                    .black54,
+                                                                .black54,
                                                             fontWeight:
-                                                                FontWeight.w400,
+                                                            FontWeight.w400,
                                                             fontSize: SizeConfig
-                                                                    .blockSizeHorizontal *
+                                                                .blockSizeHorizontal *
                                                                 3.0,
                                                             fontFamily:
-                                                                'Roboto_Regular'),
+                                                            'Roboto_Regular'),
                                                       ),
                                                     ),
                                                   ),
@@ -4792,7 +4793,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               ),
                             ],
                           ),
-                         /* GestureDetector(
+                          /* GestureDetector(
                             onTap: () {
                               if (mounted) {
                                 setState(() {
@@ -4891,8 +4892,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize:
-                                            SizeConfig.blockSizeHorizontal *
-                                                4.5,
+                                        SizeConfig.blockSizeHorizontal *
+                                            4.5,
                                         fontWeight: FontWeight.w500,
                                         fontFamily: 'Roboto_Medium'),
                                   ),
@@ -4905,7 +4906,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                         paymentFieldHide = !paymentFieldHide;
                                         paymentFieldShow = !paymentFieldShow;
                                         submit = 0;
-                                        next = 2;
+                                        next = 3;
                                       });
                                     }
                                   },
@@ -4930,15 +4931,15 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               color: Colors.transparent,
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     "Total Fare",
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize:
-                                            SizeConfig.blockSizeHorizontal *
-                                                3.5,
+                                        SizeConfig.blockSizeHorizontal *
+                                            3.5,
                                         fontWeight: FontWeight.w500,
                                         fontFamily: 'Roboto_Regular'),
                                   ),
@@ -4949,16 +4950,16 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                             color: Colors.black,
                                             fontWeight: FontWeight.w500,
                                             fontSize:
-                                                SizeConfig.blockSizeHorizontal *
-                                                    5.0,
+                                            SizeConfig.blockSizeHorizontal *
+                                                5.0,
                                             fontFamily: "Roboto_Regular"),
                                         children: [
                                           TextSpan(
                                               text:
-                                                  ' ${totalFareController.text}',
+                                              ' ${totalFareController.text}',
                                               style: TextStyle(
                                                   fontSize: SizeConfig
-                                                          .blockSizeHorizontal *
+                                                      .blockSizeHorizontal *
                                                       4.5,
                                                   color: Colors.black54,
                                                   fontWeight: FontWeight.w400))
@@ -4982,8 +4983,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                     style: TextStyle(
                                         color: CommonColor.REGISTER_HINT_COLOR,
                                         fontSize:
-                                            SizeConfig.blockSizeHorizontal *
-                                                3.5,
+                                        SizeConfig.blockSizeHorizontal *
+                                            3.5,
                                         fontWeight: FontWeight.w500,
                                         fontFamily: 'Roboto_Regular'),
                                   ),
@@ -5001,14 +5002,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               color: Colors.transparent,
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     width: parentWidth * 0.3,
                                     color: Colors.transparent,
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           advancePay == 1
@@ -5017,7 +5018,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: SizeConfig
-                                                      .blockSizeHorizontal *
+                                                  .blockSizeHorizontal *
                                                   3.7,
                                               fontWeight: FontWeight.w500,
                                               fontFamily: 'Roboto_Regular'),
@@ -5026,14 +5027,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                           height: parentHeight * 0.035,
                                           width: parentWidth * 0.003,
                                           color:
-                                              CommonColor.UNSELECT_TYPE_COLOR,
+                                          CommonColor.UNSELECT_TYPE_COLOR,
                                         ),
                                         Text(
                                           advPay == 1 ? "Online" : "Cash",
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: SizeConfig
-                                                      .blockSizeHorizontal *
+                                                  .blockSizeHorizontal *
                                                   3.7,
                                               fontWeight: FontWeight.w500,
                                               fontFamily: 'Roboto_Regular'),
@@ -5048,15 +5049,15 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                             color: Colors.black,
                                             fontWeight: FontWeight.w500,
                                             fontSize:
-                                                SizeConfig.blockSizeHorizontal *
-                                                    5.0,
+                                            SizeConfig.blockSizeHorizontal *
+                                                5.0,
                                             fontFamily: "Roboto_Regular"),
                                         children: [
                                           TextSpan(
                                               text: ' ${((count / 100) * fareVal).toStringAsFixed(1)}',
                                               style: TextStyle(
                                                   fontSize: SizeConfig
-                                                          .blockSizeHorizontal *
+                                                      .blockSizeHorizontal *
                                                       4.5,
                                                   color: Colors.black54,
                                                   fontWeight: FontWeight.w400))
@@ -5080,8 +5081,8 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                     style: TextStyle(
                                         color: CommonColor.REGISTER_HINT_COLOR,
                                         fontSize:
-                                            SizeConfig.blockSizeHorizontal *
-                                                3.5,
+                                        SizeConfig.blockSizeHorizontal *
+                                            3.5,
                                         fontWeight: FontWeight.w500,
                                         fontFamily: 'Roboto_Regular'),
                                   ),
@@ -5099,14 +5100,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                               color: Colors.transparent,
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     width: parentWidth * 0.3,
                                     color: Colors.transparent,
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           deliveryPay == 1
@@ -5115,7 +5116,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: SizeConfig
-                                                      .blockSizeHorizontal *
+                                                  .blockSizeHorizontal *
                                                   3.7,
                                               fontWeight: FontWeight.w500,
                                               fontFamily: 'Roboto_Regular'),
@@ -5124,14 +5125,14 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                           height: parentHeight * 0.035,
                                           width: parentWidth * 0.003,
                                           color:
-                                              CommonColor.UNSELECT_TYPE_COLOR,
+                                          CommonColor.UNSELECT_TYPE_COLOR,
                                         ),
                                         Text(
                                           deliveryPayMethod,
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: SizeConfig
-                                                      .blockSizeHorizontal *
+                                                  .blockSizeHorizontal *
                                                   3.7,
                                               fontWeight: FontWeight.w500,
                                               fontFamily: 'Roboto_Regular'),
@@ -5146,15 +5147,15 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                                             color: Colors.black,
                                             fontWeight: FontWeight.w500,
                                             fontSize:
-                                                SizeConfig.blockSizeHorizontal *
-                                                    5.0,
+                                            SizeConfig.blockSizeHorizontal *
+                                                5.0,
                                             fontFamily: "Roboto_Regular"),
                                         children: [
                                           TextSpan(
                                               text: ' ${deliverPayment.toStringAsFixed(1)}',
                                               style: TextStyle(
                                                   fontSize: SizeConfig
-                                                          .blockSizeHorizontal *
+                                                      .blockSizeHorizontal *
                                                       4.5,
                                                   color: Colors.black54,
                                                   fontWeight: FontWeight.w400))
@@ -5209,212 +5210,186 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
           top: parentHeight * 0.05,
           left: parentWidth * 0.1,
           right: parentWidth * 0.1),
-      child: Stack(
-        children: [
-          GestureDetector(
-            onTap: () {
+      child: GestureDetector(
+        onDoubleTap: () {},
+        onTap: () {
 
 
-              if(next == 0){
-                if (quantityLoadController.text.isEmpty) {
-                  loadError =
-                  "Please Enter Quantity of Loads";
-                  if (mounted) {
-                    setState(() {
-                      loadErrorShow = true;
-                      hideLoadError();
-                    });
-                  }
-                } else if(loadUnit == 0){
-                  loadError =
-                  "Please Select Unit of Weight";
-                  if (mounted) {
-                    setState(() {
-                      loadErrorShow = true;
-                      hideLoadError();
-                    });
-                  }
-                }  else if (loadType == 0) {
-                  loadError = "Please Select Load Type.";
-                  if (mounted) {
-                    setState(() {
-                      loadErrorShow = true;
-                      hideLoadError();
-                    });
-                  }
-                } else if (images.isEmpty) {
-                  loadError = "One load image must be required.";
-                  if (mounted) {
-                    setState(() {
-                      loadErrorShow = true;
-                      hideLoadError();
-                    });
-                  }
-                } else {
-                  if (mounted) {
-                    setState(() {
-                      showAllGoodsField = !showAllGoodsField;
-                      hideAllGoodsField = !hideAllGoodsField;
-                      vehicleDetails = !vehicleDetails;
-                      next = 1;
-                    });
-                  }
-                }
+          if(next == 0){
+            if (quantityLoadController.text.isEmpty) {
+              loadError =
+              "Please Enter Quantity of Loads";
+              if (mounted) {
+                setState(() {
+                  loadErrorShow = true;
+                  hideLoadError();
+                });
               }
-              else if(next == 1){
-                if (vehicleType == 0) {
-                  vehicleError = "Please Select Vehicle Type.";
-                  if (mounted) {
-                    setState(() {
-                      vehicleErrorShow = true;
-                      hideVehicleError();
-                    });
-                  }
-                }else if (vehicleNumberController.text.isEmpty) {
-                  vehicleError = "Please add number of Vehicles";
-                  if (mounted) {
-                    setState(() {
-                      vehicleErrorShow = true;
-                      hideVehicleError();
-                    });
-                  }
-                }else if (lengthController.text.isEmpty) {
-                  vehicleError = "Please Add Length of Vehicle.";
-                  if (mounted) {
-                    setState(() {
-                      vehicleErrorShow = true;
-                      hideVehicleError();
-                    });
-                  }
-                } else {
-                  if (mounted) {
-                    setState(() {
-                      showAllVehicleTypes = !showAllVehicleTypes;
-                      hideAllVehicleTypeField =
-                      !hideAllVehicleTypeField;
-                      paymentDetails = !paymentDetails;
-                      print(paymentDetails);
-                      next = 2;
-                    });
-                  }
-                }
+            } else if(loadUnit == 0){
+              loadError =
+              "Please Select Unit of Weight";
+              if (mounted) {
+                setState(() {
+                  loadErrorShow = true;
+                  hideLoadError();
+                });
               }
-              else if(next == 2){
-                if (totalFareController.text.isEmpty) {
-                  paymentError =
-                  "Please total fare amount must be required.";
-                  if (mounted) {
-                    setState(() {
-                      paymentErrorShow = true;
-                      hidePaymentError();
-                    });
-                  }
-                } else if (advancePay == 0) {
-                  paymentError =
-                  "Select Who's paid advance payment.";
-                  if (mounted) {
-                    setState(() {
-                      paymentErrorShow = true;
-                      hidePaymentError();
-                    });
-                  }
-                } else if (advPay == 0) {
-                  paymentError =
-                  "Select advance payment method.";
-                  if (mounted) {
-                    setState(() {
-                      paymentErrorShow = true;
-                      hidePaymentError();
-                    });
-                  }
-                } else if (deliveryPay == 0) {
-                  paymentError =
-                  "Select Who's paid deliver payment.";
-                  if (mounted) {
-                    setState(() {
-                      paymentErrorShow = true;
-                      hidePaymentError();
-                    });
-                  }
-                } else if (deliverPay == 0) {
-                  paymentError =
-                  "Select deliver payment method.";
-                  if (mounted) {
-                    setState(() {
-                      paymentErrorShow = true;
-                      hidePaymentError();
-                    });
-                  }
-                } else {
-                  paymentFieldShow = !paymentFieldShow;
-                  paymentFieldHide = !paymentFieldHide;
-                  if(mounted){
-                    setState(() {
-                      next = 3;
-                      print(next);
-                    });
-                  }
-                }
+            }  else if (loadType == 0) {
+              loadError = "Please Select Load Type.";
+              if (mounted) {
+                setState(() {
+                  loadErrorShow = true;
+                  hideLoadError();
+                });
               }
-              else{
-
+            } else if (images.isEmpty) {
+              loadError = "One load image must be required.";
+              if (mounted) {
+                setState(() {
+                  loadErrorShow = true;
+                  hideLoadError();
+                });
               }
+            } else {
+              if (mounted) {
+                setState(() {
+                  showAllGoodsField = !showAllGoodsField;
+                  hideAllGoodsField = !hideAllGoodsField;
+                  vehicleDetails = !vehicleDetails;
+                  next = 1;
+                });
+              }
+            }
+          }
+          else if(next == 1){
+            if (vehicleType == 0) {
+              vehicleError = "Please Select Vehicle Type.";
+              if (mounted) {
+                setState(() {
+                  vehicleErrorShow = true;
+                  hideVehicleError();
+                });
+              }
+            }else if (vehicleNumberController.text.isEmpty) {
+              vehicleError = "Please add number of Vehicles";
+              if (mounted) {
+                setState(() {
+                  vehicleErrorShow = true;
+                  hideVehicleError();
+                });
+              }
+            }else if (lengthController.text.isEmpty) {
+              vehicleError = "Please Add Length of Vehicle.";
+              if (mounted) {
+                setState(() {
+                  vehicleErrorShow = true;
+                  hideVehicleError();
+                });
+              }
+            } else {
+              if (mounted) {
+                setState(() {
+                  showAllVehicleTypes = !showAllVehicleTypes;
+                  hideAllVehicleTypeField =
+                  !hideAllVehicleTypeField;
+                  paymentDetails = !paymentDetails;
+                  print(paymentDetails);
+                  next = 2;
+                });
+              }
+            }
+          }
+          else if(next == 2){
+            if (totalFareController.text.isEmpty) {
+              paymentError =
+              "Please total fare amount must be required.";
+              if (mounted) {
+                setState(() {
+                  paymentErrorShow = true;
+                  hidePaymentError();
+                });
+              }
+            } else if (advancePay == 0) {
+              paymentError =
+              "Select Who's paid advance payment.";
+              if (mounted) {
+                setState(() {
+                  paymentErrorShow = true;
+                  hidePaymentError();
+                });
+              }
+            } else if (advPay == 0) {
+              paymentError =
+              "Select advance payment method.";
+              if (mounted) {
+                setState(() {
+                  paymentErrorShow = true;
+                  hidePaymentError();
+                });
+              }
+            } else if (deliveryPay == 0) {
+              paymentError =
+              "Select Who's paid deliver payment.";
+              if (mounted) {
+                setState(() {
+                  paymentErrorShow = true;
+                  hidePaymentError();
+                });
+              }
+            } else if (deliverPay == 0) {
+              paymentError =
+              "Select deliver payment method.";
+              if (mounted) {
+                setState(() {
+                  paymentErrorShow = true;
+                  hidePaymentError();
+                });
+              }
+            } else {
+              paymentFieldShow = !paymentFieldShow;
+              paymentFieldHide = !paymentFieldHide;
+              submit = 1;
+            }
+          }
 
 
-            },
-            child: Container(
-              height: parentHeight * 0.055,
-              width: parentWidth * 0.6,
-              decoration: BoxDecoration(
-                  color: CommonColor.SIGN_UP_TEXT_COLOR,
-                  borderRadius: BorderRadius.circular(15)),
-              child: Center(
-                child: Text(
-                  next == 0 ? "Next" : next == 1 ? "Next" : next == 2 ? "Done" : "",
-                  style: TextStyle(
-                      color: CommonColor.WHITE_COLOR,
-                      fontSize: SizeConfig.blockSizeHorizontal * 5.0,
-                      fontFamily: 'Roboto_Bold'),
-                ),
-              ),
+          if(submit == 1){
+            if (isLoading == false) {
+              print("One Time");
+
+              if(mounted){
+                setState(() {
+                  isLoading = true;
+                  uploadImages().then((value) {
+                    createCompanyPost();
+                  });
+                });
+              }
+            }
+          }
+
+
+        },
+        child: Container(
+          height: parentHeight * 0.055,
+          width: parentWidth * 0.6,
+          decoration: BoxDecoration(
+              color: /*submit == 0 || deliverPay == 0
+                  ? CommonColor.LOAD_SUBMIT_COLOR
+                  : */CommonColor.SIGN_UP_TEXT_COLOR,
+              borderRadius: BorderRadius.circular(15)),
+          child: Center(
+            child: Text(
+              next == 0 ? "Next" : next == 1 ? "Next" :"Submit",
+              style: TextStyle(
+                  color: /*submit == 0
+                      ? CommonColor.LOAD_SUBMIT_TEXT_COLOR
+                      : */CommonColor.WHITE_COLOR,
+                  fontSize: SizeConfig.blockSizeHorizontal * 5.0,
+                  fontFamily: 'Roboto_Bold'),
             ),
           ),
-          Visibility(
-            visible: next == 3 ? true : false,
-            child: GestureDetector(
-              onTap: (){
-                if (isLoading == false) {
-                  print("One Time");
-
-                  if(mounted){
-                    setState(() {
-                      isLoading = true;
-                      uploadImages().then((value) {
-                        createCompanyPost();
-                      });
-                    });
-                  }
-                }
-              },
-              child: Container(
-                height: parentHeight * 0.055,
-                width: parentWidth * 0.6,
-                decoration: BoxDecoration(
-                    color: CommonColor.SIGN_UP_TEXT_COLOR,
-                    borderRadius: BorderRadius.circular(15)),
-                child: Center(
-                  child: Text(
-                    "Submit",
-                    style: TextStyle(
-                        color: CommonColor.WHITE_COLOR,
-                        fontSize: SizeConfig.blockSizeHorizontal * 5.0,
-                        fontFamily: 'Roboto_Bold'),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -5528,12 +5503,12 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
     print(url);
 
     String? sessionToken =
-        GetStorage().read<String>(ConstantData.userAccessToken);
+    GetStorage().read<String>(ConstantData.userAccessToken);
 
     print(sessionToken);
 
     String? pickUpAddressId =
-        GetStorage().read<String>(ConstantData.pickupAddressId);
+    GetStorage().read<String>(ConstantData.pickupAddressId);
 
     print("pickUpAddressId $pickUpAddressId");
 
@@ -5552,9 +5527,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
             "city": widget.city,
             "state": widget.state,
             "country": widget.country,
-            "postalCode": widget.postalCode,
-            "district": widget.taluka,
-            "laneNumber": widget.lane
+            "postalCode": widget.postalCode
           },
           "coordinate": {
             "latitude": widget.lat,
@@ -5562,22 +5535,22 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
           }
         },
         "pickupDate": DateTime(pickUpDate!.year, pickUpDate!.month,
-                pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute)
+            pickUpDate!.day, pickUpTime!.hour, pickUpTime!.minute)
             .toIso8601String(),
         "loadDetail": {
           "load": int.parse(quantityLoadController.text),
           "loadUnit": loadUnit == 1
               ? "Ton"
               : loadUnit == 2
-                  ? "K.G."
-                  : "",
+              ? "K.G."
+              : "",
           "loadType": loadType == 1
               ? "Pack Load"
               : loadType == 2
-                  ? "Loose Load"
-                  : loadType == 3
-                      ? "Over Load"
-                      : "",
+              ? "Loose Load"
+              : loadType == 3
+              ? "Over Load"
+              : "",
           "goodsImage": uploadImage,
           "loadSize": {
             "length": vehicleLengthController.text.isEmpty
@@ -5585,7 +5558,7 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
                 : vehicleLengthController.text,
             "width": widthController.text.isEmpty ? "0" : widthController.text,
             "height":
-                heightController.text.isEmpty ? "0" : heightController.text,
+            heightController.text.isEmpty ? "0" : heightController.text,
           },
           "description": descriptionLoadController.text
         },
@@ -5593,18 +5566,17 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
           "vehicleType": vehicleType == 1
               ? "Open Body"
               : vehicleType == 2
-                  ? "Closed Body"
-                  : vehicleType == 3
-                      ? "Trailor"
-                      : "",
-          "trailorType" : trailerType == 1 ? "Flat Body" : trailerType == 2 ? "Half Body" : trailerType == 3 ? "Car Trailor" : trailerType == 4 ? "Multi Axel" : trailerType == 5 ? "Low Bed" : "",
+              ? "Closed Body"
+              : vehicleType == 3
+              ? "Trailor"
+              : "",
           "capacity": "${int.parse(carryingCapacityController.text)} RLW, KG",
           "quantity": int.parse(vehicleNumberController.text),
           "tyreType": vehicleType == 1 || vehicleType == 2
               ? tyreName
               : vehicleType == 3
-                  ? trailerTyreName
-                  : "",
+              ? trailerTyreName
+              : "",
           "length": int.parse(lengthController.text),
         },
         "fare": int.parse(totalFareController.text),
@@ -5613,26 +5585,26 @@ class _NewLoadScreenFormState extends State<NewLoadScreenForm> {
           "payBy": advancePay == 1
               ? "COMPANY"
               : advancePay == 2
-                  ? "RECEIVER"
-                  : "",
+              ? "RECEIVER"
+              : "",
           "mode": advPay == 1
               ? "ONLINE"
               : advPay == 2
-                  ? "CASH"
-                  : "",
+              ? "CASH"
+              : "",
         },
         "deliveryPayment": {
           "ratio": 100 - count,
           "payBy": deliveryPay == 1
               ? "COMPANY"
               : deliveryPay == 2
-                  ? "RECEIVER"
-                  : "",
+              ? "RECEIVER"
+              : "",
           "mode": deliverPay == 1
               ? "ONLINE"
               : deliverPay == 2
-                  ? "CASH"
-                  : "",
+              ? "CASH"
+              : "",
         }
       };
 

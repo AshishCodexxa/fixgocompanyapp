@@ -268,13 +268,6 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
 
                                         print("llll ${bidData.length}");
 
-
-
-
-
-
-
-
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
@@ -1100,13 +1093,13 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                 GestureDetector(
                   onTap: () {
 
-                    passPickIndexAddress = "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
+                    passPickIndexAddress = "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.district}, ${items[index].pickup.address.laneNumber}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
 
 
                     // print(passPickIndexAddress);
 
                     passLastIndexAddress =
-                    "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
+                    "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.district}, ${items[index].receiver.address.laneNumber} ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
 
 
                     DateTime tempDate = DateFormat("yyyy-MM-dd").parse(items[index].pickupDate);

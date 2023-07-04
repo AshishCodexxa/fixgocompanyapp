@@ -1,3 +1,4 @@
+import 'package:fixgocompanyapp/all_dialogs/post_delete_confirm_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:fixgocompanyapp/data/data_constant/constant_data.dart';
@@ -39,7 +40,11 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
         isLoading = true;
       });
     }
+    result();
+  }
 
+
+  result(){
     ApiClient().getAllPickUpAddressList().then((value) {
 
       if(mounted){
@@ -60,7 +65,6 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
 
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +121,7 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
 
                         SliverList(
                             delegate: SliverChildBuilderDelegate(
-                              childCount: items.length,
+                              childCount: items.length ?? 0,
                                   (context, index) {
                                 return  Padding(
                                   padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.05,
@@ -179,9 +183,38 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
                                               ),
                                               GestureDetector(
                                                 onTap: (){
-                                                  items.removeAt(index);
-                                                  setState(() {
 
+                                                  showGeneralDialog(
+                                                      barrierColor: Colors.black.withOpacity(0.5),
+                                                      transitionBuilder: (context, a1, a2, widget) {
+                                                        final curvedValue = Curves.easeInOutBack.transform(a1.value) - 1.0;
+                                                        // return Transform(
+                                                        //   transform: Matrix4.translationValues(0.0, curvedValue * 200, 0.0),
+                                                        return Transform.scale(
+                                                          scale: a1.value,
+                                                          child: Opacity(
+                                                            opacity: a1.value,
+                                                            child: PostDeleteConfirmationDialog(
+                                                              message: "Are You Sure,\nYou Want To Delete a Address",
+                                                              postId:items.isNotEmpty ? items[index].id : "", openFrom: "1",
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                      transitionDuration: const Duration(milliseconds: 200),
+                                                      barrierDismissible: true,
+                                                      barrierLabel: '',
+                                                      context: context,
+                                                      pageBuilder: (context, animation2, animation1) {
+                                                        return Container();
+                                                      }).then((value){
+
+                                                          if(mounted){
+                                                            setState(() {
+                                                              items.clear();
+                                                              result();
+                                                            });
+                                                        }
                                                   });
                                                 },
                                                 child: Container(
@@ -318,11 +351,7 @@ class _PreviousAddressListScreenState extends State<PreviousAddressListScreen> {
                 padding: EdgeInsets.only(bottom: SizeConfig.screenHeight*0.5),
                 child: Visibility(
                     visible: isLoading,
-                    child: Image(
-                      image: const AssetImage("assets/images/grid_loading.gif"),
-                      height: SizeConfig.screenHeight*.1,
-                      width: SizeConfig.screenWidth*.1,
-                    )
+                    child: CircularProgressIndicator()
                 ),
               ),
             ],
