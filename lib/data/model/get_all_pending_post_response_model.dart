@@ -128,7 +128,7 @@ class Docs {
   late final int lowestBid;
   late final int lowestBidder;
   late final int vehicleAccepted;
-  late final AcceptBidModel acceptedBid;
+  AcceptBidModel? acceptedBid;
   late final String createdAt;
   late final String updatedAt;
   late final int V;
@@ -152,7 +152,8 @@ class Docs {
     lowestBid = json['lowestBid'];
     lowestBidder = json['lowestBidder'];
     vehicleAccepted = json['vehicleAccepted'];
-    acceptedBid =  AcceptBidModel.fromJson(json['acceptedTransporterBid']);
+    acceptedBid = json['acceptedTransporterBid'] != null ?
+    AcceptBidModel.fromJson(json['acceptedTransporterBid']) : null;
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     V = json['__v'];

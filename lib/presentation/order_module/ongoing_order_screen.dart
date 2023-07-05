@@ -331,7 +331,7 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                               bottom: MediaQuery.of(context).viewInsets.bottom,
                             ),
                             child: TransporterVerifyDialog(
-                              transporterId: "${postModel[postIndex].acceptedBid.customer?.sId}",
+                              transporterId: "${postModel[postIndex].acceptedBid?.customer?.sId}",
                             ),
                           );
                         });
@@ -359,7 +359,7 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                           child: Row(
                             children: [
                               Text(
-                                "${postModel[postIndex].acceptedBid.customer?.name}",
+                                "${postModel[postIndex].acceptedBid?.customer?.name}",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize:
