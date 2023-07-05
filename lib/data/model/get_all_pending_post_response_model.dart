@@ -273,7 +273,7 @@ class Vehicle {
     capacity = json['capacity'];
     quantity = json['quantity'];
     length = json['length'];
-    tyreType = json['tyreType'];
+    tyreType = json['tyreType'] ?? "";
     capacityUnit = json['capacityUnit'];
     quantityAccepted = json['quantityAccepted'];
     width = json['width'];

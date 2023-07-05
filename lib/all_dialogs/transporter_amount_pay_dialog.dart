@@ -143,27 +143,17 @@ class _TransporterAmountPayDialogState extends State<TransporterAmountPayDialog>
                           GestureDetector(
                             onTap: (){
 
-                              print(widget.bidId);
-
-                              ApiClient().getAcceptTransporterBid(widget.bidId).then((value){
-                                if(mounted){
-                                  setState(() {
-                                    Navigator.pop(context);
-                                    showCupertinoDialog(
-                                      context: context,
-                                      barrierDismissible: true,
-                                      builder: (context) {
-                                        return const AnimatedOpacity(
-                                            opacity: 1.0,
-                                            duration: Duration(seconds: 2),
-                                            child: GetTransporterReview());
-                                      },
-                                    );
-                                  });
-                                }
-                              });
-
-
+                              Navigator.pop(context);
+                              showCupertinoDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (context) {
+                                  return const AnimatedOpacity(
+                                      opacity: 1.0,
+                                      duration: Duration(seconds: 2),
+                                      child: GetTransporterReview());
+                                },
+                              );
 
 
                             },

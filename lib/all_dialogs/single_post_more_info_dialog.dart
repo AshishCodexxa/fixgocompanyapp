@@ -641,13 +641,31 @@ class _SingleLoadMoreInfoDialogState extends State<SingleLoadMoreInfoDialog> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
 
-                Text(widget.model['vehicle']['vehicleType'],
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: SizeConfig.blockSizeHorizontal*3.2,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Roboto_Regular'
-                  ),
+                Row(
+                  children: [
+                    Text(widget.model['vehicle']['vehicleType'],
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: SizeConfig.blockSizeHorizontal*3.2,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Roboto_Regular'
+                      ),
+                    ),
+                    Visibility(
+                      visible: widget.model['vehicle']['vehicleType'] == "Trailor" ? true : false,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: parentWidth*0.01),
+                        child: Text("(${widget.model['vehicle']['trailorType']})",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: SizeConfig.blockSizeHorizontal*3.2,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Roboto_Regular'
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
 
                 Container(
@@ -853,7 +871,7 @@ class _SingleLoadMoreInfoDialogState extends State<SingleLoadMoreInfoDialog> {
                       ),
                       children: [
                         TextSpan(
-                            text: ' ${advancePay.toInt()}/-',
+                            text: ' ${advancePay.toStringAsFixed(1)}/-',
                             style: TextStyle(
                                 fontSize: SizeConfig.blockSizeHorizontal*3.0,
                                 color: Colors.black,
@@ -883,7 +901,7 @@ class _SingleLoadMoreInfoDialogState extends State<SingleLoadMoreInfoDialog> {
                               ),
                               children: [
                                 TextSpan(
-                                    text: ' ${deliveryPay.toInt()}/-',
+                                    text: ' ${deliveryPay.toStringAsFixed(1)}/-',
                                     style: TextStyle(
                                         fontSize: SizeConfig.blockSizeHorizontal*3.0,
                                         color: Colors.black,

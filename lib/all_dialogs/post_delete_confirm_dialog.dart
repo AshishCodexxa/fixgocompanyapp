@@ -133,6 +133,7 @@ class _PostDeleteConfirmationDialogState extends State<PostDeleteConfirmationDia
                 if (mounted) {
                   setState(() {
                     isLoading = false;
+                    Navigator.pop(context);
                   });
                 }
               });

@@ -37,6 +37,13 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
   String? pickUpIndexTime;
   String customerIndexId = '';
 
+  String? pickUpDate;
+  String? pickUpTime;
+  String? createPostTime;
+  String? createPostDate;
+  String? pickUpLocation;
+  String? finalLocation;
+
   @override
   void initState() {
     super.initState();
@@ -137,6 +144,39 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
   }
 
   Widget getInfoCardLayout(double parentHeight, double parentWidth, List<Docs> postModel, int postIndex) {
+
+    DateTime tempDate = DateFormat("yyyy-MM-dd").parse(items[postIndex].pickupDate);
+    var inputDate = DateTime.parse(tempDate.toString());
+    var outputFormat = DateFormat('dd MMMM yyyy');
+    pickUpDate = outputFormat.format(inputDate);
+
+    DateTime parseDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        .parse(items[postIndex].pickupDate);
+    var inputTime = DateTime.parse(parseDate.toString());
+    var inputFormat = DateFormat('hh:mm a');
+    pickUpTime = inputFormat.format(inputTime);
+
+    DateTime tempCreateDate =
+    DateFormat("yyyy-MM-dd").parse(items[postIndex].createdAt);
+    var inputCreateDate = DateTime.parse(tempCreateDate.toString());
+    var outputCreateFormat = DateFormat('dd MMMM yyyy');
+    createPostDate = outputCreateFormat.format(inputCreateDate);
+
+    DateTime parseCreateDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        .parse(items[postIndex].createdAt);
+    var inputCreateTime = DateTime.parse(parseCreateDate.toString());
+    var inputCreateFormat = DateFormat('hh:mm a');
+    createPostTime = inputCreateFormat.format(inputCreateTime);
+
+    pickUpLocation =
+    "${items[postIndex].pickup.address.street}, ${items[postIndex].pickup.address.city}, ${items[postIndex].pickup.address.state}, ${items[postIndex].pickup.address.country}, ${items[postIndex].pickup.address.postalCode}";
+
+    // print(pickUpLocation);
+
+    finalLocation =
+    "${items[postIndex].receiver.address.street}, ${items[postIndex].receiver.address.city}, ${items[postIndex].receiver.address.state}, ${items[postIndex].receiver.address.country}, ${items[postIndex].receiver.address.postalCode}";
+
+
     return Padding(
       padding: EdgeInsets.only(
         top: parentHeight * 0.012,
@@ -169,13 +209,14 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                             width: parentWidth * 0.57,
                             color: Colors.transparent,
                             child: Text(
-                              postModel[postIndex].pickup.address.street,
+                              "$pickUpLocation",
                               style: TextStyle(
                                   color: CommonColor.BLACK_COLOR,
                                   fontSize:
                                       SizeConfig.blockSizeHorizontal * 3.0,
                                   fontFamily: "Roboto_Medium",
                                   fontWeight: FontWeight.w400),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ),
@@ -211,13 +252,14 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                             width: parentWidth * 0.57,
                             color: Colors.transparent,
                             child: Text(
-                              postModel[postIndex].receiver.address.street,
+                              "$finalLocation",
                               style: TextStyle(
                                   color: CommonColor.BLACK_COLOR,
                                   fontSize:
                                       SizeConfig.blockSizeHorizontal * 3.0,
                                   fontFamily: "Roboto_Medium",
                                   fontWeight: FontWeight.w400),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ),

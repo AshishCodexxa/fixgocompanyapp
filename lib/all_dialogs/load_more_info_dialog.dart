@@ -875,7 +875,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                       ),
                       children: [
                         TextSpan(
-                            text: ' ${advancePay.toInt()}/-',
+                            text: ' ${advancePay..toStringAsFixed(1)}/-',
                             style: TextStyle(
                                 fontSize: SizeConfig.blockSizeHorizontal*3.0,
                                 color: Colors.black,
@@ -905,7 +905,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                               ),
                               children: [
                                 TextSpan(
-                                    text: ' ${deliveryPay.toInt()}/-',
+                                    text: ' ${deliveryPay.toStringAsFixed(1)}/-',
                                     style: TextStyle(
                                         fontSize: SizeConfig.blockSizeHorizontal*3.0,
                                         color: Colors.black,
@@ -1024,15 +1024,13 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                     barrierColor: Colors.black.withOpacity(0.5),
                     transitionBuilder: (context, a1, a2, widget) {
                       final curvedValue = Curves.easeInOutBack.transform(a1.value) - 1.0;
-                      // return Transform(
-                      //   transform: Matrix4.translationValues(0.0, curvedValue * 200, 0.0),
-                      return Transform.scale(
+                       return Transform.scale(
                         scale: a1.value,
                         child: Opacity(
                           opacity: a1.value,
                           child: PostDeleteConfirmationDialog(
                             message: "Are You Sure,\nYou Want To Delete a Post",
-                            postId: postId, openFrom: openFrom,
+                            postId: postId, openFrom: "2",
                           ),
                         ),
                       );
