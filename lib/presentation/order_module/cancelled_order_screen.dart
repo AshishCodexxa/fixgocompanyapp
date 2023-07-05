@@ -303,7 +303,7 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                             padding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom,
                             ),
-                            child: const TransporterVerifyDialog(),
+                            child: TransporterVerifyDialog(transporterId: '',),
                           );
                         });
                   },

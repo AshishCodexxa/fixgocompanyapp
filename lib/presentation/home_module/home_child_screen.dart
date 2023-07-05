@@ -496,8 +496,9 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                                                                                   builder: (BuildContext context) {
                                                                                                     return alert;
                                                                                                   },
-                                                                                                );
-
+                                                                                                ).then((value){
+                                                                                                  Navigator.pop(context);
+                                                                                                });
                                                                                                 widget.mListener.addOrderPrentScreen("1");
                                                                                               });
                                                                                             } else if (items[index].advancePayment.mode == "ONLINE") {

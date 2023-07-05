@@ -232,7 +232,7 @@ class _CompleteOrderScreenState extends State<CompleteOrderScreen> {
                             padding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom,
                             ),
-                            child: TransporterVerifyDialog(),
+                            child: TransporterVerifyDialog(transporterId: '',),
                           );
                         });
                   },

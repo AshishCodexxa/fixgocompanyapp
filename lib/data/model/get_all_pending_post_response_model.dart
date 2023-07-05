@@ -104,9 +104,11 @@ class Docs {
     required this.lowestBid,
     required this.lowestBidder,
     required this.vehicleAccepted,
+    required this.acceptedBid,
     required this.createdAt,
     required this.updatedAt,
     required this.V,
+
   });
   late final LoadDetail loadDetail;
   late final Vehicle vehicle;
@@ -126,6 +128,7 @@ class Docs {
   late final int lowestBid;
   late final int lowestBidder;
   late final int vehicleAccepted;
+  late final AcceptBidModel acceptedBid;
   late final String createdAt;
   late final String updatedAt;
   late final int V;
@@ -149,6 +152,7 @@ class Docs {
     lowestBid = json['lowestBid'];
     lowestBidder = json['lowestBidder'];
     vehicleAccepted = json['vehicleAccepted'];
+    acceptedBid =  AcceptBidModel.fromJson(json['acceptedTransporterBid']);
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     V = json['__v'];
@@ -174,6 +178,7 @@ class Docs {
     _data['lowestBid'] = lowestBid;
     _data['lowestBidder'] = lowestBidder;
     _data['vehicleAccepted'] = vehicleAccepted;
+    _data['acceptedTransporterBid'] = acceptedBid;
     _data['createdAt'] = createdAt;
     _data['updatedAt'] = updatedAt;
     _data['__v'] = V;
@@ -510,5 +515,65 @@ class Payload {
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
     return _data;
+  }
+}
+
+class AcceptBidModel {
+  String? sId;
+  Customer? customer;
+
+  AcceptBidModel({this.sId, this.customer});
+
+  AcceptBidModel.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    customer = json['customer'] != null
+        ? new Customer.fromJson(json['customer'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    if (this.customer != null) {
+      data['customer'] = this.customer!.toJson();
+    }
+    return data;
+  }
+}
+
+class Customer {
+  String? sId;
+  String? phone;
+  String? name;
+  List<String>? mobiles;
+  String? companyName;
+  String? companyAddress;
+
+  Customer(
+      {this.sId,
+        this.phone,
+        this.name,
+        this.mobiles,
+        this.companyName,
+        this.companyAddress});
+
+  Customer.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    phone = json['phone'];
+    name = json['name'];
+    mobiles = json['mobiles'].cast<String>();
+    companyName = json['companyName'];
+    companyAddress = json['companyAddress'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['phone'] = this.phone;
+    data['name'] = this.name;
+    data['mobiles'] = this.mobiles;
+    data['companyName'] = this.companyName;
+    data['companyAddress'] = this.companyAddress;
+    return data;
   }
 }

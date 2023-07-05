@@ -330,7 +330,9 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                             padding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom,
                             ),
-                            child: TransporterVerifyDialog(),
+                            child: TransporterVerifyDialog(
+                              transporterId: "${postModel[postIndex].acceptedBid.customer?.sId}",
+                            ),
                           );
                         });
                   },
@@ -357,7 +359,7 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                           child: Row(
                             children: [
                               Text(
-                                "Mahesh Transporter",
+                                "${postModel[postIndex].acceptedBid.customer?.name}",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize:

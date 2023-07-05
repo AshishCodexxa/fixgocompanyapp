@@ -77,7 +77,7 @@ class Data {
   late final bool hasIdVerified;
   late final Rating rating;
   late final List<dynamic> fcmToken;
-  late final Geo geo;
+  Geo? geo;
   late final bool isArchived;
   late final String createdAt;
   late final String updatedAt;
@@ -105,7 +105,7 @@ class Data {
     hasIdVerified = json['hasIdVerified'];
     rating = Rating.fromJson(json['rating']);
     fcmToken = List.castFrom<dynamic, dynamic>(json['fcmToken']);
-    geo = Geo.fromJson(json['geo']);
+    geo = json['geo'] != null ? Geo.fromJson(json['geo'] as Map<String,dynamic>) : null;
     isArchived = json['isArchived'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
@@ -135,7 +135,7 @@ class Data {
     _data['hasIdVerified'] = hasIdVerified;
     _data['rating'] = rating.toJson();
     _data['fcmToken'] = fcmToken;
-    _data['geo'] = geo.toJson();
+    _data['geo'] = geo?.toJson();
     _data['isArchived'] = isArchived;
     _data['createdAt'] = createdAt;
     _data['updatedAt'] = updatedAt;

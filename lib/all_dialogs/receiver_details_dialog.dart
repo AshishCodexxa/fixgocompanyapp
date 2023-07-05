@@ -1,10 +1,8 @@
 import 'package:fixgocompanyapp/common_file/common_color.dart';
-import 'package:fixgocompanyapp/common_file/draw_dash_border_class.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:fixgocompanyapp/data/dio_client.dart';
 import 'package:fixgocompanyapp/data/model/get_user_verify_info_response_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 
 class ReceiverVerifyDialog extends StatefulWidget {
@@ -34,7 +32,11 @@ class _ReceiverVerifyDialogState extends State<ReceiverVerifyDialog> {
 
     print(widget.customerId);
 
-    isLoader = true;
+    if(mounted){
+      setState(() {
+        isLoader = true;
+      });
+    }
 
     ApiClient().getVerifyDetailingApi(widget.customerId).then((value){
 
@@ -45,11 +47,16 @@ class _ReceiverVerifyDialogState extends State<ReceiverVerifyDialog> {
 
           print(jsonList.data);
 
-          isLoader = false;
+          if(mounted){
+            setState(() {
+              isLoader = false;
+            });
+          }
 
           if(jsonList.data != null){
-            name = jsonList.data.name ?? '';
-            number = jsonList.data.phone ?? '';
+            name = jsonList.data.name ?? "Receiver Name";
+            number = jsonList.data.phone ?? "Receiver Number";
+            location = jsonList.data.companyAddress ?? "Receiver Location";
           }
 
         });
@@ -66,7 +73,7 @@ class _ReceiverVerifyDialogState extends State<ReceiverVerifyDialog> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Container(
-      height: SizeConfig.screenHeight * 0.35,
+      height: SizeConfig.screenHeight * 0.27,
       color: Colors.transparent,
       child: Stack(
         alignment: Alignment.center,
@@ -136,7 +143,7 @@ class _ReceiverVerifyDialogState extends State<ReceiverVerifyDialog> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.05),
-                        child: Text(name,
+                        child: Text(name.isEmpty ? "Receiver Name" : name,
                           style: TextStyle(
                               color: Colors.black,
                               fontFamily: 'Roboto_Medium',
@@ -155,7 +162,7 @@ class _ReceiverVerifyDialogState extends State<ReceiverVerifyDialog> {
                       Icon(Icons.phone_android_outlined),
                       Padding(
                         padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.05),
-                        child: Text(number,
+                        child: Text(number.isEmpty ? "Receiver Number" : number,
                           style: TextStyle(
                               color: Colors.black,
                               fontFamily: 'Roboto_Regular',
@@ -178,7 +185,7 @@ class _ReceiverVerifyDialogState extends State<ReceiverVerifyDialog> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.05),
-                            child: Text("Receiver Location",
+                            child: Text(location.isEmpty ? "Receiver Location" : location,
                               style: TextStyle(
                                   color: Colors.black38,
                                   fontFamily: 'Roboto_Regular',
@@ -186,7 +193,7 @@ class _ReceiverVerifyDialogState extends State<ReceiverVerifyDialog> {
                                   fontSize: SizeConfig.blockSizeHorizontal*4.0
                               ),),
                           ),
-                          Padding(
+                          /*Padding(
                             padding: EdgeInsets.only(left: SizeConfig.screenWidth*0.05,
                                 top: SizeConfig.screenHeight*0.01),
                             child: Container(
@@ -200,7 +207,7 @@ class _ReceiverVerifyDialogState extends State<ReceiverVerifyDialog> {
                                     fontSize: SizeConfig.blockSizeHorizontal*4.0
                                 ),),
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                     ],
