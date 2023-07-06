@@ -90,11 +90,11 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                         EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.02),
                     itemBuilder: (BuildContext context, int index) {
 
-                      int totalFare = items[index].fare;
+                      int totalFare = items[index].lowestBid;
                       double ratio = items[index].advancePayment.ratio / 100;
                       advancePay = totalFare * ratio;
 
-                      int totalsFare = items[index].fare;
+                      int totalsFare = items[index].lowestBid;
                       double ratios = items[index].deliveryPayment.ratio / 100;
                       deliveryPay = totalsFare * ratios;
 
@@ -284,7 +284,7 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                           ),
                           children: [
                             TextSpan(
-                                text: ' ${postModel[postIndex].fare}/-',
+                                text: ' ${postModel[postIndex].lowestBid}/-',
                                 style: TextStyle(
                                     fontSize:
                                         SizeConfig.blockSizeHorizontal * 4.5,
@@ -748,7 +748,7 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                     onDoubleTap: () {},
                     onTap: () {
 
-                      int totalFare = items[postIndex].fare;
+                      int totalFare = items[postIndex].lowestBid;
                       double ratio = items[postIndex].advancePayment.ratio / 100;
                       advancePay = totalFare * ratio;
 

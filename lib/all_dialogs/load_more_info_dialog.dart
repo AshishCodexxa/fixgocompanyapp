@@ -74,13 +74,13 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
     openFrom = widget.openFrom;
 
 
-  int totalFare = widget.postDetails[widget.postIndex].fare;
+  int totalFare = widget.postDetails[widget.postIndex].lowestBid != 0 ? widget.postDetails[widget.postIndex].lowestBid : widget.postDetails[widget.postIndex].fare;
   double ratio = widget.postDetails[widget.postIndex].advancePayment.ratio / 100;
   advancePay = totalFare * ratio;
 
   postId = widget.postDetails[0].id;
 
-  int totalsFare = widget.postDetails[widget.postIndex].fare;
+  int totalsFare =  widget.postDetails[widget.postIndex].lowestBid != 0 ? widget.postDetails[widget.postIndex].lowestBid : widget.postDetails[widget.postIndex].fare;
   double ratios = widget.postDetails[widget.postIndex].deliveryPayment.ratio / 100;
   deliveryPay = totalsFare * ratios;
 
@@ -579,7 +579,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
 
                 Container(
                   width: parentWidth*0.4,
-                  // color: Colors.red,
+                  color: Colors.transparent,
                   child: Row(
                     children: [
                       Expanded(
@@ -618,7 +618,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
 
                 Container(
                   width: parentWidth*0.4,
-                  // color: Colors.red,
+                  color: Colors.transparent,
                   child: Row(
                     children: [
                       Expanded(
@@ -674,7 +674,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
 
                 Container(
                   width: parentWidth*0.4,
-                  // color: Colors.red,
+                  color: Colors.transparent,
                   child: Row(
                     children: [
                       Expanded(
@@ -713,7 +713,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
 
                 Container(
                   width: parentWidth*0.4,
-                  // color: Colors.red,
+                  color: Colors.transparent,
                   child: Row(
                     children: [
                       Expanded(
@@ -751,7 +751,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
 
                 Container(
                   width: parentWidth*0.4,
-                  // color: Colors.red,
+                  color: Colors.transparent,
                   child: Row(
                     children: [
                       Expanded(
@@ -808,7 +808,9 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                       ),
                       children: [
                         TextSpan(
-                            text: ' ${widget.postDetails[widget.postIndex].fare}/-',
+                            text: widget.postDetails[widget.postIndex].lowestBid == 0 ?
+                            '${widget.postDetails[widget.postIndex].fare}/-' :
+                            '${widget.postDetails[widget.postIndex].lowestBid}/-',
                             style: TextStyle(
                                 fontSize: SizeConfig.blockSizeHorizontal*3.0,
                                 color: Colors.black,
@@ -838,7 +840,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
 
                 Container(
                   width: parentWidth*0.4,
-                  // color: Colors.red,
+                  color: Colors.transparent,
                   child: Row(
                     children: [
                       Expanded(
@@ -891,7 +893,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
 
                 Container(
                   width: parentWidth*0.4,
-                  // color: Colors.red,
+                  color: Colors.transparent,
                   child: Row(
                     children: [
                       Expanded(
