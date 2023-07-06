@@ -61,6 +61,8 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
 
   var bidData;
 
+  String companyName = "";
+
   startTimer() {
     var durtaion = new Duration(seconds: 2);
     return Timer(durtaion, dialogHide);
@@ -84,6 +86,10 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
   @override
   void initState() {
     super.initState();
+
+    companyName = GetStorage().read(ConstantData.companyName) ?? "";
+
+    print(companyName);
 
     if (mounted) {
       setState(() {
@@ -489,7 +495,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                                                                         ),
                                                                                         GestureDetector(
                                                                                           onTap: () {
-                                                                                            if (items[index].advancePayment.mode == "CASH") {
+                                                                                           /* if (items[index].advancePayment.mode == "CASH") {
                                                                                               ApiClient().getAcceptTransporterBid(bidData[index]['_id']).then((value) {
                                                                                                 showDialog(
                                                                                                   context: context,
@@ -510,7 +516,18 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                                                                                                           )));
                                                                                             } else {
                                                                                               Container();
-                                                                                            }
+                                                                                            }*/
+                                                                                            ApiClient().getAcceptTransporterBid(bidData[index]['_id']).then((value) {
+                                                                                              showDialog(
+                                                                                                context: context,
+                                                                                                builder: (BuildContext context) {
+                                                                                                  return alert;
+                                                                                                },
+                                                                                              ).then((value){
+                                                                                                Navigator.pop(context);
+                                                                                              });
+                                                                                              widget.mListener.addOrderPrentScreen("1");
+                                                                                            });
                                                                                           },
                                                                                           child: Container(
                                                                                             width: SizeConfig.screenWidth * 0.18,
@@ -666,10 +683,53 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                   child: GestureDetector(
                     onDoubleTap: () {},
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const NewLoadScreenForm()));
+
+                      if(companyName.isEmpty) {
+                        showDialog<void>(
+                          context: context,
+                          barrierDismissible: false, // user must tap button!
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              shape:  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              title: const Text('Update Profile'),
+                              content: const SingleChildScrollView(
+                                child: ListBody(
+                                  children: <Widget>[
+                                    Text('Please Firstly Update Your Profile.'),
+                                  ],
+                                ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Container(
+                                    height: SizeConfig.screenHeight*0.04,
+                                    width: SizeConfig.screenWidth*0.15,
+                                    decoration: BoxDecoration(
+                                      color: CommonColor.APP_BAR_COLOR,
+                                      borderRadius: BorderRadius.circular(10)
+                                    ),
+                                      child: const Center(child: Text('OK',
+                                      style: TextStyle(
+                                        color: Colors.white
+                                      ),))
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }else{
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (
+                                    context) => const NewLoadScreenForm()));
+                      }
                     },
                     child: Container(
                       height: SizeConfig.screenHeight * 0.05,

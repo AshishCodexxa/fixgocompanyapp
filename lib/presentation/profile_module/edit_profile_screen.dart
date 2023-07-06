@@ -1075,6 +1075,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       GetStorage().write(ConstantData.userName, value['data']['name']);
                       GetStorage().write(ConstantData.emailId, value['data']['email']);
                       GetStorage().write(ConstantData.contactNo, value['data']['phone']);
+                      GetStorage().write(ConstantData.companyName, value['data']['companyName']);
 
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const Dashboard(isComeFrom: "1",)));
 

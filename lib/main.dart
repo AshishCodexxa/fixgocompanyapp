@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: "Fix Go Company App",
         home: const MyHomePage(),
         debugShowCheckedModeBanner: false,
         routes: <String, WidgetBuilder>{
