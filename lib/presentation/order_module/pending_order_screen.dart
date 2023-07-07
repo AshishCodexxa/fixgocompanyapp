@@ -736,7 +736,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
     pickUpLocation = "${items[index].pickup.address.street}, ${items[index].pickup.address.city}, ${items[index].pickup.address.state}, ${items[index].pickup.address.country}, ${items[index].pickup.address.postalCode}";
 
     finalLocation =
-    "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
+    "${items[index].receiver.address?.street}, ${items[index].receiver.address?.city}, ${items[index].receiver.address?.state}, ${items[index].receiver.address?.country}, ${items[index].receiver.address?.postalCode}";
 
     final endTime = DateTime.parse(items[index].postExpiryDate);
     Duration remainingTime = endTime.difference(DateTime.now());
@@ -1045,7 +1045,7 @@ class _PendingOrderScreenState extends State<PendingOrderScreen> {
                         // print(passPickIndexAddress);
 
                         passLastIndexAddress =
-                        "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
+                        "${items[index].receiver.address?.street}, ${items[index].receiver.address?.city}, ${items[index].receiver.address?.state}, ${items[index].receiver.address?.country}, ${items[index].receiver.address?.postalCode}";
 
 
                         DateTime tempDate = DateFormat("yyyy-MM-dd").parse(items[index].pickupDate);

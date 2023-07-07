@@ -842,7 +842,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
     // print(pickUpLocation);
 
     finalLocation =
-        "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
+        "${items[index].receiver.address?.street}, ${items[index].receiver.address?.city}, ${items[index].receiver.address?.state}, ${items[index].receiver.address?.country}, ${items[index].receiver.address?.postalCode}";
 
     final endTime = DateTime.parse(items[index].postExpiryDate);
     Duration remainingTime = endTime.difference(DateTime.now());
@@ -1148,7 +1148,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                     // print(passPickIndexAddress);
 
                     passLastIndexAddress =
-                        "${items[index].receiver.address.street}, ${items[index].receiver.address.city}, ${items[index].receiver.address.district}, ${items[index].receiver.address.laneNumber} ${items[index].receiver.address.state}, ${items[index].receiver.address.country}, ${items[index].receiver.address.postalCode}";
+                        "${items[index].receiver.address?.street}, ${items[index].receiver.address?.city}, ${items[index].receiver.address?.district}, ${items[index].receiver.address?.laneNumber} ${items[index].receiver.address?.state}, ${items[index].receiver.address?.country}, ${items[index].receiver.address?.postalCode}";
 
                     DateTime tempDate =
                         DateFormat("yyyy-MM-dd").parse(items[index].pickupDate);

@@ -174,7 +174,7 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
     // print(pickUpLocation);
 
     finalLocation =
-    "${items[postIndex].receiver.address.street}, ${items[postIndex].receiver.address.city}, ${items[postIndex].receiver.address.state}, ${items[postIndex].receiver.address.country}, ${items[postIndex].receiver.address.postalCode}";
+    "${items[postIndex].receiver.address?.street}, ${items[postIndex].receiver.address?.city}, ${items[postIndex].receiver.address?.state}, ${items[postIndex].receiver.address?.country}, ${items[postIndex].receiver.address?.postalCode}";
 
 
     return Padding(
@@ -604,7 +604,7 @@ class _OnGoingOrderScreenState extends State<OnGoingOrderScreen> {
                           passPickIndexAddress = "${postModel[postIndex].pickup.address.street}, ${postModel[postIndex].pickup.address.city}, ${postModel[postIndex].pickup.address.state}, ${postModel[postIndex].pickup.address.country}, ${postModel[postIndex].pickup.address.postalCode}";
 
                           passLastIndexAddress =
-                          "${postModel[postIndex].receiver.address.street}, ${postModel[postIndex].receiver.address.city}, ${postModel[postIndex].receiver.address.state}, ${postModel[postIndex].receiver.address.country}, ${postModel[postIndex].receiver.address.postalCode}";
+                          "${postModel[postIndex].receiver.address?.street}, ${postModel[postIndex].receiver.address?.city}, ${postModel[postIndex].receiver.address?.state}, ${postModel[postIndex].receiver.address?.country}, ${postModel[postIndex].receiver.address?.postalCode}";
 
                           DateTime tempDate = DateFormat("yyyy-MM-dd").parse(postModel[postIndex].pickupDate);
                           var inputDate = DateTime.parse(tempDate.toString());

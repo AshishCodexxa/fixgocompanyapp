@@ -485,14 +485,14 @@ class Receiver {
   });
   late final String name;
   late final String phone;
-  late final Address address;
+  Address? address;
   late final String customer;
   late final String id;
 
   Receiver.fromJson(Map<String, dynamic> json){
     name = json['name'];
     phone = json['phone'];
-    address = Address.fromJson(json['address']);
+    address = json['address'] != null ? Address.fromJson(json['address']) : null;
     customer = json['customer'];
     id = json['_id'];
   }
@@ -501,7 +501,7 @@ class Receiver {
     final _data = <String, dynamic>{};
     _data['name'] = name;
     _data['phone'] = phone;
-    _data['address'] = address.toJson();
+    _data['address'] = address?.toJson();
     _data['customer'] = customer;
     _data['_id'] = id;
     return _data;

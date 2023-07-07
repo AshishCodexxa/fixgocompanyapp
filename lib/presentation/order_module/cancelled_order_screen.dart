@@ -222,7 +222,7 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                             width: parentWidth * 0.5,
                             color: Colors.transparent,
                             child: Text(
-                              postModel[postIndex].receiver.address.street,
+                              "${postModel[postIndex].receiver.address?.street}",
                               style: TextStyle(
                                   color: CommonColor.BLACK_COLOR,
                                   fontSize: SizeConfig.blockSizeHorizontal *
@@ -303,7 +303,7 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                             padding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom,
                             ),
-                            child: TransporterVerifyDialog(transporterId: '',),
+                            child: TransporterVerifyDialog(transporterId: "${postModel[postIndex].acceptedBid?.customer?.sId}",),
                           );
                         });
                   },
@@ -330,7 +330,7 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                           child: Row(
                             children: [
                               Text(
-                                "Mahesh Transporter",
+                                "${postModel[postIndex].acceptedBid?.customer?.name}",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize:
@@ -574,7 +574,7 @@ class _CancelledOrderScreenState extends State<CancelledOrderScreen> {
                           passPickIndexAddress = "${postModel[postIndex].pickup.address.street}, ${postModel[postIndex].pickup.address.city}, ${postModel[postIndex].pickup.address.state}, ${postModel[postIndex].pickup.address.country}, ${postModel[postIndex].pickup.address.postalCode}";
 
                           passLastIndexAddress =
-                          "${postModel[postIndex].receiver.address.street}, ${postModel[postIndex].receiver.address.city}, ${postModel[postIndex].receiver.address.state}, ${postModel[postIndex].receiver.address.country}, ${postModel[postIndex].receiver.address.postalCode}";
+                          "${postModel[postIndex].receiver.address?.street}, ${postModel[postIndex].receiver.address?.city}, ${postModel[postIndex].receiver.address?.state}, ${postModel[postIndex].receiver.address?.country}, ${postModel[postIndex].receiver.address?.postalCode}";
 
                           DateTime tempDate = DateFormat("yyyy-MM-dd").parse(postModel[postIndex].pickupDate);
                           var inputDate = DateTime.parse(tempDate.toString());
