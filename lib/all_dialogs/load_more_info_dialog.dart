@@ -74,14 +74,16 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
     openFrom = widget.openFrom;
 
 
-  int totalFare = widget.postDetails[widget.postIndex].lowestBid != 0 ? widget.postDetails[widget.postIndex].lowestBid : widget.postDetails[widget.postIndex].fare;
-  double ratio = widget.postDetails[widget.postIndex].advancePayment.ratio / 100;
+  // int totalFare = widget.postDetails[widget.postIndex].lowestBid != 0 ? widget.postDetails[widget.postIndex].lowestBid : widget.postDetails[widget.postIndex].fare;
+  int totalFare = openFrom == "3" ? widget.postDetails[widget.postIndex].fare : widget.postDetails[widget.postIndex].lowestBid;
+    double ratio = widget.postDetails[widget.postIndex].advancePayment.ratio / 100;
   advancePay = totalFare * ratio;
 
   postId = widget.postDetails[0].id;
 
-  int totalsFare =  widget.postDetails[widget.postIndex].lowestBid != 0 ? widget.postDetails[widget.postIndex].lowestBid : widget.postDetails[widget.postIndex].fare;
-  double ratios = widget.postDetails[widget.postIndex].deliveryPayment.ratio / 100;
+  // int totalsFare =  widget.postDetails[widget.postIndex].lowestBid != 0 ? widget.postDetails[widget.postIndex].lowestBid : widget.postDetails[widget.postIndex].fare;
+    int totalsFare = openFrom == "3" ? widget.postDetails[widget.postIndex].fare : widget.postDetails[widget.postIndex].lowestBid;
+    double ratios = widget.postDetails[widget.postIndex].deliveryPayment.ratio / 100;
   deliveryPay = totalsFare * ratios;
 
   if(widget.postDetails[widget.postIndex].status == "PENDING"){
@@ -808,7 +810,7 @@ class _LoadMoreInfoDialogState extends State<LoadMoreInfoDialog> {
                       ),
                       children: [
                         TextSpan(
-                            text: widget.postDetails[widget.postIndex].lowestBid == 0 ?
+                            text: openFrom == "3" ?
                             '${widget.postDetails[widget.postIndex].fare}/-' :
                             '${widget.postDetails[widget.postIndex].lowestBid}/-',
                             style: TextStyle(
