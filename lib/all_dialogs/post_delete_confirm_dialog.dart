@@ -129,11 +129,12 @@ class _PostDeleteConfirmationDialogState extends State<PostDeleteConfirmationDia
             }
 
             if(widget.openFrom == "2") {
+              print("method ${widget.openFrom}");
               postDeleteById(postId: widget.postId).then((value) {
                 if (mounted) {
                   setState(() {
                     isLoading = false;
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
                   });
                 }
               });
