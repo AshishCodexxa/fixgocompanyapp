@@ -1177,7 +1177,7 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
                               pickupTime: pickUpIndexTime.toString(),
                               pickupLocation: passPickIndexAddress.toString(),
                               finalLocation: passLastIndexAddress.toString(),
-                              openFrom: "2",
+                              openFrom: "3",
                             ));
                       },
                     );
