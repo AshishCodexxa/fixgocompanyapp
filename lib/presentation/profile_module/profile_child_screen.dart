@@ -1,6 +1,5 @@
 import 'package:fixgocompanyapp/common_file/size_config.dart';
 import 'package:fixgocompanyapp/data/data_constant/constant_data.dart';
-import 'package:fixgocompanyapp/presentation/profile_module/bank_account_details_screen.dart';
 import 'package:fixgocompanyapp/presentation/profile_module/edit_profile_screen.dart';
 import 'package:fixgocompanyapp/presentation/profile_module/notifications_screen.dart';
 import 'package:fixgocompanyapp/presentation/profile_module/transaction_history_screen.dart';
@@ -30,18 +29,11 @@ class _ProfileChildScreenState extends State<ProfileChildScreen> {
   @override
   void initState() {
     super.initState();
-    if(mounted){
-      setState(() {
 
-        if(GetStorage().read(ConstantData.userName) != null && GetStorage().read(ConstantData.emailId) != null &&
-            GetStorage().read(ConstantData.contactNo) != null){
-          name = GetStorage().read(ConstantData.userName);
-          emailId = GetStorage().read(ConstantData.emailId);
-          phoneNo = GetStorage().read(ConstantData.contactNo);
-        }
+          name = GetStorage().read(ConstantData.userName) ?? "User Name";
+          emailId = GetStorage().read(ConstantData.emailId) ?? "Email Id";
+          phoneNo = GetStorage().read(ConstantData.contactNo) ?? "Phone Number";
 
-      });
-    }
   }
 
 
@@ -81,7 +73,7 @@ class _ProfileChildScreenState extends State<ProfileChildScreen> {
 
                         Padding(
                           padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.01),
-                          child: Text(name.isEmpty ? "User Name" : name,
+                          child: Text(name,
                           style: TextStyle(
                             color: Colors.black,
                             fontFamily: 'Roboto_Regular',
@@ -92,11 +84,11 @@ class _ProfileChildScreenState extends State<ProfileChildScreen> {
 
                         Padding(
                           padding: EdgeInsets.only(top: SizeConfig.screenHeight*0.015),
-                          child: Text(emailId.isEmpty ? "Email Id" : emailId,
+                          child: Text(emailId,
                             style: TextStyle(
                                 color: Colors.black,
                                 fontFamily: 'Roboto_Regular',
-                                fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                fontSize: SizeConfig.blockSizeHorizontal*4.5,
                                 fontWeight: FontWeight.w400
                             ),),
                         ),
@@ -109,11 +101,11 @@ class _ProfileChildScreenState extends State<ProfileChildScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(phoneNo.isEmpty ? "Phone No." : phoneNo,
+                                Text(phoneNo,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontFamily: 'Roboto_Regular',
-                                      fontSize: SizeConfig.blockSizeHorizontal*4.0,
+                                      fontSize: SizeConfig.blockSizeHorizontal*4.5,
                                       fontWeight: FontWeight.w400
                                   ),),
                                 GestureDetector(

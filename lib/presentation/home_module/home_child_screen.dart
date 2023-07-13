@@ -78,9 +78,15 @@ class _HomeChildScreenState extends State<HomeChildScreen> {
 
   Timer? _timer;
 
-  AlertDialog alert = const AlertDialog(
+  AlertDialog alert =  AlertDialog(
     title: Text("Bid Book"),
     content: Text("Bid Book Successful."),
+    // actions: [
+    //   Container(
+    //     color:Colors.transparent,
+    //       child: Text("OK")
+    //   )
+    // ],
   );
 
   @override

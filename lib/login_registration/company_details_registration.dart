@@ -1,9 +1,12 @@
 import 'package:fixgocompanyapp/all_dialogs/register_success_dialog.dart';
 import 'package:fixgocompanyapp/common_file/common_color.dart';
 import 'package:fixgocompanyapp/common_file/size_config.dart';
+import 'package:fixgocompanyapp/data/data_constant/constant_data.dart';
+import 'package:fixgocompanyapp/data/dio_client.dart';
 import 'package:fixgocompanyapp/login_registration/kyc_verification_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
 
 
@@ -26,6 +29,37 @@ class _CompanyDetailsRegistrationScreenState extends State<CompanyDetailsRegistr
   final _userNameFocus = FocusNode();
   final _companyNameFocus = FocusNode();
   final _companyLocationFocus = FocusNode();
+
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if(mounted){
+      setState(() {
+        isLoading = true;
+      });
+    }
+
+    ApiClient().getUserProfileData().then((value){
+
+      GetStorage().write(ConstantData.userName, value['data']['name']);
+      GetStorage().write(ConstantData.companyName, value['data']['companyName']);
+      GetStorage().write(ConstantData.companyAddress, value['data']['companyAddress']);
+
+      userNameController.text = value['data']['name'];
+      companyNameController.text = value['data']['companyName'];
+      companyLocationController.text = value['data']['companyAddress'];
+
+      if(mounted){
+        setState(() {
+          isLoading = false;
+        });
+      }
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +216,7 @@ class _CompanyDetailsRegistrationScreenState extends State<CompanyDetailsRegistr
                 focusNode: _companyNameFocus,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
-                  prefixIcon: Image(image: AssetImage("assets/images/company.png"),),
+                  prefixIcon: const Image(image: AssetImage("assets/images/company.png"),),
                   label: RichText(
                     text: TextSpan(
                         text: 'Company Name',
@@ -240,7 +274,7 @@ class _CompanyDetailsRegistrationScreenState extends State<CompanyDetailsRegistr
                 focusNode: _companyLocationFocus,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
-                  prefixIcon: Image(image: AssetImage("assets/images/company_location.png"),),
+                  prefixIcon: const Image(image: AssetImage("assets/images/company_location.png"),),
                   label: RichText(
                     text: TextSpan(
                         text: 'Company Location',
@@ -402,7 +436,48 @@ class _CompanyDetailsRegistrationScreenState extends State<CompanyDetailsRegistr
                   //   },
                   // );
 
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => KYCVerifyScreen()));
+                  if(mounted){
+                    setState(() {
+                      isLoading = true;
+                    });
+                  }
+
+                  ApiClient().editUserProfileData(
+                    userNameController.text,
+                    companyNameController.text,
+                    '',
+                    companyLocationController.text,
+                    [],
+                    [],
+                    '',
+                    '',
+                    '',
+                    '',
+                    isLoading
+                  ).then((value){
+
+                    if(mounted){
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
+
+
+                    ApiClient().getUserProfileData().then((value) {
+                      if (value.isEmpty) return;
+
+                      GetStorage().write(ConstantData.userName, value['data']['name']);
+                      GetStorage().write(ConstantData.companyName, value['data']['companyName']);
+                      GetStorage().write(ConstantData.companyAddress, value['data']['companyAddress']);
+
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const KYCVerifyScreen()));
+
+                    });
+
+
+                  });
+
+
                 },
                 child: Container(
                   height: SizeConfig.screenHeight*0.057,
